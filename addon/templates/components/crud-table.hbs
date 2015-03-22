@@ -44,11 +44,11 @@
 
                     {{#if this.editdelete}}
                         <td>
-                            {{#if this.edit}}
-                            <button class="btn btn-info btn-circle" {{action 'edit' row}}><i class="fa fa-edit" ></i></button>
+                            {{#if this.updateRecord}}
+                            <button data-action="edit" class="btn btn-info btn-circle" {{action 'internal_edit' row}}><i class="fa fa-edit"></i></button>
                             {{/if}}
-                            {{#if this.delete}}
-                            <button class="btn btn-danger btn-circle" {{action 'delete' row}}><i class="fa fa-trash"></i></button>
+                            {{#if this.deleteRecord}}
+                            <button data-action="delete" class="btn btn-danger btn-circle" {{action 'internal_delete' row}}><i class="fa fa-trash"></i></button>
                             {{/if}}
                         </td>
                     {{/if}}
@@ -59,3 +59,4 @@
     </table>
 </div>
 {{yield}}
+{{render 'crud-table-modal' this}}

@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/gerard2p/ember-cli-crudtable.svg?branch=master)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
+
 # Ember-cli-crudtable
 
 This README outlines the details of collaborating on this Ember addon.
