@@ -1,5 +1,9 @@
 <div class="row">
-    <div class="col-sm-5 m-b-xs">
+    <div class="col-sm-3 m-b-xs">
+        <button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' value}}>
+            <i class="fa fa-check"></i>&nbsp;New Record</button>
+    </div>
+    <div class="col-sm-2 m-b-xs">
         <select class="input-sm form-control input-s-sm inline">
             <option value="0">Option 1</option>
             <option value="1">Option 2</option>
@@ -20,18 +24,17 @@
     <div class="col-sm-3">
         <div class="input-group">
             <input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span>
+            <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span>
         </div>
     </div>
 </div>
 <div class="table-responsive">
-    <table {{bind-attr class=":table stripped:table-striped hover:table-hover"}} class="">
+    <table {{bind-attr class=":table stripped:table-striped hover:table-hover" }} class="">
         <thead>
             <tr>
                 {{#each field in this.fields}}
-                    <th>{{field}}</th>
-                {{/each}}
-                {{#if this.editdelete}}
+                <th>{{field}}</th>
+                {{/each}} {{#if this.editdelete}}
                 <th width="80px">Actions</th>
                 {{/if}}
             </tr>
@@ -39,24 +42,22 @@
         <tbody>
 
             {{#each row in this.model}}
-                <tr>
-                    {{render 'crud-table-row' row}}
-
-                    {{#if this.editdelete}}
-                        <td>
-                            {{#if this.updateRecord}}
-                            <button data-action="edit" class="btn btn-info btn-circle" {{action 'internal_edit' row}}><i class="fa fa-edit"></i></button>
-                            {{/if}}
-                            {{#if this.deleteRecord}}
-                            <button data-action="delete" class="btn btn-danger btn-circle" {{action 'internal_delete' row}}><i class="fa fa-trash"></i></button>
-                            {{/if}}
-                        </td>
+            <tr>
+                {{render 'crud-table-row' row}} {{#if this.editdelete}}
+                <td>
+                    {{#if this.updateRecord}}
+                    <button data-action="edit" class="btn btn-info btn-circle" {{action 'internal_edit' row}}><i class="fa fa-edit"></i>
+                    </button>
+                    {{/if}} {{#if this.deleteRecord}}
+                    <button data-action="delete" class="btn btn-danger btn-circle" {{action 'internal_delete' row}}><i class="fa fa-trash"></i>
+                    </button>
                     {{/if}}
-                </tr>
+                </td>
+                {{/if}}
+            </tr>
             {{/each}}
 
         </tbody>
     </table>
 </div>
-{{yield}}
-{{render 'crud-table-modal' this}}
+{{yield}} {{render 'crud-table-modal' this}}

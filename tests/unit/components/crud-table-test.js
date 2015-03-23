@@ -48,6 +48,30 @@ var targetObject = {
     },
     update: function () {
         ok(true, 'external Action was called!');
+    },
+    create:function(){
+        component.set('value', DS.RecordArray.create({
+            content: [
+                {
+                    id: '1',
+                    Field1: 'Data1',
+                    Field2: 'Data2',
+                    Field3: 'Data3'
+                },
+                {
+                    id: '2',
+                    Field1: 'Data4',
+                    Field2: 'Data5',
+                    Field3: 'Data6'
+                },
+                {
+                    id: '3',
+                    Field1: 'Data5',
+                    Field2: 'Data6',
+                    Field3: 'Data7'
+                }
+            ]
+        }));
     }
 };
 
@@ -64,7 +88,8 @@ moduleForComponent('crud-table', {
             stripped: true,
             hover: false,
             deleteRecord: 'delete',
-            updateRecord: 'update'
+            updateRecord: 'update',
+            createRecord: 'create'
         });
         component.set('targetObject', targetObject);
     },
@@ -108,6 +133,7 @@ test('User Create a Record', function () {
     var rows = this.$('table.table>tbody>tr').length;
     click('[data-action=create]');
     andThen(function () {
+        equal(find('.modal-title').text().trim(),'Add a New Record');
         click('[data-action=confirm]');
         andThen(function () {
             equal(find('table.table>tbody>tr').length, rows+1);
@@ -119,6 +145,7 @@ test('User Edits a Record', function () {
     var rows = this.$('table.table>tbody>tr').length;
     click('[data-action=edit]:eq(0)');
     andThen(function () {
+        equal(find('.modal-title').text().trim(),'Updating');
         click('[data-action=confirm]');
         andThen(function () {
             equal(find('table.table>tbody>tr').length, rows);
@@ -129,6 +156,7 @@ test('User Edits a Record', function () {
 test('User delete a Record', function () {
     var rows = this.$('table.table>tbody>tr').length;
     click('[data-action=delete]:eq(0)');
+    equal(find('.modal-title').text().trim(),"You're about to delete a record");
     andThen(function () {
         click('[data-action=confirm]');
         andThen(function () {
