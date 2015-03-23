@@ -64,7 +64,7 @@ export default Ember.Component.extend({
             this.set('isDeleting', false);
             var obj = this.get('value').objectAtContent(record.n);
             this.set('currentRecord',obj);
-            $("#CrudTableDeleteRecordModal .modal-title").html("Updating");
+            //$("#CrudTableDeleteRecordModal .modal-title").html("Updating");
             showmodal();
         },
         internal_delete: function (record) {
@@ -72,7 +72,8 @@ export default Ember.Component.extend({
             var obj = this.get('value').objectAtContent(record.n);
             this.set('currentRecord',obj);
             obj = obj.get ? obj.get(this.get('fields')[0]) : obj[this.get('fields')[0]];
-            $("#CrudTableDeleteRecordModal .modal-title").html("You're about to delete a record");
+            this.set('currentRecordDesc',obj);
+            //$("#CrudTableDeleteRecordModal .modal-title").html("You're about to delete a record");
             $("#CrudTableDeleteRecordModal .modal-body").html(
                 "Deleting the record: <b>" +
                 obj +
