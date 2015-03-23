@@ -19,15 +19,12 @@ var regenerateView = function (cmp) {
     cmp.set('model', model);
 };
 var showmodal = function () {
-            $("#CrudTableDeleteRecordModal").modal('show');
-        };
+    $("#CrudTableDeleteRecordModal").modal('show');
+};
 
 var hidemodal = function (ctx) {
-            $("#CrudTableDeleteRecordModal").modal('hide');
-            ctx.set('newRecord', false);
-            ctx.set('isDeleting', false);
-            ctx.set('currentRecord',null);
-        };
+    $("#CrudTableDeleteRecordModal").modal('hide');
+};
 
 export default Ember.Component.extend({
 
@@ -38,22 +35,21 @@ export default Ember.Component.extend({
 
     stripped: false,
     hover: false,
-    createRecord:'',
-    updateRecord:'',
-    deleteRecord:'',
-    currentRecord:null,
+    createRecord: '',
+    updateRecord: '',
+    deleteRecord: '',
+    currentRecord: null,
     actions: {
         confirm: function () {
             if (this.get('newRecord')) {
                 this.sendAction('createRecord');
             } else {
                 if (this.get('isDeleting')) {
-                    this.sendAction('deleteRecord');
+                    this.sendAction('deleteRecord', this.get('currentRecord'));
                 } else {
-                    this.sendAction('updateRecord');
+                    this.sendAction('updateRecord', this.get('currentRecord'));
                 }
             }
-            this.sendAction.apply(this,['delete']);
             hidemodal(this);
         },
         internal_create: function () {
@@ -63,16 +59,16 @@ export default Ember.Component.extend({
         internal_edit: function (record) {
             this.set('isDeleting', false);
             var obj = this.get('value').objectAtContent(record.n);
-            this.set('currentRecord',obj);
+            this.set('currentRecord', obj);
             //$("#CrudTableDeleteRecordModal .modal-title").html("Updating");
             showmodal();
         },
         internal_delete: function (record) {
             this.set('isDeleting', true);
             var obj = this.get('value').objectAtContent(record.n);
-            this.set('currentRecord',obj);
+            this.set('currentRecord', obj);
             obj = obj.get ? obj.get(this.get('fields')[0]) : obj[this.get('fields')[0]];
-            this.set('currentRecordDesc',obj);
+            this.set('currentRecordDesc', obj);
             //$("#CrudTableDeleteRecordModal .modal-title").html("You're about to delete a record");
             $("#CrudTableDeleteRecordModal .modal-body").html(
                 "Deleting the record: <b>" +
@@ -104,8 +100,13 @@ export default Ember.Component.extend({
                 regenerateView(that);
             });
         });
-        //$('body').prepend($("#CrudTableDeleteRecordModal"));
         $("#CrudTableDeleteRecordModal").modal('hide');
+        $('#CrudTableDeleteRecordModal').on('hidden.bs.modal', function (e) {
+            that.set('newRecord', false);
+            that.set('isDeleting', false);
+            that.set('currentRecord', null);
+        });
+
     }.on('didInsertElement'),
     teardown: function () {
         //this._drop.destroy();
