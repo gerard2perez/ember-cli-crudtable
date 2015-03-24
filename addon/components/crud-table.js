@@ -11,24 +11,27 @@ var CustomField = Ember.Object.extend({
 
 var regenerateView = function (cmp) {
     var ComplexModel = [];
-    cmp.value.forEach(function (row) {
-        var CustomProperties = [];
-        cmp.fields.forEach(function (field) {
-            var data = row.get ? row.get(field) : row[field];
-            var cfield = CustomField.create({
-                Field: field,
-                Value: data,
-                Type: typeof (data),
-                listener: function () {
-                    row.set(this.get('Field'), this.get('Value'));
-                }.observes('Value')
+    if (cmp.value) {
+        cmp.value.forEach(function (row) {
+            var CustomProperties = [];
+            cmp.fields.forEach(function (field) {
+                var data = row.get ? row.get(field) : row[field];
+                var cfield = CustomField.create({
+                    Field: field,
+                    Value: data,
+                    Type: typeof (data),
+                    listener: function () {
+                        row.set(this.get('Field'), this.get('Value'));
+                    }.observes('Value')
+                });
+                CustomProperties.pushObject(cfield);
             });
-            CustomProperties.pushObject(cfield);
+            CustomProperties.RoutedRecord = row;
+            ComplexModel.pushObject(CustomProperties);
         });
-        CustomProperties.RoutedRecord = row;
-        ComplexModel.pushObject(CustomProperties);
-    });
+    }
     cmp.set('ComplexModel', ComplexModel);
+
 };
 var showmodal = function () {
     $("#CrudTableDeleteRecordModal").modal('show');
@@ -68,10 +71,10 @@ export default Ember.Component.extend({
                     this.sendAction('updateRecord', this.get('currentRecord').RoutedRecord, deferred);
                 }
             }
-            deferred.promise.then(function(){
+            deferred.promise.then(function () {
                 regenerateView(that);
                 hidemodal();
-            },function(data){
+            }, function (data) {
                 alert(data.message);
             });
         },
@@ -80,11 +83,11 @@ export default Ember.Component.extend({
             that.set('newRecord', true);
             var deferred = Ember.RSVP.defer('crud-table#newRecord');
             this.sendAction('getRecord', deferred);
-            deferred.promise.then(function (/*record*/) {
+            deferred.promise.then(function ( /*record*/ ) {
                 regenerateView(that);
                 that.set('currentRecord', that.get('ComplexModel').get('lastObject'));
                 showmodal();
-            }, function (/*data*/) {
+            }, function ( /*data*/ ) {
                 alert('Something went wrong');
             });
         },
@@ -130,7 +133,7 @@ export default Ember.Component.extend({
                 that.set('newRecord', false);
                 that.set('isDeleting', false);
                 that.set('currentRecord', null);
-            },function(data){
+            }, function (data) {
                 alert(data);
             });
 
