@@ -2,64 +2,50 @@ import Ember from 'ember';
 //import App from '../app';
 //import EmberValidations from 'ember-validations';
 
-export default function (model, settings) {
-    return Ember.ObjectController.extend( {
+export default function (model /*settings*/) {
+    return Ember.ObjectController.extend({
         isEditing: false,
         actions: {
-            create: function (records) {
-                var self = this;
-                if (self.model.get('isNew')) {
-                    self.model.save().then(function () {
-                        self.send('emit', 'success', '¡Creado Exitosamente!');
-                        self.send('goback');
-                    }, function (e) {
-                        self.send('emit', 'error', 'Ha ocurrido un error al crear el registro. ' + e.responseText);
-                    });
+            getRecord: function (deferred) {
+                deferred.resolve(this.store.createRecord(model));
+            },
+            create: function (record, deferred) {
+                if (record.get('isNew')) {
+                    record.save().then(deferred.resolve, deferred.reject);
                 }
             },
             read: function () {
 
             },
-            update: function (record) {
-                var self = this;
-                var promises = [];
-                var xxx = self.get('currentRecord');
+            update: function (record, deferred) {
+                record.save().then(deferred.resolve, deferred.reject);
+                //var self = this;
+                //var promises = [];
                 //if(self.model.get('isDirty')){
-                promises.push(self.get('model').save());
+                //promises.push(record.save());
                 //}else{
                 //	self.set('isEditing',false);
                 //}
-                Ember.A(Ember.keys(self.model._dependentRelations)).any(function (key) {
+                /*Ember.A(Ember.keys(record._dependentRelations)).any(function (key) {
                     var value = Ember.get(self.model, key);
                     if (value.get('isDirty')) {
                         promises.push(value.get('content').save());
                     }
-                });
-                Ember.RSVP.Promise.all(promises).then(function () {
-                    self.set('isEditing', false);
-                    self.send('emit', 'success', 'Actualizado Correctamente');
-                }, function (e) {
-                    self.send('emit', 'error', 'Ha ocurrido un error al crear el registro. ' + e.responseText);
-                });
+                });*/
+                //Ember.RSVP.Promise.all(promises).then(deferred.resolve, deferred.reject);
 
             },
-            delete: function (record) {
-                var self = this;
-                this.model.destroyRecord().then(function () {
-                    self.send('emit', 'success', '¡Eliminado Corréctamente!');
-                    self.send('goback');
-                }, function (e) {
-                    self.send('emit', 'error', 'Ha ocurrido un error al crear el registro. ' + e.responseText);
-                });
+            delete: function (record, deferred) {
+                record.destroyRecord().then(deferred.resolve, deferred.reject);
             },
-            cancel: function (record) {
-                if (this.model.get('isDirty')) {
-                    this.model.rollback();
+            cancel: function (record, deferred) {
+                if (record.get('isDirty')) {
+                    record.rollback();
                 }
-                this.set('isEditing', false);
-            },
-            edit: function (record) {
-                this.set('isEditing', true);
+                if (record.get('isNew')) {
+                    record.deleteRecord();
+                }
+                deferred.resolve(true);
             }
         }
     });
