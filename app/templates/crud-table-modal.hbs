@@ -17,7 +17,16 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <p><strong>Lorem Ipsum is simply dummy</strong> text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                {{this}}
+                {{#if newRecord}}
+                    {{render 'crud-table-update' this.currentRecord}}
+                    {{else}}
+                        {{#if isDeleting}}
+                            Deleting the record: <b>{{this.currentRecord.0.Value}}</b> is a permanent action.
+                        {{else}}
+                            {{render 'crud-table-update' this.currentRecord}}
+                        {{/if}}
+                    {{/if}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
