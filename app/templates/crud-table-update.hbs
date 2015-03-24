@@ -1,0 +1,11 @@
+<form method="get" class="form-horizontal">
+    {{#each record in this.model}}
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{record.Field}}</label>
+        <div class="col-sm-10">
+            {{input value=record.Value type="text" class="form-control"}}
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    {{/each}}
+</form>
