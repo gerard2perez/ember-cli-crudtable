@@ -43,7 +43,7 @@ var metadata= function(records, that) {
     meta = {
         total: meta.count,
         previous: meta.previous,
-        current: meta.previous ? meta.next - 1 : 1,
+        current: meta.previous ? (meta.next ?  meta.next - 1:meta.previous+1 ): 1,
         next: meta.next,
         showing: records.get('content.length'),
         name: inflector.pluralize(records.type.typeKey)
@@ -97,6 +97,7 @@ export default Ember.Component.extend({
             var that = this;
             var deferred = Ember.RSVP.defer('crud-table#goto');
             lastquery.page = page;
+            that.set('isLoading', true);
             this.sendAction('searchRecord', lastquery, deferred);
             deferred.promise.then(function (records) {
                 metadata(records,that);
