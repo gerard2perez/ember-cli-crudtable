@@ -81,7 +81,7 @@ var targetObject = {
 moduleForComponent('crud-table', {
     // specify the other units that are required for this test
     // needs: ['component:foo', 'helper:bar']
-    needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update'],
+    needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update','template:spinner'],
     setup: function () {
         App = startApp();
         component = this.subject({

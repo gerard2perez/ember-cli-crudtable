@@ -8,7 +8,38 @@ var CustomField = Ember.Object.extend({
     Type: null,
     listener: function () {}.observes('Value')
 });
+var GetMetaData = function (records, that) {
+    var inflector = new Ember.Inflector(Ember.Inflector.defaultRules);
+    var meta = records.get("meta");
+    meta = {
+        total: meta.count,
+        previous: meta.previous,
+        current: meta.previous ? meta.next - 1 : 1,
+        next: meta.next,
+        showing: records.get('content.length'),
+        name: inflector.pluralize(records.type.typeKey)
+    };
 
+    meta.from = (meta.current - 1) * meta.showing + 1;
+    meta.to = meta.current * meta.showing;
+    meta.links = (function () {
+        var arr = [];
+        var tpages = Math.ceil(meta.total / meta.showing);
+        var stc = meta.current-1;
+
+        var page = 1;
+        for(page; page<=stc; page++){
+            arr.push({page:page,current:false});
+        }
+        arr.push({page:page++,current:true});
+        for(page; page<=tpages; page++){
+            arr.push({page:page,current:false});
+        }
+        return arr;
+    })();
+
+    that.set('pagination', meta);
+};
 var regenerateView = function (cmp) {
     var ComplexModel = [];
     if (cmp.value) {
@@ -69,6 +100,7 @@ export default Ember.Component.extend({
             that.set('isLoading', true);
             this.sendAction('searchRecord', query, deferred);
             deferred.promise.then(function (records) {
+                GetMetaData(records, that);
                 that.set('value', records);
                 regenerateView(that);
                 that.set('isLoading', false);
@@ -145,6 +177,7 @@ export default Ember.Component.extend({
         that.set('isLoading', true);
         this.sendAction('searchRecord', {}, deferred);
         deferred.promise.then(function (records) {
+            GetMetaData(records, that);
             that.set('value', records);
             regenerateView(that);
             that.set('isLoading', false);
