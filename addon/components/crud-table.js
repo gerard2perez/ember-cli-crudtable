@@ -155,7 +155,8 @@ export default Ember.Component.extend({
             that.set('newRecord', true);
             var deferred = Ember.RSVP.defer('crud-table#newRecord');
             this.sendAction('getRecord', deferred);
-            deferred.promise.then(function ( /*record*/ ) {
+            deferred.promise.then(function ( record) {
+                that.get('value').pushObject(record);
                 regenerateView(that);
                 that.set('currentRecord', that.get('ComplexModel').get('lastObject'));
                 showmodal();
