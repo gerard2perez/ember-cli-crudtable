@@ -69,7 +69,9 @@
     <div class="col-sm-4">
 
         <div class="btn-group">
-            <button {{bind-attr class="this.pagination.previous::disabled :btn :btn-white" }} type="button">Previous</button>
+            <button
+                    {{action 'goto' this.pagination.previous}}
+                    {{bind-attr class="this.pagination.previous::disabled :btn :btn-white" }} type="button">Previous</button>
             {{#each page in this.pagination.links}}
                 <button
                         {{bind-attr data-page=page.page}}
@@ -79,7 +81,9 @@
                     {{page.page}}
                 </button>
             {{/each}}
-            <button {{bind-attr class="this.pagination.next::disabled :btn :btn-white" }} type="button">Next</button>
+            <button
+                    {{action 'goto' this.pagination.next}}
+                    {{bind-attr class="this.pagination.next::disabled :btn :btn-white" }} type="button">Next</button>
         </div>
     </div>
 </div>
