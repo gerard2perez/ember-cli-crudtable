@@ -131,6 +131,7 @@ export default Ember.Component.extend({
         confirm: function () {
             var that = this;
             var deferred;
+            this.set('isLoading',true);
             if (this.get('newRecord')) {
                 deferred = Ember.RSVP.defer('crud-table#createRecord');
                 this.sendAction('createRecord', this.get('currentRecord').RoutedRecord, deferred);
@@ -146,15 +147,17 @@ export default Ember.Component.extend({
             deferred.promise.then(function () {
                 regenerateView(that);
                 hidemodal();
+                that.set('isLoading',false);
             }, function (data) {
                 alert(data.message);
+                that.set('isLoading',false);
             });
         },
         internal_create: function () {
             var that = this;
             that.set('newRecord', true);
             var deferred = Ember.RSVP.defer('crud-table#newRecord');
-            this.sendAction('getRecord', deferred);
+            that.sendAction('getRecord', deferred);
             deferred.promise.then(function ( record) {
                 that.get('value').pushObject(record);
                 regenerateView(that);
