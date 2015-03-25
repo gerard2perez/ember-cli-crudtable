@@ -8,7 +8,36 @@ var CustomField = Ember.Object.extend({
     Type: null,
     listener: function () {}.observes('Value')
 });
-var GetMetaData = function (records, that) {
+
+
+var regenerateView = function (cmp) {
+    var ComplexModel = [];
+    if (cmp.value) {
+        cmp.value.forEach(function (row) {
+            var CustomProperties = [];
+            cmp.fields.forEach(function (field) {
+                var data = row.get ? row.get(field) : row[field];
+                var cfield = CustomField.create({
+                    Field: field,
+                    Value: data,
+                    Type: typeof (data),
+                    listener: function () {
+                        row.set(this.get('Field'), this.get('Value'));
+                    }.observes('Value')
+                });
+                CustomProperties.pushObject(cfield);
+            });
+            CustomProperties.RoutedRecord = row;
+            ComplexModel.pushObject(CustomProperties);
+        });
+    }
+    cmp.set('ComplexModel', ComplexModel);
+
+};
+var showmodal = function () {
+    $("#CrudTableDeleteRecordModal").modal('show');
+};
+var metadata= function(records, that) {
     var inflector = new Ember.Inflector(Ember.Inflector.defaultRules);
     var meta = records.get("meta");
     meta = {
@@ -40,38 +69,10 @@ var GetMetaData = function (records, that) {
 
     that.set('pagination', meta);
 };
-var regenerateView = function (cmp) {
-    var ComplexModel = [];
-    if (cmp.value) {
-        cmp.value.forEach(function (row) {
-            var CustomProperties = [];
-            cmp.fields.forEach(function (field) {
-                var data = row.get ? row.get(field) : row[field];
-                var cfield = CustomField.create({
-                    Field: field,
-                    Value: data,
-                    Type: typeof (data),
-                    listener: function () {
-                        row.set(this.get('Field'), this.get('Value'));
-                    }.observes('Value')
-                });
-                CustomProperties.pushObject(cfield);
-            });
-            CustomProperties.RoutedRecord = row;
-            ComplexModel.pushObject(CustomProperties);
-        });
-    }
-    cmp.set('ComplexModel', ComplexModel);
-
-};
-var showmodal = function () {
-    $("#CrudTableDeleteRecordModal").modal('show');
-};
-
 var hidemodal = function () {
     $("#CrudTableDeleteRecordModal").modal('hide');
 };
-
+var lastquery={page:null};
 export default Ember.Component.extend({
 
     attributeBindings: ['style'],
@@ -91,16 +92,33 @@ export default Ember.Component.extend({
     SearchTerm: "",
     SearchField: "",
     actions: {
+        goto:function(page){
+
+            var that = this;
+            var deferred = Ember.RSVP.defer('crud-table#goto');
+            lastquery.page = page;
+            this.sendAction('searchRecord', lastquery, deferred);
+            deferred.promise.then(function (records) {
+                metadata(records,that);
+                that.set('value', records);
+                regenerateView(that);
+                that.set('isLoading', false);
+            }, function (data) {
+                alert(data.message);
+                that.set('isLoading', false);
+            });
+        },
         internal_search: function () {
             var field = $("#SearchField").val();
             var query = {};
             var that = this;
             query[field] = this.get('SearchTerm');
+            lastquery = query;
             var deferred = Ember.RSVP.defer('crud-table#createRecord');
             that.set('isLoading', true);
             this.sendAction('searchRecord', query, deferred);
             deferred.promise.then(function (records) {
-                GetMetaData(records, that);
+                metadata(records,that);
                 that.set('value', records);
                 regenerateView(that);
                 that.set('isLoading', false);
@@ -177,7 +195,7 @@ export default Ember.Component.extend({
         that.set('isLoading', true);
         this.sendAction('searchRecord', {}, deferred);
         deferred.promise.then(function (records) {
-            GetMetaData(records, that);
+            metadata(records, that);
             that.set('value', records);
             regenerateView(that);
             that.set('isLoading', false);

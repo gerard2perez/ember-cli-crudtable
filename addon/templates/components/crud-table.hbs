@@ -72,6 +72,7 @@
             <button {{bind-attr class="this.pagination.previous::disabled :btn :btn-white" }} type="button">Previous</button>
             {{#each page in this.pagination.links}}
                 <button
+                        {{bind-attr data-page=page.page}}
                         {{action 'goto' page.page}}
                         {{bind-attr class=":btn page.current:btn-primary:btn-white" }}
                         type="button">

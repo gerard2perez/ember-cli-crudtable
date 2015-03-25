@@ -37,16 +37,25 @@ var emberdatafix = DS.RecordArray.create({
 });
 var targetObject = {
     FetchData: function (query, deferred) {
+        var page = query.page ? query.page : 1;
         var searchResult = DS.RecordArray.create({
+            type: {
+                typeKey: "Dummy"
+            },
+            meta: {
+                count: 10,
+                previous: null,
+                next: 2
+            },
             content: [
                 FakeModel.create({
-                    id: '3',
+                    id: 2 + page,
                     Field1: 'Data5',
                     Field2: 'Data7',
                     Field3: 'Data11'
                 }),
                 FakeModel.create({
-                    id: '13',
+                    id: 12 + page,
                     Field1: 'Data17',
                     Field2: 'Data19',
                     Field3: 'Data23'
@@ -81,12 +90,11 @@ var targetObject = {
 moduleForComponent('crud-table', {
     // specify the other units that are required for this test
     // needs: ['component:foo', 'helper:bar']
-    needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update','template:spinner'],
+    needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update', 'template:spinner'],
     setup: function () {
         App = startApp();
         component = this.subject({
             fields: 'Field1,Field2,Field3',
-            value: emberdatafix,
             stripped: true,
             hover: false,
             deleteRecord: 'delete',
@@ -102,14 +110,10 @@ moduleForComponent('crud-table', {
 });
 
 test('Can set init variables', function () {
-
-    equal(emberdatafix.get('lastObject').get('id'), 2);
-    equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data6');
-    var oldvalue = component.get('value');
+    equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data23');
     ArrField = ArrField.split(',');
     equal(component.get('fields').length, ArrField.length);
     equal(component.get('fields')[2], ArrField[2]);
-    equal(emberdatafix, oldvalue);
     equal(find('table.table>tbody>tr').children().length, (ArrField.length + 1) * find('table.table>tbody').children().length);
 });
 
@@ -167,16 +171,28 @@ test('User deletes a Record', function () {
     });
 });
 
-test('User pushes a search',function(){
-    Ember.run(function(){
-        component.set('SearchTerm','Data2');
-        component.set('SearchField','Field1');
+test('User pushes a search', function () {
+    Ember.run(function () {
+        component.set('SearchTerm', 'Data2');
+        component.set('SearchField', 'Field1');
         click('[data-action=search]');
     });
-    andThen(function(){
-        equal(component.get('SearchTerm'),'Data2');
-        equal(component.get('SearchField'),'Field1');
-        equal( component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'),'Data23','Complex Model not Updated') ;
-        equal( component.get('value').get('lastObject').get('Field3'),'Data23') ;
+    andThen(function () {
+        equal(component.get('SearchTerm'), 'Data2');
+        equal(component.get('SearchField'), 'Field1');
+        equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data23', 'Complex Model not Updated');
+        equal(component.get('value').get('lastObject').get('Field3'), 'Data23');
+    });
+});
+
+test('User interacts with pagination', function () {
+    equal(find('[data-page]').length, 5);
+    click('[data-page=1]');
+    andThen(function () {
+        equal(component.get('value').get('lastObject').get('id'), 13);
+        click('[data-page=3]');
+        andThen(function () {
+            equal(component.get('value').get('lastObject').get('id'), 15);
+        });
     });
 });
