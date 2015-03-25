@@ -143,7 +143,7 @@ export default Ember.Component.extend({
         var that = this;
         var deferred = Ember.RSVP.defer('crud-table#createRecord');
         that.set('isLoading', true);
-        this.sendAction('searchRecord', query, deferred);
+        this.sendAction('searchRecord', {}, deferred);
         deferred.promise.then(function (records) {
             that.set('value', records);
             regenerateView(that);
