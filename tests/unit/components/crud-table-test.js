@@ -11,12 +11,6 @@ import DS from "ember-data";
 var component;
 var App;
 var ArrField = 'Field1,Field2,Field3';
-var Generic = DS.Model.extend({
-    id: DS.attr('number'),
-    Field1: DS.attr('string'),
-    Field2: DS.attr('string'),
-    Field3: DS.attr('string')
-});
 
 var FakeModel = Ember.Component.extend({
     id: null,
@@ -42,6 +36,26 @@ var emberdatafix = DS.RecordArray.create({
     ]
 });
 var targetObject = {
+    FetchData: function (query, deferred) {
+        var searchResult = DS.RecordArray.create({
+            content: [
+                FakeModel.create({
+                    id: '3',
+                    Field1: 'Data5',
+                    Field2: 'Data7',
+                    Field3: 'Data11'
+                }),
+                FakeModel.create({
+                    id: '13',
+                    Field1: 'Data17',
+                    Field2: 'Data19',
+                    Field3: 'Data23'
+                }),
+            ]
+        });
+        ok(query);
+        deferred.resolve(searchResult);
+    },
     getRecord: function (deferred) {
         var newobject = FakeModel.create({
             id: '3',
@@ -150,5 +164,19 @@ test('User deletes a Record', function () {
             //equal(component.get('ComplexModel.length'),1);
             //equal(find('table.table>tbody>tr').length, rows - 1);
         });
+    });
+});
+
+test('User pushes a search',function(){
+    Ember.run(function(){
+        component.set('SearchTerm','Data2');
+        component.set('SearchField','Field1');
+        click('[data-action=search]');
+    });
+    andThen(function(){
+        equal(component.get('SearchTerm'),'Data2');
+        equal(component.get('SearchField'),'Field1');
+        equal( component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'),'Data23','Complex Model not Updated') ;
+        equal( component.get('value').get('lastObject').get('Field3'),'Data23') ;
     });
 });
