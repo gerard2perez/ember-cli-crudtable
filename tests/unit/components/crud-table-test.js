@@ -72,7 +72,6 @@ var targetObject = {
             Field2: 'Data8',
             Field3: 'Data9'
         });
-        component.get('value').pushObject(newobject);
         deferred.resolve(newobject);
     },
     delete: function (record, deferred) {
@@ -125,6 +124,7 @@ test('User Create a Record', function () {
         click('[data-action=confirm]');
         andThen(function () {
             equal(find('table.table>tbody>tr').length, rows + 1);
+
         });
     });
 });
