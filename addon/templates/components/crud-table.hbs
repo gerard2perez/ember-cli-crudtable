@@ -14,20 +14,23 @@
         </div>
     </div>
     <div class="col-sm-2 m-b-xs">
-        <select name="SearchField" class="input-sm form-control input-s-sm inline">
+        <select id="SearchField" class="input-sm form-control input-s-sm inline">
             {{#each field in this.fields}}
-                <option {{bind-attr value=field}}>{{field}}</option>
+            <option {{bind-attr value=field}}>{{field}}</option>
             {{/each}}
         </select>
     </div>
     <div class="col-sm-3">
         <div class="input-group">
-            <input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-            <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span>
+            {{input value=this.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
+            </span>
         </div>
     </div>
 </div>
 <div class="table-responsive">
+    {{#unless isLoading}}
     <table {{bind-attr class=":table stripped:table-striped hover:table-hover" }} class="">
         <thead>
             <tr>
@@ -41,10 +44,7 @@
         <tbody>
             {{#each row in this.ComplexModel}}
             <tr>
-                {{#if row}}
-                {{render 'crud-table-row' row}}
-                {{/if}}
-                {{#if this.editdelete}}
+                {{#if row}} {{render 'crud-table-row' row}} {{/if}} {{#if this.editdelete}}
                 <td>
                     {{#if this.updateRecord}}
                     <button data-action="edit" class="btn btn-info btn-circle" {{action 'internal_edit' row}}><i class="fa fa-edit"></i>
@@ -60,5 +60,8 @@
 
         </tbody>
     </table>
+    {{else}}
+    {{render 'spinner' this}}
+    {{/unless}}
 </div>
 {{yield}} {{render 'crud-table-modal' this}}

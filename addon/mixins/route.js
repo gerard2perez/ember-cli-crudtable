@@ -3,9 +3,12 @@ import Ember from 'ember';
 //import EmberValidations from 'ember-validations';
 
 export default function (model /*settings*/) {
-    return Ember.ObjectController.extend({
+    return Ember.Mixin.create({
         isEditing: false,
         actions: {
+            FetchData:function(query,deferred){
+                deferred.resolve(query);
+            },
             getRecord: function (deferred) {
                 deferred.resolve(this.store.createRecord(model));
             },

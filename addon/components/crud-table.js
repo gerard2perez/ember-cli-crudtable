@@ -49,13 +49,34 @@ export default Ember.Component.extend({
     }.property('name'),
     stripped: false,
     hover: false,
-    createRecord: '',
-    updateRecord: '',
-    deleteRecord: '',
+    createRecord: 'create',
+    updateRecord: 'update',
+    deleteRecord: 'delete',
     cancelRecord: 'cancel',
+    searchRecord: 'FetchData',
     currentRecord: null,
     getRecord: 'getRecord',
+    isLoading: true,
+    SearchTerm: "",
+    SearchField: "",
     actions: {
+        internal_search: function () {
+            var field = $("#SearchField").val();
+            var query = {};
+            var that = this;
+            query[field] = this.get('SearchTerm');
+            var deferred = Ember.RSVP.defer('crud-table#createRecord');
+            that.set('isLoading', true);
+            this.sendAction('searchRecord', query, deferred);
+            deferred.promise.then(function (records) {
+                that.set('value', records);
+                regenerateView(that);
+                that.set('isLoading', false);
+            }, function (data) {
+                alert(data.message);
+                that.set('isLoading', false);
+            });
+        },
         confirm: function () {
             var that = this;
             var deferred;
@@ -120,19 +141,32 @@ export default Ember.Component.extend({
     }.on('willInsertElement'),
     setup: function () {
         var that = this;
-        regenerateView(that);
+        var deferred = Ember.RSVP.defer('crud-table#createRecord');
+        that.set('isLoading', true);
+        this.sendAction('searchRecord', query, deferred);
+        deferred.promise.then(function (records) {
+            that.set('value', records);
+            regenerateView(that);
+            that.set('isLoading', false);
+        }, function (data) {
+            alert(data.message);
+            that.set('isLoading', false);
+        });
+        //regenerateView(that);
         //Ember.addObserver('value',that,function(){
         //    regenerateView(that);
         //});
         $("#CrudTableDeleteRecordModal").modal('hide');
         $('#CrudTableDeleteRecordModal').on('hidden.bs.modal', function () {
             var deferred = Ember.RSVP.defer('crud-table#cancelRecord');
+            var template = Ember.RSVP.defer('crud-table#RenderTemplate');
             that.sendAction('cancelRecord', that.get('currentRecord').RoutedRecord, deferred);
             deferred.promise.then(function () {
                 regenerateView(that);
                 that.set('newRecord', false);
                 that.set('isDeleting', false);
                 that.set('currentRecord', null);
+                template.resolve(true);
             }, function (data) {
                 alert(data);
             });
