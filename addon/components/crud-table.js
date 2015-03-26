@@ -95,11 +95,12 @@ var metadata = function (records, that) {
         previous: meta.previous,
         current: meta.previous ? (meta.next ? meta.next - 1 : meta.previous + 1) : 1,
         next: meta.next,
-        showing: records.get('content.length'),
+        showing: that.page_size,
         name: inflector.pluralize(records.type.typeKey)
     };
     meta.from = (meta.current - 1) * meta.showing + 1;
     meta.to = meta.current * meta.showing;
+    meta.to = meta.to > meta.total ? meta.total:meta.to;
     recalculatePagination(that, meta);
 
 };
@@ -158,7 +159,6 @@ export default Ember.Component.extend({
                 that.set('value', records);
                 regenerateView(that);
                 that.set('isLoading', false);
-                alert(12);
             }, function (data) {
                 alert(data.message);
                 that.set('isLoading', false);
@@ -250,6 +250,7 @@ export default Ember.Component.extend({
         that.set('isLoading', true);
         this.sendAction('searchRecord', {}, deferred);
         deferred.promise.then(function (records) {
+            that.page_size = records.get('content.length');
             metadata(records, that);
             that.set('value', records);
             regenerateView(that);
