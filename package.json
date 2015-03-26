@@ -1,7 +1,7 @@
 {
   "name": "ember-cli-crudtable",
-  "version": "0.0.1",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.3.26",
+  "description": "This addon allows you to easly create a CRUD Table, it will take you only 5s!.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -18,8 +18,8 @@
   "dependencies": {
     "ember-cli-htmlbars": "0.7.4"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "Gerardo Pérez Pérez",
+  "license": "MPL2",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.0",
     "ember-cli": "0.2.0",
