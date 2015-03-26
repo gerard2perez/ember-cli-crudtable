@@ -59,32 +59,22 @@
             {{/each}}
 
         </tbody>
+        <tfoot>
+            Showing {{this.pagination.from}} to {{this.pagination.to}} of {{this.pagination.total}} {{this.pagination.name}}
+        </tfoot>
     </table>
-    {{else}} {{render 'spinner' this}} {{/unless}}
+    {{else}} -{{render 'spinner' this.newRecord}}- {{/unless}}
 </div>
-<div class="row">
-    <div class="col-sm-8">
-        Showing {{this.pagination.from}} to {{this.pagination.to}} of {{this.pagination.total}} {{this.pagination.name}}
-    </div>
-    <div class="col-sm-4">
 
-        <div class="btn-group">
-            <button
-                    {{action 'goto' this.pagination.previous}}
-                    {{bind-attr class="this.pagination.previous::disabled :btn :btn-white" }} type="button">Previous</button>
-            {{#each page in this.pagination.links}}
-                <button
-                        {{bind-attr data-page=page.page}}
-                        {{action 'goto' page.page}}
-                        {{bind-attr class=":btn page.current:btn-primary:btn-white" }}
-                        type="button">
-                    {{page.page}}
-                </button>
-            {{/each}}
-            <button
-                    {{action 'goto' this.pagination.next}}
-                    {{bind-attr class="this.pagination.next::disabled :btn :btn-white" }} type="button">Next</button>
-        </div>
+<div class="row text-center">
+    <div class="btn-group">
+        <button {{action 'goto' this.pagination.previous}} {{bind-attr class="this.pagination.previous::disabled :btn :btn-white" }} type="button">Previous</button>
+        {{#each page in this.pagination.links}}
+        <button {{bind-attr data-page=page.page}} {{action 'goto' page.page}} {{bind-attr class=":btn page.current:btn-primary:btn-white" }} type="button">
+            {{page.page}}
+        </button>
+        {{/each}}
+        <button {{action 'goto' this.pagination.next}} {{bind-attr class="this.pagination.next::disabled :btn :btn-white" }} type="button">Next</button>
     </div>
 </div>
 {{yield}} {{render 'crud-table-modal' this}}

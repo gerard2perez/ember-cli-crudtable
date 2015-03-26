@@ -1,5 +1,8 @@
-<div class="spinner">
+<div {{bind-attr class=":spinner this.model:inline_spinner"}}>
     <style>
+        .inline_spinner{
+            margin: 0 auto !important;
+        }
         .spinner {
             margin: 100px auto;
             width: 50px;
