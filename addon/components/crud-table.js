@@ -124,6 +124,10 @@ export default Ember.Component.extend({
     isLoading: true,
     SearchTerm: "",
     SearchField: "",
+    value: [],
+    layout: layout,
+    class: "",
+    fields: "id",
     actions: {
         goto: function (page) {
             var that = this;
@@ -227,10 +231,6 @@ export default Ember.Component.extend({
             //this.get('delete')();
         }
     },
-    value: [],
-    layout: layout,
-    class: "",
-    fields: "id",
     init: function () {
         var that = this;
         this._super();

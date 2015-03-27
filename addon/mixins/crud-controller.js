@@ -5,7 +5,7 @@ export default function (model /*settings*/) {
         isEditing: false,
         actions: {
             FetchData:function(query,deferred){
-                deferred.resolve(query);
+                this.store.find(model,query).then(deferred.resolve,deferred.reject);
             },
             getRecord: function (deferred) {
                 deferred.resolve(this.store.createRecord(model));
