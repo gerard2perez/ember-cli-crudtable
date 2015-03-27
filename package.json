@@ -13,7 +13,7 @@
   },
   "repository": "https://github.com/gerard2p/ember-cli-crudtable.git",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.12.0"
   },
   "dependencies": {
     "ember-cli-htmlbars": "0.7.4"
