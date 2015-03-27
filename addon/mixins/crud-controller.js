@@ -1,6 +1,4 @@
 import Ember from 'ember';
-//import App from '../app';
-//import EmberValidations from 'ember-validations';
 
 export default function (model /*settings*/) {
     return Ember.Mixin.create({
@@ -29,12 +27,12 @@ export default function (model /*settings*/) {
                 //}else{
                 //	self.set('isEditing',false);
                 //}
-                /*Ember.A(Ember.keys(record._dependentRelations)).any(function (key) {
+                Ember.A(Ember.keys(record._dependentRelations)).any(function (key) {
                     var value = Ember.get(self.model, key);
                     if (value.get('isDirty')) {
                         promises.push(value.get('content').save());
                     }
-                });*/
+                });
                 //Ember.RSVP.Promise.all(promises).then(deferred.resolve, deferred.reject);
 
             },
