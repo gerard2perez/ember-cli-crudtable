@@ -59,7 +59,7 @@ var recalculatePagination = function (that, meta) {
 
     meta.links = arr;
     that.set('pagination', meta);
-}
+};
 var regenerateView = function (cmp) {
     var ComplexModel = [];
     if (cmp.value) {
@@ -201,7 +201,7 @@ export default Ember.Component.extend({
             }, function (data) {
                 alert(data.message);
                 that.set('isLoading', false);
-            })
+            });
         },
         internal_create: function () {
             var that = this;

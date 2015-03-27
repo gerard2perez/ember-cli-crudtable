@@ -60,7 +60,7 @@
 
         </tbody>
         <tfoot>
-            Showing {{this.pagination.from}} to {{this.pagination.to}} of {{this.pagination.total}} {{this.pagination.name}}
+            Showing {{this.pagination.from}} to {{this.pagination.to}} of <span name="total_records">{{this.pagination.total}}</span> {{this.pagination.name}}
         </tfoot>
     </table>
     {{else}} -{{render 'spinner' this.newRecord}}- {{/unless}}
