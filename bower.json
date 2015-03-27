@@ -1,6 +1,9 @@
 {
     "name": "ember-cli-crudtable",
     "dependencies": {
+        "bootstrap": "~3.3.4"
+    },
+    "devDependencies": {
         "jquery": "^1.11.1",
         "ember": "1.10.0",
         "ember-data": "1.0.0-beta.15",
@@ -12,8 +15,5 @@
         "ember-qunit": "0.2.8",
         "ember-qunit-notifications": "0.0.7",
         "qunit": "~1.17.1"
-    },
-    "devDependencies": {
-        "bootstrap": "~3.3.4"
     }
 }

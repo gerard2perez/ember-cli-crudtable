@@ -8,7 +8,6 @@ var CustomField = Ember.Object.extend({
     Type: null,
     listener: function () {}.observes('Value')
 });
-
 var recalculatePagination = function (that, meta) {
     var arr = [];
     var tpages = Math.ceil(meta.total / meta.showing);
@@ -100,7 +99,7 @@ var metadata = function (records, that) {
     };
     meta.from = (meta.current - 1) * meta.showing + 1;
     meta.to = meta.current * meta.showing;
-    meta.to = meta.to > meta.total ? meta.total:meta.to;
+    meta.to = meta.to > meta.total ? meta.total : meta.to;
     recalculatePagination(that, meta);
 
 };
@@ -110,12 +109,9 @@ var hidemodal = function () {
 var lastquery = {
     page: null
 };
-export default Ember.Component.extend({
 
-    attributeBindings: ['style'],
-    style: function () {
-        return 'color: ' + this.get('name') + ';';
-    }.property('name'),
+
+export default Ember.Component.extend({
     stripped: false,
     hover: false,
     createRecord: 'create',
@@ -231,9 +227,9 @@ export default Ember.Component.extend({
             //this.get('delete')();
         }
     },
+    value: [],
     layout: layout,
     class: "",
-    value: [],
     fields: "id",
     init: function () {
         var that = this;
@@ -249,6 +245,9 @@ export default Ember.Component.extend({
         var deferred = Ember.RSVP.defer('crud-table#createRecord');
         that.set('isLoading', true);
         this.sendAction('searchRecord', {}, deferred);
+
+        $(this).addClass(this.get('class'));
+
         deferred.promise.then(function (records) {
             that.page_size = records.get('content.length');
             metadata(records, that);
@@ -259,10 +258,6 @@ export default Ember.Component.extend({
             alert(data.message);
             that.set('isLoading', false);
         });
-        //regenerateView(that);
-        //Ember.addObserver('value',that,function(){
-        //    regenerateView(that);
-        //});
         $("#CrudTableDeleteRecordModal").modal('hide');
         $('#CrudTableDeleteRecordModal').on('hidden.bs.modal', function () {
             var deferred = Ember.RSVP.defer('crud-table#cancelRecord');
@@ -282,6 +277,6 @@ export default Ember.Component.extend({
 
     }.on('didInsertElement'),
     teardown: function () {
-        //this._drop.destroy();
+
     }.on('willDestroyElement'),
 });
