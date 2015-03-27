@@ -1,13 +1,11 @@
 import Ember from 'ember';
-//import App from '../app';
-//import EmberValidations from 'ember-validations';
 
 export default function (model /*settings*/) {
     return Ember.Mixin.create({
         isEditing: false,
         actions: {
             FetchData:function(query,deferred){
-                deferred.resolve(query);
+                this.store.find(model,query).then(deferred.resolve,deferred.reject);
             },
             getRecord: function (deferred) {
                 deferred.resolve(this.store.createRecord(model));
@@ -21,21 +19,20 @@ export default function (model /*settings*/) {
 
             },
             update: function (record, deferred) {
-                record.save().then(deferred.resolve, deferred.reject);
-                //var self = this;
-                //var promises = [];
+                var that = this;
+                var promises = [];
                 //if(self.model.get('isDirty')){
-                //promises.push(record.save());
+                promises.push(record.save());
                 //}else{
                 //	self.set('isEditing',false);
                 //}
-                /*Ember.A(Ember.keys(record._dependentRelations)).any(function (key) {
-                    var value = Ember.get(self.model, key);
+                Ember.A(Ember.keys(record._relationships)).any(function (key) {
+                    var value = Ember.get(that.model, key);
                     if (value.get('isDirty')) {
                         promises.push(value.get('content').save());
                     }
-                });*/
-                //Ember.RSVP.Promise.all(promises).then(deferred.resolve, deferred.reject);
+                });
+                Ember.RSVP.Promise.all(promises).then(deferred.resolve, deferred.reject);
 
             },
             delete: function (record, deferred) {
