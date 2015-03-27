@@ -5,52 +5,52 @@
     </div>
     <div class="col-sm-4 m-b-xs">
         <div data-toggle="buttons" class="btn-group">
-            <label class="btn btn-sm btn-white">
+            <label class="btn btn-sm btn-page">
                 <input type="radio" id="option1" name="options"> Day </label>
-            <label class="btn btn-sm btn-white active">
+            <label class="btn btn-sm btn-page active">
                 <input type="radio" id="option2" name="options"> Week </label>
-            <label class="btn btn-sm btn-white">
+            <label class="btn btn-sm btn-page">
                 <input type="radio" id="option3" name="options"> Month </label>
         </div>
     </div>
     <div class="col-sm-2 m-b-xs">
-        <select name="SearchField" class="input-sm form-control input-s-sm inline">
+        <select id="SearchField" class="input-sm form-control input-s-sm inline">
             {{#each field in this.fields}}
-                <option {{bind-attr value=field}}>{{field}}</option>
+            <option {{bind-attr value=field}}>{{field}}</option>
             {{/each}}
         </select>
     </div>
     <div class="col-sm-3">
         <div class="input-group">
-            <input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-            <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span>
+            {{input value=this.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
+            </span>
         </div>
     </div>
 </div>
 <div class="table-responsive">
+    {{#unless isLoading}}
     <table {{bind-attr class=":table stripped:table-striped hover:table-hover" }} class="">
         <thead>
             <tr>
                 {{#each field in this.fields}}
                 <th>{{field}}</th>
                 {{/each}} {{#if this.editdelete}}
-                <th width="80px">Actions</th>
+                <th width="100px">Actions</th>
                 {{/if}}
             </tr>
         </thead>
         <tbody>
             {{#each row in this.ComplexModel}}
             <tr>
-                {{#if row}}
-                {{render 'crud-table-row' row}}
-                {{/if}}
-                {{#if this.editdelete}}
+                {{#if row}} {{render 'crud-table-row' row}} {{/if}} {{#if this.editdelete}}
                 <td>
                     {{#if this.updateRecord}}
-                    <button data-action="edit" class="btn btn-info btn-circle" {{action 'internal_edit' row}}><i class="fa fa-edit"></i>
+                    <button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="fa fa-edit"></i>
                     </button>
                     {{/if}} {{#if this.deleteRecord}}
-                    <button data-action="delete" class="btn btn-danger btn-circle" {{action 'internal_delete' row}}><i class="fa fa-trash"></i>
+                    <button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="fa fa-trash"></i>
                     </button>
                     {{/if}}
                 </td>
@@ -59,6 +59,22 @@
             {{/each}}
 
         </tbody>
+        <tfoot>
+            Showing {{this.pagination.from}} to {{this.pagination.to}} of <span name="total_records">{{this.pagination.total}}</span> {{this.pagination.name}}
+        </tfoot>
     </table>
+    {{else}} -{{render 'spinner' this.newRecord}}- {{/unless}}
+</div>
+
+<div class="row text-center">
+    <div class="btn-group">
+        <button {{action 'goto' this.pagination.previous}} {{bind-attr class="this.pagination.previous::disabled :btn :btn-page" }} type="button">Previous</button>
+        {{#each page in this.pagination.links}}
+        <button {{bind-attr data-page=page.page}} {{action 'goto' page.page}} {{bind-attr class=":btn page.current:btn-primary:btn-page" }} type="button">
+            {{page.page}}
+        </button>
+        {{/each}}
+        <button {{action 'goto' this.pagination.next}} {{bind-attr class="this.pagination.next::disabled :btn :btn-page" }} type="button">Next</button>
+    </div>
 </div>
 {{yield}} {{render 'crud-table-modal' this}}

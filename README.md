@@ -1,37 +1,124 @@
 
-Master Branch: [![Build Status](https://travis-ci.org/gerard2p/ember-cli-crudtable.svg?branch=master)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
+# CRUD Table [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?branch=master&style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable) [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)
+This addon allows you to easly create a CRUD Table, it will take you only 5s!.
+___
 
-Development Branch: [![Build Status](https://travis-ci.org/gerard2p/ember-cli-crudtable.svg?branch=development)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
-# Hello Every One
-I've didn't notice that people was watching this proyect, so i'm sorry for the lack of documentation.
-Today (24 March, 2015) I just finished one version wich is working, so hang on a second and tomorrow I'll update the docuemntation. 
+##Development [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?style=flat-square&branch=development)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
+___
 
-If you could support me by following me, or maybe by letting any comment on the issue section It'll be great.
+##Installation
+```
+ember install:addon ember-cli-crudtable
+```
 
-Thank You :)
+##How to use it
+You can use the helper **{{crud-table}}** there are some minimun variables you must specify and these are:
+###Minimun Configuration
+1. class **The class name you want the component to have**
+2. fields **The field names you want the component to render separated by ","**
 
-# Ember-cli-crudtable
+###Action Configuration
+These variables are completed optional, if you're using the integrated mixin for the controller.
 
-This README outlines the details of collaborating on this Ember addon.
+1. createRecord: [default: '*create*']
+1. updateRecord: [default: '*update*']
+1. deleteRecord: [default: '*delete*']
+1. cancelRecord: [default: '*cancel*']
+	2. This actions is triggered when click on **"cancel"**, the default configuration makes a rollback on the record or deletes it if new.
+1. getRecord: [default: '*getRecord*']
+	2. This action creates a new empty record.
+1. searchRecord: [default: '*FetchData*']
+	2. This actions if the one witch searches for your records.
 
-## Installation
+###Style Configuration
+1. stripped: [ true| **false** ]	-	Makes the table to render stripped.
+1. hover: [ true | **false** ]		-	Allows to hover the table.
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+##Controller Configuration
+You can use this very same code when creating your controller and the only thing you have to worry about is to indicate the model.
 
-## Running
+```
+import CTABLE from 'ember-cli-crudtable/mixins/crud-controller';
+import Ember from 'ember'
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+var CrudTable = CTABLE('school');
+export default Ember.ObjectController.extend(CrudTable);
+```
 
-## Running Tests
 
-* `ember test`
-* `ember test --server`
+##Full Example
+```
+//app/router.js
+import Ember from 'ember';
+import config from './config/environment';
 
-## Building
+var Router = Ember.Router.extend({
+    location: config.locationType,
+    rootURL: config.baseURL
+});
 
-* `ember build`
+Router.map(function () {
+    this.resource('schools');
+});
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+export default Router;
+
+```
+
+```
+//app/models/school.js
+import DS from 'ember-data';
+
+var attr = DS.attr;
+
+export default DS.Model.extend({
+    Name: attr('string'),
+    City: attr('string'),
+    Adress: attr('string'),
+    CP: attr('string'),
+    Responsable:attr('string'),
+    AmountStudents:attr('number')
+});
+
+```
+
+```
+//app/controllers/schools/index.js
+import CTABLE from 'ember-cli-crudtable/mixins/crud-controller';
+import Ember from 'ember'
+
+var CrudTable = CTABLE('school');
+export default Ember.ObjectController.extend(CrudTable);
+```
+
+
+```
+//app/templates/schools/index.hbs
+{{crud-table 
+fields="Name,City,Adress" 
+deleteRecord='delete'
+updateRecord='update' 
+createRecord='create'}}
+```
+
+Thats All you can have now a fully CRUD table that communicates with your server and allows pagination.
+
+
+##Pagination
+The pagination data must be included in the meta response of your server so ember-data can use it and crudtable has access to it.
+
+This is a sample meta:
+
+```
+{
+	"meta":{
+		"next":2,
+		"previous"":null,
+		"count":20
+	}
+}
+```
+
+##Upcoming
+I'm in a little hurry but as soon as posible i'll be adding more features and also providing a more detailed doc about the functions.
+But try it, is quite simple to have your fully functional CRUD application.
