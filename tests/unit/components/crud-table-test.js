@@ -94,8 +94,6 @@ var targetObject = {
 };
 
 moduleForComponent('crud-table', {
-    // specify the other units that are required for this test
-    // needs: ['component:foo', 'helper:bar']
     needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update', 'template:spinner'],
     setup: function () {
         App = startApp();
@@ -123,7 +121,7 @@ test('Can set init variables', function () {
     equal(find('table.table>tbody>tr').children().length, (ArrField.length + 1) * find('table.table>tbody').children().length);
 });
 
-test('User Create a Record', function () {
+test('User Creates a Record', function () {
     var rows = parseInt(this.$('[name=total_records]').text());
     click('[data-action=create]');
     andThen(function () {
@@ -192,12 +190,10 @@ test('User pushes a search', function () {
 });
 
 test('User interacts with pagination', function () {
-
     tricky = 2;
     Ember.run(function () {
         click('[data-action=search]');
     });
-
     andThen(function () {
         equal(find('[data-page]').length, 3);
         click('[data-page=2]');
@@ -207,5 +203,23 @@ test('User interacts with pagination', function () {
                 equal(find('[name=total_records]').text(), 3);
             });
         });
+    });
+});
+test('User exports file to CSV',function(){
+    click('#tocsv');
+    andThen(function(){
+        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
+    });
+});
+test('User exports file to TSV',function(){
+    click('#totsv');
+    andThen(function(){
+        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
+    });
+});
+test('User exports file to JSON',function(){
+    click('#tojson');
+    andThen(function(){
+        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
     });
 });
