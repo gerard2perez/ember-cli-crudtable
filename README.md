@@ -4,6 +4,13 @@ This addon allows you to easly create a CRUD Table, it will take you only 5s!.
 ___
 
 ##Development [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?style=flat-square&branch=development)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
+
+(I'm not using any versioning convention, instead i'm just using the current date)
+
+###Change Log
+v0.4.8
+
+	1. Added support to export results to CSV, TSV, JSON
 ___
 
 ##Installation
@@ -74,7 +81,7 @@ var attr = DS.attr;
 export default DS.Model.extend({
     Name: attr('string'),
     City: attr('string'),
-    Adress: attr('string'),
+    Address: attr('string'),
     CP: attr('string'),
     Responsable:attr('string'),
     AmountStudents:attr('number')
@@ -95,7 +102,7 @@ export default Ember.ObjectController.extend(CrudTable);
 ```
 //app/templates/schools/index.hbs
 {{crud-table 
-fields="Name,City,Adress" 
+fields="Name,City,Address" 
 deleteRecord='delete'
 updateRecord='update' 
 createRecord='create'}}
