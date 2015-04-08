@@ -208,18 +208,18 @@ test('User interacts with pagination', function () {
 test('User exports file to CSV',function(){
     click('#tocsv');
     andThen(function(){
-        ok("I don't know how to test this yet, sorry");
+        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
     });
 });
 test('User exports file to TSV',function(){
     click('#totsv');
     andThen(function(){
-        ok("I don't know how to test this yet, sorry");
+        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
     });
 });
 test('User exports file to JSON',function(){
     click('#tojson');
     andThen(function(){
-        ok("I don't know how to test this yet, sorry");
+        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
     });
 });

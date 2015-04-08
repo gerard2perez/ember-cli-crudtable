@@ -130,7 +130,6 @@ export default Ember.Component.extend({
     fields: "id",
     actions: {
         toJSONObject: function () {
-
             var data = [];
             this.get('ComplexModel').forEach(function(model){
                 var row = {};
@@ -139,12 +138,12 @@ export default Ember.Component.extend({
                 });
                 data.push(row);
             });
-            console.log(data);
             var csvContent = "data:text/json;charset=utf-8,"+JSON.stringify(data);
             var encodedUri = encodeURI(csvContent);
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.json");
+            this.set('dlf',link);
             link.click();
         },
         toTSV: function () {
@@ -172,6 +171,7 @@ export default Ember.Component.extend({
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.tsv");
+            this.set('dlf',link);
             link.click();
         },
         toCSV: function () {
@@ -199,6 +199,7 @@ export default Ember.Component.extend({
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.csv");
+            this.set('dlf',link);
             link.click();
         },
         goto: function (page) {
