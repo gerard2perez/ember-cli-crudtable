@@ -1,9 +1,36 @@
 
-# CRUD Table [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?branch=master&style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable) [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)
+# CRUD Table [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable/v0.3.27.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable) [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)
 This addon allows you to easly create a CRUD Table, it will take you only 5s!.
+
+This component is compatible with bootstrap (Actually is a dependency, but it's downloaded automatically) and ember-data.
+
+##Features
+1. Create
+2. Read
+3. Update
+4. Delete
+5. Search by field
+6. Pagination
+7. Export to CSV, TSV, JSON
 ___
 
-##Development [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?style=flat-square&branch=development)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
+##Contributions
+Please let me know about anything you find is not working, or maybe some features you want the component to perform. Any kind of comment will be well received, so thank you so mucho for using it.
+
+---
+
+##Current Status [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable/master.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
+
+(I'm not using any versioning convention, instead i'm just using the current date)
+
+And I'll be releasing a new version every month or every 5 features I add.
+
+---
+
+##Changelog
+
+###v0.4.8-unrelease
+	1. Added support to export results to CSV, TSV, JSON
 ___
 
 ##Installation
@@ -74,7 +101,7 @@ var attr = DS.attr;
 export default DS.Model.extend({
     Name: attr('string'),
     City: attr('string'),
-    Adress: attr('string'),
+    Address: attr('string'),
     CP: attr('string'),
     Responsable:attr('string'),
     AmountStudents:attr('number')
@@ -95,7 +122,7 @@ export default Ember.ObjectController.extend(CrudTable);
 ```
 //app/templates/schools/index.hbs
 {{crud-table 
-fields="Name,City,Adress" 
+fields="Name,City,Address" 
 deleteRecord='delete'
 updateRecord='update' 
 createRecord='create'}}

@@ -129,6 +129,79 @@ export default Ember.Component.extend({
     class: "",
     fields: "id",
     actions: {
+        toJSONObject: function () {
+            var data = [];
+            this.get('ComplexModel').forEach(function(model){
+                var row = {};
+                model.forEach(function(field){
+                    row[field.Field] = field.Value;
+                });
+                data.push(row);
+            });
+            var csvContent = "data:text/json;charset=utf-8,"+JSON.stringify(data);
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "table.json");
+            this.set('dlf',link);
+            $(link).click();
+        },
+        toTSV: function () {
+
+            var data = [];
+            var row = [];
+            this.fields.forEach(function (field) {
+                row.push(field);
+            });
+            data.push(row);
+
+            this.get('ComplexModel').forEach(function(model){
+                row = [];
+                model.forEach(function(field){
+                    row.push(field.Value);
+                });
+                data.push(row);
+            });
+            var csvContent = "data:text/csv;charset=utf-8,";
+            data.forEach(function (infoArray, index) {
+                var dataString = infoArray.join("\t");
+                csvContent += index < data.length ? dataString + "\n" : dataString;
+            });
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "table.tsv");
+            this.set('dlf',link);
+            $(link).click();
+        },
+        toCSV: function () {
+
+            var data = [];
+            var row = [];
+            this.fields.forEach(function (field) {
+                row.push(field);
+            });
+            data.push(row);
+
+            this.get('ComplexModel').forEach(function(model){
+                row = [];
+                model.forEach(function(field){
+                    row.push(field.Value);
+                });
+                data.push(row);
+            });
+            var csvContent = "data:text/csv;charset=utf-8,";
+            data.forEach(function (infoArray, index) {
+                var dataString = infoArray.join(",");
+                csvContent += index < data.length ? dataString + "\n" : dataString;
+            });
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "table.csv");
+            this.set('dlf',link);
+            $(link).click();
+        },
         goto: function (page) {
             var that = this;
             var deferred = Ember.RSVP.defer('crud-table#goto');

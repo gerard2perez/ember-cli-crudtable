@@ -5,12 +5,12 @@
     </div>
     <div class="col-sm-4 m-b-xs">
         <div data-toggle="buttons" class="btn-group">
-            <label class="btn btn-sm btn-page">
-                <input type="radio" id="option1" name="options"> Day </label>
-            <label class="btn btn-sm btn-page active">
-                <input type="radio" id="option2" name="options"> Week </label>
-            <label class="btn btn-sm btn-page">
-                <input type="radio" id="option3" name="options"> Month </label>
+            <label id="tocsv" class="btn btn-sm btn-page" {{action 'toCSV' this}}  >
+                <input type="radio"> To CSV </label>
+            <label id="totsv" class="btn btn-sm btn-page" {{action 'toTSV' this}}>
+                <input type="radio" id="option2" name="options"> To TSV </label>
+            <label id="tojson" class="btn btn-sm btn-page" {{action 'toJSONObject' this}}>
+                <input type="radio" id="option3" name="options"> To Json </label>
         </div>
     </div>
     <div class="col-sm-2 m-b-xs">
