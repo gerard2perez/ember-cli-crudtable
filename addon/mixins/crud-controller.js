@@ -39,13 +39,15 @@ export default function (model /*settings*/) {
                 record.destroyRecord().then(deferred.resolve, deferred.reject);
             },
             cancel: function (record, deferred) {
+                var remove = false;
+                if (record.get('isNew')) {
+                    record.deleteRecord();
+                    remove = true;
+                }
                 if (record.get('isDirty')) {
                     record.rollback();
                 }
-                if (record.get('isNew')) {
-                    record.deleteRecord();
-                }
-                deferred.resolve(true);
+                deferred.resolve({record:record,remove:remove});
             }
         }
     });
