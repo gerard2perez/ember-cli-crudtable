@@ -11,7 +11,12 @@
                         {{#if isDeleting}}
                             You're about to delete a record
                         {{else}}
-                            Updating
+                            {{#if showMap}}
+                                Location
+                            {{else}}
+                                Updating
+                            {{/if}}
+
                         {{/if}}
                     {{/if}}
                 </h4>
@@ -23,7 +28,11 @@
                         {{#if isDeleting}}
                             Deleting the record: <b>{{this.currentRecord.0.Value}}</b> is a permanent action.
                         {{else}}
-                            {{render 'crud-table-update' this.currentRecord}}
+                            {{#if showMap}}
+                                {{render 'crud-table-googlemap' this.currentRecord}}
+                            {{else}}
+                                {{render 'crud-table-update' this.currentRecord}}
+                            {{/if}}
                         {{/if}}
                     {{/if}}
             </div>
@@ -38,7 +47,12 @@
                     {{/if}}
                 </button>
                 {{else}}
-                    {{render 'spinner' this.isLoading}}
+                    {{#if showMap}}
+                        {{render 'crud-table-googlemap' this.currentRecord}}
+                    {{else}}
+                        {{render 'spinner' this.isLoading}}
+                    {{/if}}
+
                 {{/unless}}
             </div>
         </div>

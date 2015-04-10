@@ -6,6 +6,7 @@ var CustomField = Ember.Object.extend({
     Field: null,
     Value: null,
     Type: null,
+    Display:null,
     listener: function () {}.observes('Value')
 });
 var recalculatePagination = function (that, meta) {
@@ -64,16 +65,20 @@ var regenerateView = function (cmp) {
     if (cmp.value) {
         cmp.value.forEach(function (row) {
             var CustomProperties = [];
-            cmp.fields.forEach(function (field) {
-                var data = row.get ? row.get(field) : row[field];
+            Object.keys(cmp.fields).forEach(function (field) {
+                var data = row.get(field);
                 var cfield = CustomField.create({
                     Field: field,
                     Value: data,
-                    Type: typeof (data),
+                    Type: cmp.fields[field].Type || 'text',
                     listener: function () {
                         row.set(this.get('Field'), this.get('Value'));
                     }.observes('Value')
                 });
+                switch(cfield.get('Type')){
+                    case 'googlemap':
+                        cfield.set('Display', row.get(cmp.fields[field].Display) );
+                }
                 CustomProperties.pushObject(cfield);
             });
             CustomProperties.RoutedRecord = row;
@@ -128,22 +133,23 @@ export default Ember.Component.extend({
     layout: layout,
     class: "",
     fields: "id",
+    labels: [],
     actions: {
         toJSONObject: function () {
             var data = [];
-            this.get('ComplexModel').forEach(function(model){
+            this.get('ComplexModel').forEach(function (model) {
                 var row = {};
-                model.forEach(function(field){
+                model.forEach(function (field) {
                     row[field.Field] = field.Value;
                 });
                 data.push(row);
             });
-            var csvContent = "data:text/json;charset=utf-8,"+JSON.stringify(data);
+            var csvContent = "data:text/json;charset=utf-8," + JSON.stringify(data);
             var encodedUri = encodeURI(csvContent);
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.json");
-            this.set('dlf',link);
+            this.set('dlf', link);
             $(link).click();
         },
         toTSV: function () {
@@ -155,9 +161,9 @@ export default Ember.Component.extend({
             });
             data.push(row);
 
-            this.get('ComplexModel').forEach(function(model){
+            this.get('ComplexModel').forEach(function (model) {
                 row = [];
-                model.forEach(function(field){
+                model.forEach(function (field) {
                     row.push(field.Value);
                 });
                 data.push(row);
@@ -171,7 +177,7 @@ export default Ember.Component.extend({
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.tsv");
-            this.set('dlf',link);
+            this.set('dlf', link);
             $(link).click();
         },
         toCSV: function () {
@@ -183,9 +189,9 @@ export default Ember.Component.extend({
             });
             data.push(row);
 
-            this.get('ComplexModel').forEach(function(model){
+            this.get('ComplexModel').forEach(function (model) {
                 row = [];
-                model.forEach(function(field){
+                model.forEach(function (field) {
                     row.push(field.Value);
                 });
                 data.push(row);
@@ -199,7 +205,7 @@ export default Ember.Component.extend({
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.csv");
-            this.set('dlf',link);
+            this.set('dlf', link);
             $(link).click();
         },
         goto: function (page) {
@@ -276,6 +282,37 @@ export default Ember.Component.extend({
                 that.set('isLoading', false);
             });
         },
+        internal_map: function (record) {
+            var that = this;
+            that.set('showMap', true);
+            this.set('currentRecord', record);
+            var deferred = Ember.RSVP.defer('crud-table#cell-map');
+            showmodal();
+
+            function mapit(id, latlng) {
+                var mapOptions = {
+                    zoom: 18,
+                    center: new google.maps.LatLng(latlng.lat, latlng.lng),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                }
+                var map = new google.maps.Map(document.getElementById(id), mapOptions);
+            }
+
+            var cord="";
+            record.forEach(function(prop){
+                if(prop.Type=='googlemap'){
+                    cord = prop.Value.split(',');
+                    cord = {
+                        lat:cord[0],
+                        lng:cord[1]
+                    }
+                }
+            });
+
+            setTimeout(function () {
+                mapit('google_map_canvas',cord);
+            }, 500);
+        },
         internal_create: function () {
             var that = this;
             that.set('newRecord', true);
@@ -307,7 +344,10 @@ export default Ember.Component.extend({
     init: function () {
         var that = this;
         this._super();
-        this.set('fields', this.fields.split(','));
+        that.set('labels', []);
+        Object.keys(this.get('fields')).forEach(function (key) {
+            that.get('labels').push(that.fields[key].Label);
+        });
         this.set('editdelete', this.deleteRecord != null || this.updateRecord != null);
         this.init = function () {
             that._super();
@@ -341,6 +381,7 @@ export default Ember.Component.extend({
                 that.set('newRecord', false);
                 that.set('isDeleting', false);
                 that.set('currentRecord', null);
+                that.set('showMap', false);
                 template.resolve(true);
             }, function (data) {
                 alert(data);

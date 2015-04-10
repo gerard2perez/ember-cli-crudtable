@@ -10,7 +10,17 @@ import DS from "ember-data";
 
 var component;
 var App;
-var ArrField = 'Field1,Field2,Field3';
+var ArrField = {
+    Field1: {
+        Label: 'Field1'
+    },
+    Field2: {
+        Label: 'Field2'
+    },
+    Field3: {
+        Label: 'Field3'
+    }
+};
 var tricky = 0;
 var FakeModel = Ember.Component.extend({
     id: null,
@@ -94,11 +104,11 @@ var targetObject = {
 };
 
 moduleForComponent('crud-table', {
-    needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update', 'template:spinner'],
+    needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update', 'template:spinner', 'helper:crud-cell'],
     setup: function () {
         App = startApp();
         component = this.subject({
-            fields: 'Field1,Field2,Field3',
+            fields: ArrField,
             stripped: true,
             hover: false,
             deleteRecord: 'delete',
@@ -115,10 +125,8 @@ moduleForComponent('crud-table', {
 
 test('Can set init variables', function () {
     equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data23');
-    ArrField = ArrField.split(',');
-    equal(component.get('fields').length, ArrField.length);
-    equal(component.get('fields')[2], ArrField[2]);
-    equal(find('table.table>tbody>tr').children().length, (ArrField.length + 1) * find('table.table>tbody').children().length);
+    equal(component.get('labels').length, 3);
+    equal(find('table.table>tbody>tr').children().length, (component.get('labels').length + 1) * find('table.table>tbody').children().length);
 });
 
 test('User Creates a Record', function () {
@@ -205,21 +213,21 @@ test('User interacts with pagination', function () {
         });
     });
 });
-test('User exports file to CSV',function(){
+test('User exports file to CSV', function () {
     click('#tocsv');
-    andThen(function(){
-        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
+    andThen(function () {
+        ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
     });
 });
-test('User exports file to TSV',function(){
+test('User exports file to TSV', function () {
     click('#totsv');
-    andThen(function(){
-        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
+    andThen(function () {
+        ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
     });
 });
-test('User exports file to JSON',function(){
+test('User exports file to JSON', function () {
     click('#tojson');
-    andThen(function(){
-        ok( component.get('dlf').getAttribute('href') , "Download File Not Generated" );        
+    andThen(function () {
+        ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
     });
 });
