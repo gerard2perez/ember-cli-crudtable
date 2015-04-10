@@ -43,7 +43,12 @@
                     {{#if isDeleting}}
                         Delete
                     {{else}}
-                        Save
+                        {{#if showMap}}
+                            Caputure Location
+                        {{else}}
+                            Save
+                        {{/if}}
+
                     {{/if}}
                 </button>
                 {{else}}

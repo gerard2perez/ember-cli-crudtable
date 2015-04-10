@@ -1,0 +1,14 @@
+{{#if record.DisplayField}}
+<div class="form-group">
+    <label class="col-sm-2 control-label">{{record.DisplayField}}</label>
+    <div class="col-sm-10">
+        {{input value=record.Display type="text" class="form-control"}}
+    </div>
+</div>
+{{/if}}
+<div class="form-group">
+    <label class="col-sm-2 control-label">{{record.Field}}</label>
+    <div class="col-sm-10">
+        {{input value=record.Value type="text" class="form-control"}}
+    </div>
+</div>
