@@ -19,7 +19,7 @@ Please let me know about anything you find is not working, or maybe some feature
 
 ---
 
-##Current Status [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable/master.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
+##Current Status 
 
 (I'm not using any versioning convention, instead i'm just using the current date)
 
@@ -29,7 +29,7 @@ And I'll be releasing a new version every month or every 5 features I add.
 
 ##Changelog
 
-###v0.4.unrelease
+###![Current NPM](https://img.shields.io/github/tag/gerard2p/ember-cli-crudtable.svg)]
 1. **fields** variable of the component now is and **object** an should be defined through the controller.
 1. Added support to export results to CSV, TSV, JSON.
 1. Custom labels.
