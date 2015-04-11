@@ -1,4 +1,4 @@
-/*globals $*/
+/*globals $, google*/
 import Ember from 'ember';
 import layout from '../templates/components/crud-table';
 
@@ -273,7 +273,7 @@ export default Ember.Component.extend({
                 var RoutedPropMap;
                 record.forEach(function (prop) {
                     RoutedPropMap = prop;
-                    if (prop.Type == 'googlemap') {
+                    if (prop.Type === 'googlemap') {
                         map = record.get('map').getCenter();
                         prop.set('Value', map.toUrlValue());
                     }
@@ -283,11 +283,11 @@ export default Ember.Component.extend({
                 geocoder.geocode({
                     'latLng': map
                 }, function (results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
+                    if (status === google.maps.GeocoderStatus.OK) {
                         if (results[0]) {
                             var add = results[0].formatted_address;
                             var use = prompt('Suggested address is:\n' + add + '\n If you want to use it leave the field empty.');
-                            if (use == null || use == "") {
+                            if (use === null || use === "") {
                                 record.RoutedRecord.set(RoutedPropMap.DisplayField, add);
                             } else {
                                 record.RoutedRecord.set(RoutedPropMap.DisplayField, use);
@@ -344,28 +344,26 @@ export default Ember.Component.extend({
             var that = this;
             that.set('showMap', true);
             this.set('currentRecord', record);
-            var deferred = Ember.RSVP.defer('crud-table#cell-map');
             showmodal();
-
             function mapit(id, latlng) {
                 var mapOptions = {
                     zoom: latlng.zoom,
                     center: new google.maps.LatLng(latlng.lat, latlng.lng),
                     mapTypeId: google.maps.MapTypeId.ROADMAP
-                }
+                };
                 var map = new google.maps.Map(document.getElementById(id), mapOptions);
                 record.set('map', map);
             }
 
             var cord = "";
             record.forEach(function (prop) {
-                if (prop.Type == 'googlemap') {
+                if (prop.Type === 'googlemap') {
                     cord = prop.Value.split(',');
                     cord = {
                         lat: cord[0],
                         lng: cord[1],
                         zoom: prop.Zoom.value
-                    }
+                    };
                 }
             });
 

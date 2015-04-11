@@ -104,7 +104,10 @@ var targetObject = {
 };
 
 moduleForComponent('crud-table', {
-    needs: ['template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update', 'template:spinner', 'helper:crud-cell'],
+    needs: [
+        'template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update',
+        'template:spinner', 'helper:crud-cell','component:crud-cell','crud-edit-cell'
+    ],
     setup: function () {
         App = startApp();
         component = this.subject({

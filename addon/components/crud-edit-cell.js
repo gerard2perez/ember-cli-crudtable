@@ -1,3 +1,4 @@
+import Ember from 'ember';
 export default Ember.Component.extend({
     Display: function () {
         return this.get('record.Display');

@@ -1,3 +1,4 @@
+import Ember from 'ember';
 export default Ember.Component.extend({
     layoutName: function () {
         return 'crud-cell-' + this.get('record.Type');

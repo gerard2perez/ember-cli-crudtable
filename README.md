@@ -29,8 +29,15 @@ And I'll be releasing a new version every month or every 5 features I add.
 
 ##Changelog
 
-###v0.4.8-unrelease
-	1. Added support to export results to CSV, TSV, JSON
+###v0.4.unrelease
+
+1. Added support to export results to CSV, TSV, JSON.
+1. Custom labels.
+1. Render-Cell by Type
+	a. Text
+	a. Google Map
+	a. Image (Url)
+1. Custom field render based on handelbars templates.
 ___
 
 ##Installation
