@@ -19,17 +19,23 @@ Please let me know about anything you find is not working, or maybe some feature
 
 ---
 
-##Current Status 
+##Current Status ![Current NPM](https://img.shields.io/github/tag/gerard2p/ember-cli-crudtable.svg)
 
 (I'm not using any versioning convention, instead i'm just using the current date)
 
 And I'll be releasing a new version every month or every 5 features I add.
 
+You can use the next command to get the latest build
+
+```
+ember install:addon ember-cli-crudtable@tag_upper_image
+```
+
 ---
 
 ##Changelog
 
-###![Current NPM](https://img.shields.io/github/tag/gerard2p/ember-cli-crudtable.svg)]
+### v0.4.0-beta.1
 1. **fields** variable of the component now is and **object** an should be defined through the controller.
 1. Added support to export results to CSV, TSV, JSON.
 1. Custom labels.
