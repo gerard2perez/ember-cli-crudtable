@@ -76,7 +76,7 @@ var regenerateView = function (cmp) {
                             Type: cmp.fields[field].Type || 'text',
                             listener: function () {
                                 row.set(this.get('Field'), this.get('Value'));
-                                if (cmp.fields[field].Display == null) {
+                                if (cmp.fields[field].Display === null) {
                                     row.set('Display', this.get('Value'));
                                 }
                             }.observes('Value'),
@@ -247,12 +247,11 @@ export default Ember.Component.extend({
             var that = this;
 
             Object.keys(that.fields).forEach(function(fieldname){
-                if(that.fields[fieldname].Label == field){
+                if(that.fields[fieldname].Label === field){
                     field = fieldname;
                 }
             });
             var query = {};
-            var that = this;
             query[field] = this.get('SearchTerm');
             lastquery = query;
             var deferred = Ember.RSVP.defer('crud-table#createRecord');
