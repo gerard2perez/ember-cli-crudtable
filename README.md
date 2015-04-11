@@ -19,6 +19,20 @@ Please let me know about anything you find is not working, or maybe some feature
 
 ---
 
+
+##Installation
+```
+ember install ember-cli-crudtable
+```
+
+or
+
+```
+ember install:addon ember-cli-crudtable
+```
+
+---
+
 ##Current Status ![Current NPM](https://img.shields.io/github/tag/gerard2p/ember-cli-crudtable.svg)
 
 (I'm not using any versioning convention, instead i'm just using the current date)
@@ -52,16 +66,6 @@ ember install:addon ember-cli-crudtable@tag_upper_image
 1. Custom field render based on handelbars templates.
 ___
 
-##Installation
-```
-ember install ember-cli-crudtable
-```
-
-or
-
-```
-ember install:addon ember-cli-crudtable
-```
 
 ##How to use it
 You can use the helper **{{crud-table}}** there are some minimun variables you must specify and these are:
