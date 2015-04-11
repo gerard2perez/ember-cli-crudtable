@@ -1,7 +1,7 @@
 import Ember from 'ember';
 export default Ember.Component.extend({
     layoutName: function () {
-        return 'crud-cell-' + this.get('record.Type');
+        return 'ember-cli-crudtable/table-cell-' + this.get('record.Type');
     }.property('record'),
     renderMap: 'internal_map',
     parent:null,

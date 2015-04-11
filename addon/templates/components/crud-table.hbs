@@ -44,7 +44,7 @@
         <tbody>
             {{#each row in this.ComplexModel}}
             <tr>
-                {{#if row}} {{render 'crud-table-row' row}} {{/if}} {{#if this.editdelete}}
+                {{#if row}} {{render 'ember-cli-crudtable/table-row' row}} {{/if}} {{#if this.editdelete}}
                 <td>
                     {{#if this.updateRecord}}
                     <button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="fa fa-edit"></i>
@@ -63,7 +63,7 @@
             Showing {{this.pagination.from}} to {{this.pagination.to}} of <span name="total_records">{{this.pagination.total}}</span> {{this.pagination.name}}
         </tfoot>
     </table>
-    {{else}} -{{render 'spinner' this.newRecord}}- {{/unless}}
+    {{else}} -{{render 'ember-cli-crudtable/spinner' this.newRecord}}- {{/unless}}
 </div>
 
 <div class="row text-center">
@@ -77,4 +77,4 @@
         <button {{action 'goto' this.pagination.next}} {{bind-attr class="this.pagination.next::disabled :btn :btn-page" }} type="button">Next</button>
     </div>
 </div>
-{{yield}} {{render 'crud-table-modal' this}}
+{{yield}} {{render 'ember-cli-crudtable/table-modal' this}}

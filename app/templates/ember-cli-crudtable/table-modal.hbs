@@ -23,15 +23,15 @@
             </div>
             <div class="modal-body">
                 {{#if newRecord}}
-                    {{render 'crud-table-update' this.currentRecord}}
+                    {{render 'ember-cli-crudtable/table-update' this.currentRecord}}
                     {{else}}
                         {{#if isDeleting}}
                             Deleting the record: <b>{{this.currentRecord.0.Value}}</b> is a permanent action.
                         {{else}}
                             {{#if showMap}}
-                                {{render 'crud-table-googlemap' this.currentRecord}}
+                                {{render 'ember-cli-crudtable/modal-googlemap' this.currentRecord}}
                             {{else}}
-                                {{render 'crud-table-update' this.currentRecord}}
+                                {{render 'ember-cli-crudtable/table-update' this.currentRecord}}
                             {{/if}}
                         {{/if}}
                     {{/if}}
@@ -53,9 +53,9 @@
                 </button>
                 {{else}}
                     {{#if showMap}}
-                        {{render 'crud-table-googlemap' this.currentRecord}}
+                        {{render 'ember-cli-crudtable/table-googlemap' this.currentRecord}}
                     {{else}}
-                        {{render 'spinner' this.isLoading}}
+                        {{render 'ember-cli-crudtable/spinner' this.isLoading}}
                     {{/if}}
 
                 {{/unless}}

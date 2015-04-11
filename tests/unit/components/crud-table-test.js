@@ -105,8 +105,17 @@ var targetObject = {
 
 moduleForComponent('crud-table', {
     needs: [
-        'template:crud-table-row', 'template:crud-table-modal', 'template:crud-table-update',
-        'template:spinner', 'helper:crud-cell','component:crud-cell','crud-edit-cell'
+        'component:crud-cell',
+        'component:crud-edit-cell',
+        'template:ember-cli-crudtable/table-cell-googlemap',
+        'template:ember-cli-crudtable/table-cell-text',
+        'template:ember-cli-crudtable/edit-cell-googlemap',
+        'template:ember-cli-crudtable/edit-cell-text',
+        'template:ember-cli-crudtable/modal-googlemap',
+        'template:ember-cli-crudtable/spinner',
+        'template:ember-cli-crudtable/table-modal',
+        'template:ember-cli-crudtable/table-row',
+        'template:ember-cli-crudtable/table-update'
     ],
     setup: function () {
         App = startApp();
