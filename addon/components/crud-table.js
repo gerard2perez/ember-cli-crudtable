@@ -172,7 +172,6 @@ export default Ember.Component.extend({
 
         },
         toTSV: function () {
-
             var data = [];
             var row = [];
             this.labels.forEach(function (field) {
@@ -245,6 +244,13 @@ export default Ember.Component.extend({
         },
         internal_search: function () {
             var field = $("#SearchField").val();
+            var that = this;
+
+            Object.keys(that.fields).forEach(function(fieldname){
+                if(that.fields[fieldname].Label == field){
+                    field = fieldname;
+                }
+            });
             var query = {};
             var that = this;
             query[field] = this.get('SearchTerm');
