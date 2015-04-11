@@ -167,7 +167,9 @@ export default Ember.Component.extend({
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.json");
             this.set('dlf', link);
-            link.click();
+
+            if(link.click){link.click();}
+
         },
         toTSV: function () {
 
@@ -195,7 +197,7 @@ export default Ember.Component.extend({
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.tsv");
             this.set('dlf', link);
-            link.click();
+            if(link.click){link.click();}
         },
         toCSV: function () {
 
@@ -223,7 +225,7 @@ export default Ember.Component.extend({
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "table.csv");
             this.set('dlf', link);
-            link.click();
+            if(link.click){link.click();}
         },
         goto: function (page) {
             var that = this;
