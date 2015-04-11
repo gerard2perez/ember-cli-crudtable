@@ -28,6 +28,12 @@ And I'll be releasing a new version every month or every 5 features I add.
 You can use the next command to get the latest build
 
 ```
+ember install ember-cli-crudtable@tag_upper_image
+```
+
+or
+
+```
 ember install:addon ember-cli-crudtable@tag_upper_image
 ```
 
@@ -47,6 +53,12 @@ ember install:addon ember-cli-crudtable@tag_upper_image
 ___
 
 ##Installation
+```
+ember install ember-cli-crudtable
+```
+
+or
+
 ```
 ember install:addon ember-cli-crudtable
 ```
