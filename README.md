@@ -42,18 +42,19 @@ And I'll be releasing a new version every month or every 5 features I add.
 You can use the next command to get the latest build
 
 ```
-ember install ember-cli-crudtable@tag_upper_image
+ember install ember-cli-crudtable@beta
 ```
 
 or
 
 ```
-ember install:addon ember-cli-crudtable@tag_upper_image
+ember install:addon ember-cli-crudtable@beta
 ```
 
 ---
 
 ##Changelog
+Maybe you want one of the older relases.
 
 ### v0.4.0-beta.1
 1. **fields** variable of the component now is and **object** an should be defined through the controller.

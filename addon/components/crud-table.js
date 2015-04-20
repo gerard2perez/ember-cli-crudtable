@@ -132,8 +132,27 @@ var lastquery = {
     page: null
 };
 
-
+var PULLID = 0;
+var PULLFN = function(cmp,time){
+    return setTimeout(function(){
+        var deferred = Ember.RSVP.defer('crud-table#pulling');
+        //cmp.set('isLoading', true);
+        cmp.sendAction('searchRecord', {}, deferred);
+        deferred.promise.then(function (records) {
+            cmp.set('page_size',records.get('content.length') );
+            metadata(records, cmp);
+            cmp.set('value', records);
+            regenerateView(cmp);
+            //cmp.set('isLoading', false);
+            PULLFN(cmp,time);
+        }, function (data) {
+            alert(data.message);
+            //cmp.set('isLoading', false);
+        });
+    },time);
+}
 export default Ember.Component.extend({
+    pulling:false,
     stripped: false,
     hover: false,
     createRecord: 'create',
@@ -151,6 +170,7 @@ export default Ember.Component.extend({
     class: "",
     fields: "id",
     labels: [],
+    exports:true,
     actions: {
         toJSONObject: function () {
             var data = [];
@@ -417,13 +437,22 @@ export default Ember.Component.extend({
         this.init = function () {
             that._super();
         }.on('willInsertElement');
+        this.addObserver('pulling',function(a,b){
+            if( PULLID > 0 && that.get('pulling')>0 ){
+                clearTimeout(PULLID);
+                PULLID=0;
+            }
+            if(this.get('pulling')>0){
+                 PULLID = PULLFN(that,that.get('pulling'));
+            }
+        });
     }.on('willInsertElement'),
     setup: function () {
         var that = this;
         var deferred = Ember.RSVP.defer('crud-table#createRecord');
         that.set('isLoading', true);
-        this.sendAction('searchRecord', {}, deferred);
 
+        this.sendAction('searchRecord', {}, deferred);
         $(this).addClass(this.get('class'));
 
         deferred.promise.then(function (records) {
@@ -432,6 +461,7 @@ export default Ember.Component.extend({
             that.set('value', records);
             regenerateView(that);
             that.set('isLoading', false);
+            PULLID = PULLFN(that,that.get('pulling'));
         }, function (data) {
             alert(data.message);
             that.set('isLoading', false);
@@ -454,7 +484,6 @@ export default Ember.Component.extend({
             }, function (data) {
                 alert(data);
             });
-
         });
 
     }.on('didInsertElement'),

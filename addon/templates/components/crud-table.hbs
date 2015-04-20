@@ -1,19 +1,23 @@
 <div class="row">
     <div class="col-sm-3 m-b-xs">
+    {{#if createRecord}}
         <button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' value}}>
             <i class="fa fa-check"></i>&nbsp;New Record</button>
+    {{/if}}
     </div>
     <div class="col-sm-4 m-b-xs">
         <div data-toggle="buttons" class="btn-group">
+        {{#if exports}}
             <label id="tocsv" class="btn btn-sm btn-page" {{action 'toCSV' this}}  >
                 <input type="radio"> To CSV </label>
             <label id="totsv" class="btn btn-sm btn-page" {{action 'toTSV' this}}>
                 <input type="radio" id="option2" name="options"> To TSV </label>
             <label id="tojson" class="btn btn-sm btn-page" {{action 'toJSONObject' this}}>
                 <input type="radio" id="option3" name="options"> To Json </label>
+        {{/if}}
         </div>
     </div>
-    <div class="col-sm-2 m-b-xs">
+    <div class="col-sm-2 m-b-xs no-padding">
         <select id="SearchField" class="input-sm form-control input-s-sm inline">
             {{#each field in this.labels}}
             <option {{bind-attr value=field}}>{{field}}</option>
