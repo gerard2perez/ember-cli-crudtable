@@ -7,7 +7,9 @@ export default Ember.Component.extend({
         return this.get('record.Value');
     }.property('record'),
     layoutName: function () {
-        console.log(this.get('record'));
+        if(this.get('record.ReadOnly')){
+            return null;
+        }
         return 'ember-cli-crudtable/edit-cell-' + this.get('record.Type');
     }.property('record'),
     parent:null,

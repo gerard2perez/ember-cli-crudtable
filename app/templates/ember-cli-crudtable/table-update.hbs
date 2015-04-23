@@ -1,6 +1,8 @@
 <form method="get" class="form-horizontal">
     {{#each record in this.model}}
-        {{crud-edit-cell record=record}}
-        <div class="hr-line-dashed"></div>
+    	{{#unless record.ReadOnly}}
+        	{{crud-edit-cell record=record}}
+        	<div class="hr-line-dashed"></div>
+        {{/unless}}
     {{/each}}
 </form>

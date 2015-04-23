@@ -8,6 +8,7 @@ var CustomField = Ember.Object.extend({
     Type: null,
     Display: null,
     DisplayField: null,
+    ReadOnly:null,
     listener: function () {}.observes('Value'),
     googlefield: function () {}.observes('Display'),
 });
@@ -73,6 +74,7 @@ var regenerateView = function (cmp) {
                             Field: field,
                             Value: data,
                             Display: data,
+                            ReadOnly: cmp.fields[field].ReadOnly || false,
                             Type: cmp.fields[field].Type || 'text',
                             listener: function () {
                                 row.set(this.get('Field'), this.get('Value'));
@@ -84,6 +86,7 @@ var regenerateView = function (cmp) {
                                 if (this.get('DisplayField')) {
                                     row.set(this.get('DisplayField'), this.get('Display'));
                                 }
+                                this.set('ReadOnly',cmp.fields[field].ReadOnly || true);
                             }.observes('Display')
                         });
                         switch (cfield.get('Type')) {
@@ -129,28 +132,32 @@ var hidemodal = function () {
     $("#CrudTableDeleteRecordModal").modal('hide');
 };
 var lastquery = {
-    page: null
+    page: 1
 };
 
 var PULLID = 0;
 var PULLFN = function(cmp,time){
     return setTimeout(function(){
         var deferred = Ember.RSVP.defer('crud-table#pulling');
-        //cmp.set('isLoading', true);
-        cmp.sendAction('searchRecord', {}, deferred);
+        cmp.sendAction('searchRecord', lastquery, deferred);
         deferred.promise.then(function (records) {
             cmp.set('page_size',records.get('content.length') );
             metadata(records, cmp);
             cmp.set('value', records);
             regenerateView(cmp);
-            //cmp.set('isLoading', false);
-            PULLFN(cmp,time);
+            PULLID = PULLFN(cmp,time);
         }, function (data) {
-            alert(data.message);
-            //cmp.set('isLoading', false);
+            console.log(data.message);
         });
     },time);
-}
+};
+var PULL = function(cmp){
+    clearTimeout(PULLID);
+    PULLID=0;
+    if( cmp.get('pulling') > 0){
+        PULLID = PULLFN(cmp,cmp.get('pulling'));
+    }
+};
 export default Ember.Component.extend({
     pulling:false,
     stripped: false,
@@ -160,6 +167,9 @@ export default Ember.Component.extend({
     deleteRecord: 'delete',
     cancelRecord: 'cancel',
     searchRecord: 'FetchData',
+    newRecord:  false,
+    isDeleting: false,
+    showMap:    false,
     currentRecord: null,
     getRecord: 'getRecord',
     isLoading: true,
@@ -349,8 +359,6 @@ export default Ember.Component.extend({
             deferred.promise.then(function () {
                 lastquery.page = that.get('pagination').current;
                 that.sendAction('searchRecord', lastquery, updateview);
-                //regenerateView(that);
-                //recalculatePagination(that,that.get('pagination'));
             }, function (data) {
                 alert(data.message);
                 that.set('isLoading', false);
@@ -367,12 +375,17 @@ export default Ember.Component.extend({
                 that.set('isLoading', false);
             });
         },
-        internal_map: function (record) {
+        internal_map: function (record,kind) {
+            if(google === undefined){
+
+            }
             var that = this;
             that.set('showMap', true);
-            this.set('currentRecord', record);
             showmodal();
             function mapit(id, latlng) {
+                if(document.getElementById(id)==null){
+                    return false;
+                }
                 var mapOptions = {
                     zoom: latlng.zoom,
                     center: new google.maps.LatLng(latlng.lat, latlng.lng),
@@ -380,11 +393,12 @@ export default Ember.Component.extend({
                 };
                 var map = new google.maps.Map(document.getElementById(id), mapOptions);
                 record.set('map', map);
+                return true;
             }
 
             var cord = "";
             record.forEach(function (prop) {
-                if (prop.Type === 'googlemap') {
+                if (prop.Type === kind) {
                     cord = prop.Value.split(',');
                     cord = {
                         lat: cord[0],
@@ -393,10 +407,24 @@ export default Ember.Component.extend({
                     };
                 }
             });
-
-            setTimeout(function () {
-                mapit('google_map_canvas', cord);
-            }, 500);
+            var waitforgoogle = function(fn){
+                if(google === undefined){
+                    setTimeout(function () {
+                        fn(fn);
+                    }, 10);
+                    return false;
+                }
+                if( mapit('google_map_canvas', cord) ){
+                    setTimeout(function(){
+                        that.set('currentRecord', record);  
+                    },1);
+                }else{
+                    setTimeout(function () {
+                        fn(fn);
+                    }, 10);
+                }
+            };
+            waitforgoogle(waitforgoogle);
         },
         internal_create: function () {
             var that = this;
@@ -437,14 +465,8 @@ export default Ember.Component.extend({
         this.init = function () {
             that._super();
         }.on('willInsertElement');
-        this.addObserver('pulling',function(a,b){
-            if( PULLID > 0 && that.get('pulling')>0 ){
-                clearTimeout(PULLID);
-                PULLID=0;
-            }
-            if(this.get('pulling')>0){
-                 PULLID = PULLFN(that,that.get('pulling'));
-            }
+        this.addObserver('pulling',function(){
+            PULL(that);
         });
     }.on('willInsertElement'),
     setup: function () {
@@ -461,7 +483,7 @@ export default Ember.Component.extend({
             that.set('value', records);
             regenerateView(that);
             that.set('isLoading', false);
-            PULLID = PULLFN(that,that.get('pulling'));
+            PULL(that);
         }, function (data) {
             alert(data.message);
             that.set('isLoading', false);

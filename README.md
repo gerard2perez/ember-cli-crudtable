@@ -56,6 +56,18 @@ ember install:addon ember-cli-crudtable@beta
 ##Changelog
 Maybe you want one of the older relases.
 
+### v0.4.0-beta.3
+1. Fixed a bug that prevent pulling from stopping.
+2. Improved the map initialization.
+3. Support for ReadOnly Fields.
+4. Added the edit-cell-image template.
+5. Added email datatype.
+
+### v0.4.0-beta.2
+1. Added support for data poolling every n milisecods.
+2. Create button can now be hidden.
+3. The export commands can now be hidden.
+
 ### v0.4.0-beta.1
 1. **fields** variable of the component now is and **object** an should be defined through the controller.
 1. Added support to export results to CSV, TSV, JSON.
@@ -80,8 +92,9 @@ The field definition is this:
 field_name:{
 	Label:'label_to_show_on_table_header',
 	Display:'field_which_contain_data_to_show',
-	Type: 'text' || 'googlemap' || 'image',
+	Type: 'any_of_the_supported_datatypes,
 	Zoom:'zoom_value_for_google_map_type'
+	ReadOnly: true || false
 }
 ```
 ** *If not clear please check the example at the end* **.
@@ -102,17 +115,29 @@ These variables are completed optional, if you're using the integrated mixin for
 1. stripped: [ true| **false** ]	-	Makes the table to render stripped.
 1. hover: [ true | **false** ]		-	Allows to hover the table.
 
-###Custom Templates
+##Datatypes
+
+Datatypes allow to make a custom predifined render of the data in the table, currente supported datatypes are:
+
+1. **text**: It just render the informatión without any decoration, in edition mode it renders a input text.
+2. **image**: It assumes that information if an url so it renders the image. In edition mode it render a input text.
+3. **email**: Displays the email along with a button to mail the receiver, in edition mode it renders a input email.
+4. **googlemap**: Render a link that shows a modal windown with the location it is important to notice this Type of field is by default ReadOnly.
+
+
+
+##Custom Templates
 The table which is generated depends on templates so you can choose whatever you like to be the render style of every cell in the table or the model window to update a field.
 
 You must put your templetes under */templates/**ember-cli-crudtable**/template_name*
 
 These are the current aviable templates to overwrite:
 
-####Handlebars templates for data Read
+###Handlebars templates for data Read
 
 a. table-cell-googlemap
 a. table-cell-text
+a. table-cell-image
 
 You can access the data in handeblar using the next object
 
@@ -120,16 +145,18 @@ You can access the data in handeblar using the next object
 recod = {
 	Field:'field_name',
 	Value:'field_value',
-	Display:'mask_field_value'
+	Display:'mask_field_value',
+	ReadOnly: true || false
 }
 ```
 
 ---
 
-####Handlebars templates for data creation/update
+###Handlebars templates for data creation/update
 
 a. edit-cell-googlemap
 a. edit-cell-text
+a. edit-cell-image
 
 You can access the data in handeblar using the next object
 
@@ -138,12 +165,13 @@ recod = {
 	Field:'field_name',
 	Value:'field_value',
 	Display:'mask_field_value'
+	ReadOnly: true || false
 }
 ```
 
 ---
 
-####Other handlebars templates
+###Other handlebars templates
 **modal-googlemap**
 
 Contains the definition for waht will be shown in the modal window when, a googlemap field is defined.
@@ -169,7 +197,26 @@ The templace uses de **crud-cell** helper to determine which templete is goin to
 
 This template is render inside the modal window and calls every tamplate labeled edit-cell-*datatype* this template also calls the **crud-edit-cell** helper in order to determine which template is goin to be rendered.
 
+##Hidding Edit,Delete,Create, Exports
+All these commands can be hidden if you need just by setting to null their corresponding action in the handlebars herlper.
 
+```
+{{crud-table
+	createRecord=null
+	deleteRecord=null
+	updateRecord=null
+	exports=false
+	
+	fields=fieldDefinition	
+}}
+```
+
+##Data Pulling
+
+ember-cli-crudtable has the hability to indicate and interval of time for reloading all data from the server.
+
+You can do this by setting the pulling var in the template to the time you like to pull in milliseconds.
+The default value if false (no pulling).
 
 ##Controller Configuration
 You can use this very same code when creating your controller and the only thing you have to worry about is to indicate the model.

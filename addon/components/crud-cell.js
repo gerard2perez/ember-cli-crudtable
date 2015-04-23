@@ -7,7 +7,10 @@ export default Ember.Component.extend({
     parent:null,
     actions: {
         show_map: function () {
-            this.sendAction('renderMap',this.get('parent'));
+            this.sendAction( 'renderMap', this.get('parent'), this.get('record.Type') );
+        },
+        mailto:function(){
+            document.location.href = "mailto:"+this.get('record.Value');
         }
     }
 });
