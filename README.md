@@ -55,6 +55,9 @@ ember install:addon ember-cli-crudtable@beta
 
 ##Changelog
 Maybe you want one of the older relases.
+### V0.4.0
+1. Support for Search key in controller configuration allowing to decide which fields are searchable.
+2. layoutName can be defined in order to select a fully custom design if you don't like tables.
 
 ### v0.4.0-beta.3
 1. Fixed a bug that prevent pulling from stopping.
@@ -94,7 +97,8 @@ field_name:{
 	Display:'field_which_contain_data_to_show',
 	Type: 'any_of_the_supported_datatypes,
 	Zoom:'zoom_value_for_google_map_type'
-	ReadOnly: true || false
+	ReadOnly: true || false,
+	Search: false || true
 }
 ```
 ** *If not clear please check the example at the end* **.
@@ -279,7 +283,8 @@ export default Ember.ObjectController.extend(CrudTable,{
 		Name:{Label:'School'},
 		Responsable:{
 			Label:'Manager',
-			Type:'text'
+			Type:'text',
+			Search: true
 		},
 		Location:{
 			Label:'Google Map',

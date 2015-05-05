@@ -1,0 +1,37 @@
+<div class="table-responsive">
+    {{#unless isLoading}}
+    <table {{bind-attr class=":table stripped:table-striped hover:table-hover" }} class="">
+        <thead>
+            <tr>
+                {{#each field in this.labels}}
+                <th>{{field.Display}}</th>
+                {{/each}}
+                {{#if this.editdelete}}
+                <th width="100px">Actions</th>
+                {{/if}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each row in this.ComplexModel}}
+            <tr>
+                {{#if row}} {{render 'ember-cli-crudtable/table-row' row}} {{/if}} {{#if this.editdelete}}
+                <td>
+                    {{#if this.updateRecord}}
+                    <button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="fa fa-edit"></i>
+                    </button>
+                    {{/if}} {{#if this.deleteRecord}}
+                    <button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="fa fa-trash"></i>
+                    </button>
+                    {{/if}}
+                </td>
+                {{/if}}
+            </tr>
+            {{/each}}
+
+        </tbody>
+        <tfoot>
+            Showing {{this.pagination.from}} to {{this.pagination.to}} of <span name="total_records">{{this.pagination.total}}</span> {{this.pagination.name}}
+        </tfoot>
+    </table>
+    {{else}} -{{render 'ember-cli-crudtable/spinner' this.newRecord}}- {{/unless}}
+</div>

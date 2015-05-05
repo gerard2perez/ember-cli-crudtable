@@ -107,6 +107,10 @@ moduleForComponent('crud-table', {
     needs: [
         'component:crud-cell',
         'component:crud-edit-cell',
+        'template:ember-cli-crudtable/default/base',
+        'template:ember-cli-crudtable/default/top',
+        'template:ember-cli-crudtable/default/body',
+        'template:ember-cli-crudtable/default/pagination',
         'template:ember-cli-crudtable/table-cell-googlemap',
         'template:ember-cli-crudtable/table-cell-text',
         'template:ember-cli-crudtable/edit-cell-googlemap',

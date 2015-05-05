@@ -1,6 +1,6 @@
 /*globals $, google*/
 import Ember from 'ember';
-import layout from '../templates/components/crud-table';
+//import layout from '../templates/components/crud-table';
 
 var CustomField = Ember.Object.extend({
     Field: null,
@@ -64,6 +64,7 @@ var recalculatePagination = function (that, meta) {
     that.set('pagination', meta);
 };
 var regenerateView = function (cmp) {
+    var KeyValueModel={};
     var ComplexModel = [];
     if (cmp.value) {
         cmp.value.forEach(function (row) {
@@ -101,10 +102,12 @@ var regenerateView = function (cmp) {
                         }
                         break;
                     }
+                    CustomProperties[field] = cfield;
                     CustomProperties.pushObject(cfield);
                 }); CustomProperties.RoutedRecord = row; ComplexModel.pushObject(CustomProperties);
         });
 }
+cmp.set('KeyValueModel', KeyValueModel);
 cmp.set('ComplexModel', ComplexModel);
 
 };
@@ -176,7 +179,8 @@ export default Ember.Component.extend({
     SearchTerm: "",
     SearchField: "",
     value: [],
-    layout: layout,
+    layoutName:'ember-cli-crudtable/default/base',
+    //layout: this.get('layoutName') ? alert('hola'):layout,
     class: "",
     fields: "id",
     labels: [],
@@ -459,7 +463,10 @@ export default Ember.Component.extend({
         this._super();
         that.set('labels', []);
         Object.keys(this.get('fields')).forEach(function (key) {
-            that.get('labels').push(that.fields[key].Label);
+            that.get('labels').push({
+                Display:that.fields[key].Label,
+                Search:that.fields[key].Search || false
+            });
         });
         this.set('editdelete', this.deleteRecord != null || this.updateRecord != null);
         this.init = function () {
