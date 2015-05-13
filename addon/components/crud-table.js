@@ -1,6 +1,7 @@
 /*globals $, google*/
 import Ember from 'ember';
 //import layout from '../templates/components/crud-table';
+var modalpromise;
 var PreLoad = [];
 var CustomField = Ember.Object.extend({
     Field: null,
@@ -101,16 +102,18 @@ var regenerateView = function (cmp) {
                                 };
                                 records.some(function(record){
                                     info.Added = datadep.get('id') === record.get('id');
-                                    if(info.Added)return true;
+                                    if(info.Added){
+										return true;
+									}
                                 });
                                 datafinal.push(info);
                             });
                             cfield.set('Display',datafinal);
-                        }
+                        };
                         if( data.isLoaded ){
                             checkvals(data);
                         }else{
-                            data.then(function(records){
+                            data.then(function(){
                                 checkvals(data);   
                             },
                             function(e){
@@ -138,6 +141,7 @@ cmp.set('ComplexModel', ComplexModel);
 
 };
 var showmodal = function () {
+	modalpromise = Ember.RSVP.defer('crud-table#showingmodal');
     $("#CrudTableDeleteRecordModal").modal('show');
 };
 var metadata = function (records, that) {
@@ -502,7 +506,7 @@ export default Ember.Component.extend({
                 Display:that.fields[key].Label,
                 Search:that.fields[key].Search || false
             });
-            if(that.fields[key].Type == "many-multi"){
+            if(that.fields[key].Type === "many-multi"){
                 Ember.assert('Action should be specified in Source field',that.fields[key].Source);
                 var deferred = Ember.RSVP.defer('crud-table#dependant-table');
                 PreLoad.push( deferred.promise );
@@ -551,8 +555,10 @@ export default Ember.Component.extend({
 
         Ember.RSVP.all(PreLoad).then(function(){
             regenerateView(that);
-        })
-
+        });
+		$('#CrudTableDeleteRecordModal').on('shown.bs.modal', function () {
+			//modalpromise.resolve();
+		});
         $("#CrudTableDeleteRecordModal").modal('hide');
         $('#CrudTableDeleteRecordModal').on('hidden.bs.modal', function () {
             var deferred = Ember.RSVP.defer('crud-table#cancelRecord');

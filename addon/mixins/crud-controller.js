@@ -19,7 +19,6 @@ export default function (model) {
 
             },
             update: function (record, deferred) {
-                var that = this;
                 var promises = [];
                 //if(self.model.get('isDirty')){
                 promises.push(record.save());
