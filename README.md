@@ -62,12 +62,16 @@ ember install:addon ember-cli-crudtable@beta
 
 ##Changelog
 Maybe you want one of the older relases.
+### v0.4.2
+I made a lot of mistakes and v0.4.1 it's actually version v0.4.2 and accidentally I removed all the other versions from npm, but don't worry this version is still backwards compatible.
+
 ### v0.4.1
 1. Handles manytomany relations (many-multi)
 2. Yout can now access the properties of the complex model by the name you defined in the model. (check custom templates seccion)
 3. Error messages won't show and alert window, intead, the response will be log to the consoke.
 4. Fiexed a bug that made modal window be created twice in the DOM so ... you know a mess.
 5. Boostrap is a requiere dependency.
+
 ### V0.4.0
 1. Support for Search key in controller configuration allowing to decide which fields are searchable.
 2. layoutName can be defined in order to select a fully custom design if you don't like tables.
