@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default function (model /*settings*/) {
+export default function (model) {
     return Ember.Mixin.create({
         isEditing: false,
         actions: {
@@ -27,7 +27,7 @@ export default function (model /*settings*/) {
                 //	self.set('isEditing',false);
                 //}
                 Ember.A(Ember.keys(record._relationships)).any(function (key) {
-                    var value = Ember.get(that.model, key);
+                    var value = Ember.get(record, key);
                     if (value.get('isDirty')) {
                         promises.push(value.get('content').save());
                     }

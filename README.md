@@ -17,6 +17,7 @@ ___
 ##Contributions
 Please let me know about anything you find is not working, or maybe some features you want the component to perform. Any kind of comment will be well received, so thank you so mucho for using it.
 
+
 ---
 
 
@@ -29,6 +30,12 @@ or
 
 ```
 ember install:addon ember-cli-crudtable
+```
+
+After this you must install boostrap with bower
+
+```
+bower install bootstrap
 ```
 
 ---
@@ -55,6 +62,12 @@ ember install:addon ember-cli-crudtable@beta
 
 ##Changelog
 Maybe you want one of the older relases.
+### v0.4.1
+1. Handles manytomany relations (many-multi)
+2. Yout can now access the properties of the complex model by the name you defined in the model. (check custom templates seccion)
+3. Error messages won't show and alert window, intead, the response will be log to the consoke.
+4. Fiexed a bug that made modal window be created twice in the DOM so ... you know a mess.
+5. Boostrap is a requiere dependency.
 ### V0.4.0
 1. Support for Search key in controller configuration allowing to decide which fields are searchable.
 2. layoutName can be defined in order to select a fully custom design if you don't like tables.
@@ -161,11 +174,12 @@ recod = {
 a. edit-cell-googlemap
 a. edit-cell-text
 a. edit-cell-image
+a. edit-cell-many-multi
 
 You can access the data in handeblar using the next object
 
 ```
-recod = {
+record = {
 	Field:'field_name',
 	Value:'field_value',
 	Display:'mask_field_value'
@@ -214,6 +228,23 @@ All these commands can be hidden if you need just by setting to null their corre
 	fields=fieldDefinition	
 }}
 ```
+
+
+##many-multi
+
+When defining a many-multi field you will have to specify the **Source** fiedl, which is the name of the model from the second table.
+
+```
+Some_Field:{
+	Label:'Some_Label',
+	Type:'many-multi',
+	Display:'Name',
+	Source:'second_table_on_the_manytomany_relation'
+}
+```
+
+The complemnt will load all the field in the table specified in the Source field,
+And will use the Display field has the property that will show the information from the loaded data.
 
 ##Data Pulling
 
@@ -323,6 +354,37 @@ This is a sample meta:
 	}
 }
 ```
+## Creating your own datatype
+When You're defining the Type field in the controller yuo can especify a generic one.
+
+Let's supose you want the field to have a link to some detail information, and we will define a Type **link**.
+
+So our controller wil contain a field definition like this:
+
+```
+fieldDefinition:{
+	Status:{
+	Label:'Current State',
+	Type:'link',
+	ReadOnly:true
+},
+```
+
+In order to compleat out goal we have to create a template file under **templates/ember-cli-crudtable** and call it **table-cell-link**
+
+The definition of the template can be like this:
+
+```
+{{#link-to 'school.profesors' parent.RoutedRecord}}
+	<span class="label label-primary pull-right" style="cursor:pointer">
+	<i class="glyphicon glyphicon-user" style="cursor:pointer"></i>
+	View All Profesors
+	</span>
+{{/link-to}}
+```
+
+That's all. You'll have a new field rendered as a link which is pointing to 'school.profesors' route.
+
 
 ##Upcoming
 I'll create a website to show some examples if the downloads still increasing, thank you for using it.

@@ -16,6 +16,15 @@ export default Ember.Component.extend({
     renderMap: 'internal_map',
     getCenter: 'set',
     actions: {
+        addto:function(recordparent,recordchild){
+            var isAdded = Ember.get(recordchild,'Added');
+            if(isAdded){
+                recordparent.get('Value').removeObject(recordchild.Routed);
+            }else{
+                recordparent.get('Value').pushObject(recordchild.Routed);
+            }
+            Ember.set(recordchild,'Added',!isAdded);
+        },
         show_map: function () {
             this.sendAction('renderMap',this.get('parent'));
         }

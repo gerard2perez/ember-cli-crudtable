@@ -3,6 +3,9 @@
     	{{#unless record.ReadOnly}}
         	{{crud-edit-cell record=record}}
         	<div class="hr-line-dashed"></div>
+        {{else}}
+        	{{record.ReadOnly}}
+        	{{record}}
         {{/unless}}
     {{/each}}
 </form>

@@ -1,7 +1,7 @@
 /*globals $, google*/
 import Ember from 'ember';
 //import layout from '../templates/components/crud-table';
-
+var PreLoad = [];
 var CustomField = Ember.Object.extend({
     Field: null,
     Value: null,
@@ -59,55 +59,81 @@ var recalculatePagination = function (that, meta) {
             });
         }
     }
-
     meta.links = arr;
     that.set('pagination', meta);
 };
 var regenerateView = function (cmp) {
-    var KeyValueModel={};
     var ComplexModel = [];
     if (cmp.value) {
         cmp.value.forEach(function (row) {
-                var CustomProperties = [];
-                Object.keys(cmp.fields).forEach(function (field) {
-                        var data = row.get(field);
-                        var cfield = CustomField.create({
-                            Field: field,
-                            Value: data,
-                            Display: data,
-                            ReadOnly: cmp.fields[field].ReadOnly || false,
-                            Type: cmp.fields[field].Type || 'text',
-                            listener: function () {
-                                row.set(this.get('Field'), this.get('Value'));
-                                if (cmp.fields[field].Display === null) {
-                                    row.set('Display', this.get('Value'));
-                                }
-                            }.observes('Value'),
-                            googlefield: function () {
-                                if (this.get('DisplayField')) {
-                                    row.set(this.get('DisplayField'), this.get('Display'));
-                                }
-                                this.set('ReadOnly',cmp.fields[field].ReadOnly || true);
-                            }.observes('Display')
-                        });
-                        switch (cfield.get('Type')) {
-                        case 'googlemap':
-                            if (cmp.fields[field].Display != null) {
-                                cfield.set('Zoom', {
-                                    value: row.get(cmp.fields[field].Zoom),
-                                    field: cmp.fields[field].Zoom
+            var CustomProperties = [];
+            Object.keys(cmp.fields).forEach(function (field) {
+                    var data = row.get(field);
+                    var cfield = CustomField.create({
+                        Field: field,
+                        Value: data,
+                        Display: data,
+                        ReadOnly: cmp.fields[field].ReadOnly || false,
+                        Type: cmp.fields[field].Type || 'text',
+                        listener: function () {
+                            row.set(this.get('Field'), this.get('Value'));
+                            if (cmp.fields[field].Display === null) {
+                                row.set('Display', this.get('Value'));
+                            }
+                        }.observes('Value'),
+                        googlefield: function () {
+                            if (this.get('DisplayField')) {
+                                row.set(this.get('DisplayField'), this.get('Display'));
+                            }
+                            this.set('ReadOnly',cmp.fields[field].ReadOnly || this.get('Type')==="googlemap");
+                        }.observes('Display')
+                    });
+                    switch (cfield.get('Type')) {
+                    case 'many-multi':
+                        var checkvals = function(records){
+                            var datafinal = [];
+                            var deps = cmp.get('dependants')[cmp.fields[field].Source];
+                            deps.forEach(function(datadep){
+                                var info = {
+                                    Display: datadep.get(cmp.fields[field].Display),
+                                    Routed : datadep,
+                                    Added: false
+                                };
+                                records.some(function(record){
+                                    info.Added = datadep.get('id') === record.get('id');
+                                    if(info.Added)return true;
                                 });
-                            cfield.set('Display', row.get(cmp.fields[field].Display));
-                            cfield.set('DisplayField', cmp.fields[field].Display);
+                                datafinal.push(info);
+                            });
+                            cfield.set('Display',datafinal);
+                        }
+                        if( data.isLoaded ){
+                            checkvals(data);
+                        }else{
+                            data.then(function(records){
+                                checkvals(data);   
+                            },
+                            function(e){
+                                console.log(e);
+                            });
                         }
                         break;
+                    case 'googlemap':
+                        if (cmp.fields[field].Display != null) {
+                            cfield.set('Zoom', {
+                                value: row.get(cmp.fields[field].Zoom),
+                                field: cmp.fields[field].Zoom
+                            });
+                        cfield.set('Display', row.get(cmp.fields[field].Display));
+                        cfield.set('DisplayField', cmp.fields[field].Display);
                     }
-                    CustomProperties[field] = cfield;
-                    CustomProperties.pushObject(cfield);
-                }); CustomProperties.RoutedRecord = row; ComplexModel.pushObject(CustomProperties);
+                    break;
+                }
+                CustomProperties[field] = cfield;
+                CustomProperties.pushObject(cfield);
+            }); CustomProperties.RoutedRecord = row; ComplexModel.pushObject(CustomProperties);
         });
 }
-cmp.set('KeyValueModel', KeyValueModel);
 cmp.set('ComplexModel', ComplexModel);
 
 };
@@ -209,7 +235,7 @@ export default Ember.Component.extend({
             var data = [];
             var row = [];
             this.labels.forEach(function (field) {
-                row.push(field);
+                row.push(field.Display);
             });
             data.push(row);
 
@@ -237,7 +263,7 @@ export default Ember.Component.extend({
             var data = [];
             var row = [];
             this.labels.forEach(function (field) {
-                row.push(field);
+                row.push(field.Display);
             });
             data.push(row);
 
@@ -272,7 +298,7 @@ export default Ember.Component.extend({
                 regenerateView(that);
                 that.set('isLoading', false);
             }, function (data) {
-                alert(data.message);
+                console.log(data);
                 that.set('isLoading', false);
             });
         },
@@ -287,6 +313,10 @@ export default Ember.Component.extend({
             });
             var query = {};
             query[field] = this.get('SearchTerm');
+            if(query[field]==="")
+            {
+                delete query[field];
+            }
             lastquery = query;
             var deferred = Ember.RSVP.defer('crud-table#createRecord');
             that.set('isLoading', true);
@@ -297,7 +327,7 @@ export default Ember.Component.extend({
                 regenerateView(that);
                 that.set('isLoading', false);
             }, function (data) {
-                alert(data.message);
+                console.log(data);
                 that.set('isLoading', false);
             });
         },
@@ -314,9 +344,13 @@ export default Ember.Component.extend({
                 var RoutedPropMap;
                 record.forEach(function (prop) {
                     RoutedPropMap = prop;
-                    if (prop.Type === 'googlemap') {
-                        map = record.get('map').getCenter();
-                        prop.set('Value', map.toUrlValue());
+                    switch(prop.Type){
+                        case 'googlemap':
+                            map = record.get('map').getCenter();
+                            prop.set('Value', map.toUrlValue());
+                            break;
+                        case 'many-multi':
+                            break;
                     }
                 });
                 deferred = Ember.RSVP.defer('crud-table#updateRecord');
@@ -364,7 +398,7 @@ export default Ember.Component.extend({
                 lastquery.page = that.get('pagination').current;
                 that.sendAction('searchRecord', lastquery, updateview);
             }, function (data) {
-                alert(data.message);
+                console.log(data);
                 that.set('isLoading', false);
             });
 
@@ -375,7 +409,8 @@ export default Ember.Component.extend({
                 hidemodal();
                 that.set('isLoading', false);
             }, function (data) {
-                alert(data.message);
+                console.log(data);
+                hidemodal();
                 that.set('isLoading', false);
             });
         },
@@ -467,6 +502,24 @@ export default Ember.Component.extend({
                 Display:that.fields[key].Label,
                 Search:that.fields[key].Search || false
             });
+            if(that.fields[key].Type == "many-multi"){
+                Ember.assert('Action should be specified in Source field',that.fields[key].Source);
+                var deferred = Ember.RSVP.defer('crud-table#dependant-table');
+                PreLoad.push( deferred.promise );
+
+                that.set('sideLoad',that.fields[key].Source);
+                that.sendAction('sideLoad',deferred);
+                deferred.promise.then(function(arr){
+                    var dep = that.get('dependants') || {};
+                    dep[that.fields[key].Source] = arr;
+                    that.set('dependants',dep);
+                    that.set('sideLoad',null);
+                }, function (data) {
+                    that.set('sideLoad',null);
+                    console.log(data.message);
+                });
+                
+            }
         });
         this.set('editdelete', this.deleteRecord != null || this.updateRecord != null);
         this.init = function () {
@@ -488,19 +541,34 @@ export default Ember.Component.extend({
             that.page_size = records.get('content.length');
             metadata(records, that);
             that.set('value', records);
-            regenerateView(that);
             that.set('isLoading', false);
             PULL(that);
         }, function (data) {
-            alert(data.message);
+            console.log(data);
             that.set('isLoading', false);
         });
+        PreLoad.push( deferred.promise );
+
+        Ember.RSVP.all(PreLoad).then(function(){
+            regenerateView(that);
+        })
+
         $("#CrudTableDeleteRecordModal").modal('hide');
         $('#CrudTableDeleteRecordModal').on('hidden.bs.modal', function () {
             var deferred = Ember.RSVP.defer('crud-table#cancelRecord');
             var template = Ember.RSVP.defer('crud-table#RenderTemplate');
             that.sendAction('cancelRecord', that.get('currentRecord').RoutedRecord, deferred);
             deferred.promise.then(function (args) {
+                that.get('currentRecord').forEach(function (prop) {
+                    switch(prop.Type){
+                        case 'many-multi':
+                            prop.Display.forEach(function(property){
+                                console.log(property);
+                                Ember.set(property,'Added',false);
+                            });
+                            break;
+                    }
+                });
                 if (args.remove) {
                     that.get('value').removeObject(args.record);
                 }
@@ -511,12 +579,12 @@ export default Ember.Component.extend({
                 that.set('showMap', false);
                 template.resolve(true);
             }, function (data) {
-                alert(data);
+                console.log(data);
             });
         });
-
+        $('body').append( $("#CrudTableDeleteRecordModal") );
     }.on('didInsertElement'),
     teardown: function () {
-
+        $("#CrudTableDeleteRecordModal").remove();
     }.on('willDestroyElement'),
 });
