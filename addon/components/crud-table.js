@@ -1,6 +1,6 @@
 /*globals $, google*/
 import Ember from 'ember';
-import dateformat from '../utils/dateformat';
+import DF from '../utils/dateformat';
 
 var modalpromise;
 var proccesDef = [];
@@ -117,7 +117,7 @@ var regenerateView = function(cmp) {
                     Field: field,
                     Value: data,
                     Choose: cmp.fields[field].OnChoose,
-                    Display: dateformat.format(data, cmp.fields[field].Format),
+                    Display: DF.format(data, cmp.fields[field].Format),
                     List: cmp.fields[field].List === true,
                     Suffix: cmp.fields[field].Suffix,
                     Prefix: cmp.fields[field].Prefix,

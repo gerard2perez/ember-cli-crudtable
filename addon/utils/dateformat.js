@@ -128,7 +128,7 @@ dateFormat.i18n = {
     ]
 };
 
-export default Ember.Object.extend({
+export default {
 	format : function(theString, formatval) {
 	    if (theString == null || formatval === undefined) {
 	        return theString;
@@ -148,4 +148,4 @@ export default Ember.Object.extend({
 	    }
 	    return theString;
 	}
-});
+};
