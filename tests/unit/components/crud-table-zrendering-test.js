@@ -132,7 +132,7 @@ moduleForComponent('crud-table', {
             createRecord: null,
             exports:null
         });
-        component.set('targetObject', targetObject);
+        //component.set('targetObject', targetObject);
         this.render();
     },
     teardown: function () {

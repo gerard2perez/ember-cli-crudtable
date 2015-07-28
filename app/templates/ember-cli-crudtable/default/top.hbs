@@ -1,37 +1,45 @@
 <div class="row">
+{{#if model.createRecord}}
     <div class="col-sm-3 m-b-xs">
-    {{#if model.createRecord}}
-        <button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' value}}>
+    
+        <button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' model.value}}>
             <i class="glyphicon glyphicon-send"></i>&nbsp;New Record</button>
-    {{/if}}
+    
     </div>
+    {{/if}}
+    {{#if model.exports}}
     <div class="col-sm-4 m-b-xs">
         <div data-toggle="buttons" class="btn-group">
-        {{#if model.exports}}
+        
             <label id="tocsv" class="btn btn-sm btn-default" {{action 'toCSV' this}}  >
                 <input type="radio"> To CSV </label>
             <label id="totsv" class="btn btn-sm btn-default" {{action 'toTSV' this}}>
                 <input type="radio" id="option2" name="options"> To TSV </label>
             <label id="tojson" class="btn btn-sm btn-default" {{action 'toJSONObject' this}}>
                 <input type="radio" id="option3" name="options"> To Json </label>
-        {{/if}}
+        
         </div>
     </div>
+    {{/if}}
+    {{#if this.search}}
     <div class="col-sm-2 m-b-xs no-padding">
         <select id="SearchField" class="input-sm form-control input-s-sm inline">
-            {{#each field in model.labels}}
+            {{#each model.labels key="@index" as |field index|}}
             {{#if field.Search}}
-            <option {{bind-attr value=field.Display}}>{{field.Display}}</option>
+            <option value={{field.Display}}>{{field.Display}}</option>
             {{/if}}
             {{/each}}
         </select>
     </div>
     <div class="col-sm-3">
+    
         <div class="input-group">
             {{input value=model.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
             <span class="input-group-btn">
                 <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
             </span>
         </div>
+    
     </div>
+    {{/if}}
 </div>

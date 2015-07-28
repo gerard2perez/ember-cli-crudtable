@@ -5,7 +5,7 @@ export default function (model) {
         isEditing: false,
         actions: {
             FetchData:function(query,deferred){
-                this.store.find(model,query).then(deferred.resolve,deferred.reject);
+                this.store.query(model,query).then(deferred.resolve,deferred.reject);
             },
             getRecord: function (deferred) {
                 deferred.resolve(this.store.createRecord(model));
@@ -25,12 +25,12 @@ export default function (model) {
                 //}else{
                 //	self.set('isEditing',false);
                 //}
-                Ember.A(Ember.keys(record._relationships)).any(function (key) {
-                    var value = Ember.get(record, key);
-                    if (value.get('isDirty')) {
-                        promises.push(value.get('content').save());
-                    }
-                });
+                // Ember.A(Ember.keys(record._relationships)).any(function (key) {
+                //     var value = Ember.get(record, key);
+                //     if (value && value.get('isDirty')) {
+                //         promises.push(value.get('content').save());
+                //     }
+                // });
                 Ember.RSVP.Promise.all(promises).then(deferred.resolve, deferred.reject);
 
             },

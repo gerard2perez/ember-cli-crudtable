@@ -1,25 +1,27 @@
 <div class="table-responsive">
-    {{#unless isLoading}}
-    <table {{bind-attr class=":table stripped:table-striped hover:table-hover" }} class="">
+    {{#unless model.isLoading}}
+    <table 
+    class="table {{if model.stripped 'table-striped'}} {{if model.hover 'table-hover'}}"
+    >
         <thead>
             <tr>
-                {{#each field in this.labels}}
+                {{#each model.labels key="@index" as |field index|}}
                 <th>{{field.Display}}</th>
                 {{/each}}
-                {{#if this.editdelete}}
+                {{#if model.editdelete}}
                 <th width="100px">Actions</th>
                 {{/if}}
             </tr>
         </thead>
         <tbody>
-            {{#each row in this.ComplexModel}}
+            {{#each model.ComplexModel key="@index" as |row index|}}
             <tr>
-                {{#if row}} {{render 'ember-cli-crudtable/table-row' row}} {{/if}} {{#if this.editdelete}}
+                {{#if row}} {{render 'ember-cli-crudtable/table-row' row}} {{/if}} {{#if model.editdelete}}
                 <td>
-                    {{#if this.updateRecord}}
+                    {{#if model.updateRecord}}
                     <button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="glyphicon glyphicon-edit"></i>
                     </button>
-                    {{/if}} {{#if this.deleteRecord}}
+                    {{/if}} {{#if model.deleteRecord}}
                     <button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="glyphicon glyphicon-trash"></i>
                     </button>
                     {{/if}}
@@ -30,8 +32,8 @@
 
         </tbody>
         <tfoot>
-            Showing {{this.pagination.from}} to {{this.pagination.to}} of <span name="total_records">{{this.pagination.total}}</span> {{this.pagination.name}}
+            Showing {{model.pagination.from}} to {{model.pagination.to}} of <span name="total_records">{{model.pagination.total}}</span> {{model.pagination.name}}
         </tfoot>
     </table>
-    {{else}} -{{render 'ember-cli-crudtable/spinner' this.newRecord}}- {{/unless}}
+    {{else}} -{{render 'ember-cli-crudtable/spinner' model.newRecord}}- {{/unless}}
 </div>

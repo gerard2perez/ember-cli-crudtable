@@ -4,8 +4,12 @@ export default Ember.Component.extend({
         return 'ember-cli-crudtable/table-cell-' + this.get('record.Type');
     }.property('record'),
     renderMap: 'internal_map',
+    generic_callback:'generic_callback',
     parent:null,
     actions: {
+        generic_callback:function(action,arg1,arg2,arg3){
+            this.sendAction( 'generic_callback', action,arg1,arg2,arg3 );
+        },
         show_map: function () {
             this.sendAction( 'renderMap', this.get('parent'), this.get('record.Type') );
         },

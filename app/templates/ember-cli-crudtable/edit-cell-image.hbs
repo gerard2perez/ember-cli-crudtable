@@ -1,9 +1,9 @@
 <div class="form-group">
-    <label class="col-sm-2 control-label">{{record.Field}}</label>
+    <label class="col-sm-2 control-label">{{record.Label}}</label>
     <div class="col-sm-8">
         {{input value=record.Value type="text" class="form-control"}}
     </div>
     <div class="col-sm-2">
-    	<img {{bind-attr src=record.Value}} style="height:auto;width:100%"/>
+    	<img src={{record.Value}} style="height:auto;width:100%"/>
     </div>
 </div>

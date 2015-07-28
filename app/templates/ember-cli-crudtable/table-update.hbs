@@ -1,11 +1,8 @@
 <form method="get" class="form-horizontal">
-    {{#each record in this.model}}
-    	{{#unless record.ReadOnly}}
-        	{{crud-edit-cell record=record}}
+    {{#each this.model key="@index" as |record index|}}
+    	{{#unless record.Edit}}
+        	{{crud-edit-cell record=record parent=this.model}}
         	<div class="hr-line-dashed"></div>
-        {{else}}
-        	{{record.ReadOnly}}
-        	{{record}}
         {{/unless}}
     {{/each}}
 </form>

@@ -1,0 +1,13 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">{{record.Label}}</label>
+    <div class="col-sm-10">
+    	<select {{action 'choose' this.record on="change"}}>
+    		<option value="0">Select a value</option>
+        	{{#each this.record.Display key="@index" as |option index|}}
+        	<option selected={{option.Added}} >
+        	{{option.Display}}
+        	</option>
+        	{{/each}}
+		</select>
+    </div>
+</div>

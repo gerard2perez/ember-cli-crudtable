@@ -1,3 +1,5 @@
-{{#each property in this.model}}
-    <td>{{crud-cell record=property parent=this.model}} </td>
+{{#each this.model key="@index" as |property index|}}
+	{{#if property.List}}
+    	<td>{{crud-cell record=property parent=this.model}}</td>
+	{{/if}}
 {{/each}}
