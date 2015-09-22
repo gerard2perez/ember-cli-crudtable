@@ -26,12 +26,6 @@ Please let me know about anything you find is not working, or maybe some feature
 ember install ember-cli-crudtable
 ```
 
-or
-
-```
-ember install:addon ember-cli-crudtable
-```
-
 After this you must install boostrap with bower
 
 ```
@@ -42,25 +36,21 @@ bower install bootstrap
 
 ##Current Status ![Current NPM](https://img.shields.io/github/tag/gerard2p/ember-cli-crudtable.svg)
 
-(I'm not using any versioning convention, instead i'm just using the current date)
+I'm now using a Mayor/Minor/Revision notation.
 
-And I'll be releasing a new version every month or every 5 features I add.
-
-You can use the next command to get the latest build
+So we can now use the npm notation correctly.
 
 ```
 ember install ember-cli-crudtable@beta
 ```
 
-or
-
-```
-ember install:addon ember-cli-crudtable@beta
-```
-
 ---
 
 ##Changelog
+
+### v1.0.0
+Since this versión I'll put the changelog on the release section.
+
 Maybe you want one of the older relases.
 ### v0.4.2
 I made a lot of mistakes and v0.4.1 it's actually version v0.4.2 and accidentally I removed all the other versions from npm, but don't worry this version is still backwards compatible.

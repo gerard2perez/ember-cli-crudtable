@@ -118,7 +118,7 @@ var regenerateView = function(cmp) {
                     Value: data,
                     Choose: cmp.fields[field].OnChoose,
                     Display: DF.format(data, cmp.fields[field].Format),
-                    List: cmp.fields[field].List === true,
+                    List: cmp.fields[field].List === false ? true:false,
                     Suffix: cmp.fields[field].Suffix,
                     Prefix: cmp.fields[field].Prefix,
                     Label: cmp.fields[field].Label,
@@ -187,7 +187,9 @@ var regenerateView = function(cmp) {
 };
 var showmodal = function() {
     modalpromise = Ember.RSVP.defer('crud-table#showingmodal');
-    $("#CrudTableDeleteRecordModal").modal('show');
+    var modal = $("#CrudTableDeleteRecordModal");
+    console.log($.fn.modal);
+    modal.modal('show');
 };
 var metadata = function(records, that) {
     var inflector = new Ember.Inflector(Ember.Inflector.defaultRules);
