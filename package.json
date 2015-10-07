@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-crudtable",
-  "version": "1.1.0",
+  "version": "1.0.1",
   "description": "This addon allows you to easly create a CRUD Table, it will take you only 5s!.",
   "directories": {
     "doc": "doc",
