@@ -1,5 +1,7 @@
-{{render 'ember-cli-crudtable/default/top' this}}
-{{render 'ember-cli-crudtable/default/body' this}}
-{{render 'ember-cli-crudtable/default/pagination' this}}
+{{render 'ember-cli-crudtable.default.top' this}}
+{{render 'ember-cli-crudtable.default.body' this}}
+{{#if this.paginator}}
+{{render 'ember-cli-crudtable.default.pagination' this}}
+{{/if}}
 {{yield}} 
-{{render 'ember-cli-crudtable/table-modal' this}}
+{{render 'ember-cli-crudtable.table-modal' this}}

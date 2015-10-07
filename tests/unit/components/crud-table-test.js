@@ -1,4 +1,4 @@
-/* globals equal, ok*/
+/* globals ok*/
 import {
     moduleForComponent,
     test
@@ -6,8 +6,7 @@ import {
 from 'ember-qunit';
 import startApp from '../../helpers/start-app';
 import Ember from 'ember';
-import DS from "ember-data";
-
+//import DS from "ember-data";
 var component;
 var App;
 var ArrField = {
@@ -29,22 +28,22 @@ var FakeModel = Ember.Component.extend({
     Field3: null
 });
 
-var emberdatafix = DS.RecordArray.create({
-    content: [
-        FakeModel.create({
-            id: '1',
-            Field1: 'Data1',
-            Field2: 'Data2',
-            Field3: 'Data3'
-        }),
-        FakeModel.create({
-            id: '2',
-            Field1: 'Data4',
-            Field2: 'Data5',
-            Field3: 'Data6'
-        })
-    ]
-});
+// var emberdatafix = DS.RecordArray.create({
+//     content: [
+//         FakeModel.create({
+//             id: '1',
+//             Field1: 'Data1',
+//             Field2: 'Data2',
+//             Field3: 'Data3'
+//         }),
+//         FakeModel.create({
+//             id: '2',
+//             Field1: 'Data4',
+//             Field2: 'Data5',
+//             Field3: 'Data6'
+//         })
+//     ]
+// });
 
 var searchResult = DS.RecordArray.create({
     type: {
@@ -56,7 +55,7 @@ var searchResult = DS.RecordArray.create({
         next: 2
     },
     content: [
-                FakeModel.create({
+        FakeModel.create({
             id: 2,
             Field1: 'Data5',
             Field2: 'Data7',
@@ -73,8 +72,6 @@ var searchResult = DS.RecordArray.create({
 
 var targetObject = {
     FetchData: function (query, deferred) {
-        var page = query.page ? query.page : 1;
-        ok(query);
         var meta = searchResult.get('meta');
         meta.count += tricky;
         searchResult.set('meta',meta);
@@ -87,13 +84,11 @@ var targetObject = {
             Field2: 'Data88',
             Field3: 'Data99'
         });
-        //searchResult.pushObject(newobject);
         deferred.resolve(newobject);
     },
     delete: function (record, deferred) {
         component.get('value').removeAt(0);
         searchResult.removeAt(0);
-
         deferred.resolve(record);
     },
     update: function (record, deferred) {
@@ -101,6 +96,7 @@ var targetObject = {
         deferred.resolve(record);
     },
     create: function (record, deferred) {
+        console.log('create');
         searchResult.get('content').pushObject(record);
         deferred.resolve(record);
     }
@@ -126,133 +122,147 @@ moduleForComponent('crud-table', 'CrudTable',{
     ],
     beforeEach: function () {
         App = startApp();
-        
+        component = this.subject({
+            search:true,
+            ComplexModel:'nothing',
+            fields: ArrField,
+            stripped: true,
+            hover: false,
+            deleteRecord: 'delete',
+            updateRecord: 'update',
+            createRecord: 'create'
+        });
+        component.set('targetObject', targetObject);
     },
     afterEach: function () {
         Ember.run(App, 'destroy');
     }
 });
 
-test('Can set init variables', function (assert) {
-    assert.expect(2);
-    var done = assert.async();
-    component = this.subject({
-        ComplexModel:'caca',
-        fields: ArrField,
-        stripped: true,
-        hover: false,
-        deleteRecord: 'delete',
-        updateRecord: 'update',
-        createRecord: 'create'
-    });
+test('No data initialization', function (assert) {
     this.render();
-    component.set('targetObject', targetObject);
-    // setTimeout(function(){
-    //     equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data23');    
-    //     //done();
-    // },1000);
-    // equal(component.get('Promise').then,null);
-    component.get('Promise').then(function(){    
-        //equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data23');        
-        equal(component.get('labels').length, 3);
-        equal(find('table.table>tbody>tr').children().length, (component.get('labels').length + 1) * find('table.table>tbody').children().length);
-        done();
+    assert.expect(1);
+    assert.equal(1,1);
+});
+test('Can Set Initial Variables', function (assert) {
+    assert.expect(3);
+    this.render();
+    andThen(function(){
+        assert.equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data23');
+        assert.equal(component.get('labels').length, 3);
+        assert.equal(find('table.table>tbody>tr').children().length, (component.get('labels').length + 1) * find('table.table>tbody').children().length);
     });
 });
-/*
-test('User Creates a Record', function () {
+test('User Creates a Record', function (assert) {
+    this.render();
+    assert.expect(2);
     tricky = 1;
-    var rows = parseInt(this.$('[name=total_records]').text());
+    //var rows = parseInt(this.$('[name=total_records]').text());
     click('[data-action=create]');
     andThen(function () {
-        equal($('.modal-title').text().trim(), 'Add a New Record');
+        assert.equal($('.modal-title').text().trim(), 'Add a New Record');
         click($('[data-action=confirm]'));
         andThen(function () {
-            //equal(find('[name=total_records]').text(), rows + 1);
-            ok("doesn't wait for promises");
+            assert.equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data99');
+            //assert.equal(find('[name=total_records]').text(), rows + 1);
+            //For some reason the view is not yet updated.
         });
     });
 });
-test('User Edits a Record', function () {
+test('User Edits a Record', function (assert) {
     var rows = parseInt(this.$('[name=total_records]').text());
+    this.render();
+    assert.expect(1);
     click('[data-action=edit]:eq(0)');
     andThen(function () {
-        //equal($('.modal-title').text().trim(), 'Updating');
+        //assert.equal($('.modal-title').html().trim(), 'Updating');
         click( $('[data-action=confirm]'));
-        /*andThen(function () {
-            equal(find('[name=total_records]').text(), rows);
-        });* /
+        andThen(function () {
+            assert.equal(find('[name=total_records]').text(), rows);
+        });
     });
 });
-
-test('User attemps to delete a Record and cancels', function () {
+test('User attemps to delete a Record and cancels', function (assert) {
+    this.render();
+    assert.expect(2);
     var rows = this.$('table.table>tbody>tr').children().length;
-    equal($('table.table>tbody>tr').children().length, rows);
+    assert.equal($('table.table>tbody>tr').children().length, rows);
     click('[data-action=edit]:eq(0)');
     andThen(function () {
         click( $('[data-dismiss=modal]'));
         andThen(function () {
-            equal(find('table.table>tbody>tr').children().length, rows);
+            assert.equal(find('table.table>tbody>tr').children().length, rows);
         });
     });
 });
 
-test('User deletes a Record', function () {
-    var rows = this.$('table.table>tbody>tr').length;
+
+
+
+
+
+test('User deletes a Record', function (assert) {
+    this.render();
+    //var rows = this.$('table.table>tbody>tr').length;
     click('[data-action=delete]:eq(0)');
     andThen(function () {
         //equal($('#CrudTableDeleteRecordModal').html().trim(), "You're about to delete a record");
         click( $('[data-action=confirm]'));
         andThen(function () {
-            ok('Templates take to long to render, causeing async fail');
+            assert.ok('Templates take to long to render, causeing async fail');
         });
     });
 });
 
-test('User pushes a search', function () {
+test('User pushes a search', function (assert) {
+    this.render();
     Ember.run(function () {
         component.set('SearchTerm', 'Data2');
         component.set('SearchField', 'Field1');
         click('[data-action=search]');
     });
     andThen(function () {
-        equal(component.get('SearchTerm'), 'Data2');
-        equal(component.get('SearchField'), 'Field1');
-        equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data99', 'Complex Model not Updated');
-        equal(component.get('value').get('lastObject').get('Field1'), 'Data77');
+        assert.equal(component.get('SearchTerm'), 'Data2');
+        assert.equal(component.get('SearchField'), 'Field1');
+        assert.equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data99', 'Complex Model not Updated');
+        assert.equal(component.get('value').get('content').get('lastObject').get('Field1'), 'Data77');
     });
 });
 
-test('User interacts with pagination', function () {
-    tricky = 2;
-    click('[data-action=search]');
-    andThen(function () {
-        //equal(find('[data-page]').length, 3);
-        click('[data-page=2]');
-        andThen(function () {
-            click('[data-page=3]');
-            andThen(function () {
-                //equal(find('[name=total_records]').text(), 3);
-                ok("doesn't wait for promises");
-            });
-        });
-    });
-});
-test('User exports file to CSV', function () {
+// test('User interacts with pagination', function (assert) {
+//     this.render();
+//     tricky = 6;
+//     click('[data-action=search]');
+//     andThen(function () {
+//         assert.equal(find('[data-page]').length, 3);
+//         click('[data-page=2]');
+//         andThen(function () {
+//             click('[data-page=3]');
+//             andThen(function () {
+//                 //equal(find('[name=total_records]').text(), 3);
+//                 assert.ok("doesn't wait for promises");
+//             });
+//         });
+//     });
+// });
+test('User exports file to CSV', function (assert) {
+    this.render();
     click('#tocsv');
     andThen(function () {
-        ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
+        assert.ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
     });
 });
-test('User exports file to TSV', function () {
+test('User exports file to TSV', function (assert) {
+    this.render();
     click('#totsv');
     andThen(function () {
-        ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
+        assert.ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
     });
 });
-test('User exports file to JSON', function () {
+test('User exports file to JSON', function (assert) {
+    this.render();
     click('#tojson');
     andThen(function () {
-        ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
+        assert.ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
     });
-});*/
+});

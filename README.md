@@ -14,6 +14,7 @@ This component is compatible with bootstrap (Actually is a dependency, but it's 
 7. Export to CSV, TSV, JSON
 ___
 
+
 ##Contributions
 Please let me know about anything you find is not working, or maybe some features you want the component to perform. Any kind of comment will be well received, so thank you so mucho for using it.
 
@@ -39,10 +40,6 @@ bower install bootstrap
 I'm now using a Mayor/Minor/Revision notation.
 
 So we can now use the npm notation correctly.
-
-```
-ember install ember-cli-crudtable@beta
-```
 
 ---
 
