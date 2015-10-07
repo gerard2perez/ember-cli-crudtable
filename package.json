@@ -1,53 +1,50 @@
 {
-	"name": "ember-cli-crudtable",
-	"version": "1.0.2",
-	"description": "This addon allows you to easly create a CRUD Table, it will take you only 5s!.",
-	"directories": {
-		"doc": "doc",
-		"test": "tests"
-	},
-	"scripts": {
-		"start": "ember server",
-		"build": "ember build",
-		"test": "ember test"
-	},
-	"repository": "https://github.com/gerard2p/ember-cli-crudtable.git",
-	"engines": {
-		"node": ">= 0.12.0"
-	},
-	"dependencies": {
-		"ember-cli-htmlbars": "0.7.9"
-	},
-	"author": "Gerardo Pérez Pérez",
-	"license": "MPL-2.0",
-	"devDependencies": {
-		"ember-data": "2.1.0",
-		"broccoli-asset-rev": "^2.0.0",
-		"ember-cli": "1.13.8",
-		"ember-cli-app-version": "0.5.0",
-		"ember-cli-babel": "^4.0.0",
-		"ember-cli-content-security-policy": "0.4.0",
-		"ember-cli-dependency-checker": "^1.0.1",
-		"ember-cli-ic-ajax": "0.2.1",
-		"ember-cli-inject-live-reload": "^1.3.1",
-		"ember-cli-qunit": "1.0.0",
-		"ember-cli-uglify": "^1.2.0",
-		"ember-export-application-global": "^1.0.3",
-
-		"ember-cli-release": "0.2.3",
-		"ember-cli-sri": "^1.0.3",
-
-
-		"ember-try": "0.0.6"
-	},
-	"keywords": [
+  "name": "ember-cli-crudtable",
+  "version": "1.0.0",
+  "description": "This addon allows you to easly create a CRUD Table, it will take you only 5s!.",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "ember server",
+    "build": "ember build",
+    "test": "ember test"
+  },
+  "repository": "https://github.com/gerard2p/ember-cli-crudtable.git",
+  "engines": {
+    "node": ">= 0.12.0"
+  },
+  "dependencies": {
+    "ember-cli-htmlbars": "0.7.9"
+  },
+  "author": "Gerardo Pérez Pérez",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "ember-data": "2.1.0",
+    "broccoli-asset-rev": "^2.0.0",
+    "ember-cli": "1.13.8",
+    "ember-cli-app-version": "0.5.0",
+    "ember-cli-babel": "^4.0.0",
+    "ember-cli-content-security-policy": "0.4.0",
+    "ember-cli-dependency-checker": "^1.0.1",
+    "ember-cli-ic-ajax": "0.2.1",
+    "ember-cli-inject-live-reload": "^1.3.1",
+    "ember-cli-qunit": "1.0.0",
+    "ember-cli-uglify": "^1.2.0",
+    "ember-export-application-global": "^1.0.3",
+    "ember-cli-release": "0.2.3",
+    "ember-cli-sri": "^1.0.3",
+    "ember-try": "0.0.6"
+  },
+  "keywords": [
     "ember-addon",
     "crudtable",
     "crud",
     "table",
     "ember-cli"
   ],
-	"ember-addon": {
-		"configPath": "tests/dummy/config"
-	}
+  "ember-addon": {
+    "configPath": "tests/dummy/config"
+  }
 }
