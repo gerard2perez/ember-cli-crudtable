@@ -1,6 +1,6 @@
 
 # CRUD Table [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable/v0.3.27.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable) [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)
-This addon allows you to easly create a CRUD Table, it will take you only 5s!.
+This addon allows you to easily create a CRUD Table, it will take you only 5s!.
 
 This component is compatible with bootstrap (Actually is a dependency, but it's downloaded automatically) and ember-data.
 
@@ -48,15 +48,15 @@ So we can now use the npm notation correctly.
 ### v1.0.0
 Since this versión I'll put the changelog on the release section.
 
-Maybe you want one of the older relases.
+Maybe you want one of the older releases.
 ### v0.4.2
-I made a lot of mistakes and v0.4.1 it's actually version v0.4.2 and accidentally I removed all the other versions from npm, but don't worry this version is still backwards compatible.
+I made a lot of mistakes and v0.4.1 it's actually version v0.4.2 and I accidentally removed all the other versions from npm, but don't worry this version is still backwards compatible.
 
 ### v0.4.1
 1. Handles manytomany relations (many-multi)
 2. Yout can now access the properties of the complex model by the name you defined in the model. (check custom templates seccion)
-3. Error messages won't show and alert window, intead, the response will be log to the consoke.
-4. Fiexed a bug that made modal window be created twice in the DOM so ... you know a mess.
+3. Error messages won't show and alert window, intead, the response will be log to the console.
+4. Fixed a bug that made modal window be created twice in the DOM so ... you know a mess.
 5. Boostrap is a requiere dependency.
 
 ### V0.4.0
@@ -71,7 +71,7 @@ I made a lot of mistakes and v0.4.1 it's actually version v0.4.2 and accidentall
 5. Added email datatype.
 
 ### v0.4.0-beta.2
-1. Added support for data poolling every n milisecods.
+1. Added support for data pooling every n millisecods.
 2. Create button can now be hidden.
 3. The export commands can now be hidden.
 
@@ -107,7 +107,7 @@ field_name:{
 ```
 ** *If not clear please check the example at the end* **.
 ###Action Configuration
-These variables are completed optional, if you're using the integrated mixin for the controller.
+These variables are completely optional, if you're using the integrated mixin for the controller.
 
 1. createRecord: [default: '*create*']
 1. updateRecord: [default: '*update*']
@@ -117,7 +117,7 @@ These variables are completed optional, if you're using the integrated mixin for
 1. getRecord: [default: '*getRecord*']
 	2. This action creates a new empty record.
 1. searchRecord: [default: '*FetchData*']
-	2. This actions if the one witch searches for your records.
+	2. This actions if the one which searches for your records.
 
 ###Style Configuration
 1. stripped: [ true| **false** ]	-	Makes the table to render stripped.
@@ -125,7 +125,7 @@ These variables are completed optional, if you're using the integrated mixin for
 
 ##Datatypes
 
-Datatypes allow to make a custom predifined render of the data in the table, currente supported datatypes are:
+Datatypes allow to make a custom predefined render of the data in the table, currently supported datatypes are:
 
 1. **text**: It just render the informatión without any decoration, in edition mode it renders a input text.
 2. **image**: It assumes that information if an url so it renders the image. In edition mode it render a input text.
@@ -137,7 +137,7 @@ Datatypes allow to make a custom predifined render of the data in the table, cur
 ##Custom Templates
 The table which is generated depends on templates so you can choose whatever you like to be the render style of every cell in the table or the model window to update a field.
 
-You must put your templetes under */templates/**ember-cli-crudtable**/template_name*
+You must put your templates under */templates/**ember-cli-crudtable**/template_name*
 
 These are the current aviable templates to overwrite:
 
@@ -183,7 +183,7 @@ record = {
 ###Other handlebars templates
 **modal-googlemap**
 
-Contains the definition for waht will be shown in the modal window when, a googlemap field is defined.
+Contains the definition for what will be shown in the modal window when, a googlemap field is defined.
 
 
 **spinner**
@@ -199,14 +199,14 @@ This template contains the hole definition of the model window, by **the moment 
 **table-row**
 
 This template recives a full row which be iterated through the *model* property.
-The templace uses de **crud-cell** helper to determine which templete is goin to be rendered.
+The template uses de **crud-cell** helper to determine which templete is goin to be rendered.
 
 
 **table-update**
 
-This template is render inside the modal window and calls every tamplate labeled edit-cell-*datatype* this template also calls the **crud-edit-cell** helper in order to determine which template is goin to be rendered.
+This template is render inside the modal window and calls every template labeled edit-cell-*datatype* this template also calls the **crud-edit-cell** helper in order to determine which template is going to be rendered.
 
-##Hidding Edit,Delete,Create, Exports
+##Hiding Edit,Delete,Create, Exports
 All these commands can be hidden if you need just by setting to null their corresponding action in the handlebars herlper.
 
 ```
@@ -223,7 +223,7 @@ All these commands can be hidden if you need just by setting to null their corre
 
 ##many-multi
 
-When defining a many-multi field you will have to specify the **Source** fiedl, which is the name of the model from the second table.
+When defining a many-multi field you will have to specify the **Source** field, which is the name of the model from the second table.
 
 ```
 Some_Field:{
@@ -234,7 +234,7 @@ Some_Field:{
 }
 ```
 
-The complemnt will load all the field in the table specified in the Source field,
+The component will load all the fields in the table specified in the Source field,
 And will use the Display field has the property that will show the information from the loaded data.
 
 ##Data Pulling
@@ -350,7 +350,7 @@ When You're defining the Type field in the controller yuo can especify a generic
 
 Let's supose you want the field to have a link to some detail information, and we will define a Type **link**.
 
-So our controller wil contain a field definition like this:
+So our controller will contain a field definition like this:
 
 ```
 fieldDefinition:{
@@ -361,7 +361,7 @@ fieldDefinition:{
 },
 ```
 
-In order to compleat out goal we have to create a template file under **templates/ember-cli-crudtable** and call it **table-cell-link**
+In order to complete our goal we have to create a template file under **templates/ember-cli-crudtable** and call it **table-cell-link**
 
 The definition of the template can be like this:
 
