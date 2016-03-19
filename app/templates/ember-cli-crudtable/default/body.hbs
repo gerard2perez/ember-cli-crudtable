@@ -31,9 +31,10 @@
             {{/each}}
 
         </tbody>
-        {{#if model.paginator}}
+        {{#if model.paginator.render}}
         <tfoot>
-            Showing {{model.pagination.from}} to {{model.pagination.to}} of <span name="total_records">{{model.pagination.total}}</span> {{model.pagination.name}}
+            Showing {{model.paginator.from}} to {{model.paginator.to}} of
+            <span name="total_records"> {{model.paginator.total}} </span> {{model.paginator.name}}
         </tfoot>
         {{/if}}
     </table>
