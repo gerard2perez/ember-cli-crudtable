@@ -1,5 +1,8 @@
 {
     "jscodehints.detectedExclusions": [
-        "/Users/gerard2p/development/ember/AddOns/ember-cli-crudtable/bower_components/jquery/src/attributes.js"
+        "bower_components",
+        "node_modules",
+	".node_modules.ember-try",
+        "tmp"
     ]
 }

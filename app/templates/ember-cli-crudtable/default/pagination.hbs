@@ -1,11 +1,11 @@
 <div class="row text-center">
     <div class="btn-group">
-        <button {{action 'goto' model.pagination.previous}} 
+        <button {{action 'goto' model.paginator.previous}}
 
-        class="{{if model.pagination.previous '' 'disabled'}} btn btn-page"
+        class="{{if model.paginator.previous '' 'disabled'}} btn btn-page"
 
         type="button">Previous</button>
-        {{#each model.pagination.links key="@index" as |page index|}}
+        {{#each model.paginator.links key="@index" as |page index|}}
         <button 
         data-page={{page.page}} {{action 'goto' page.page}} 
         class="btn {{if page.current 'btn-primary' 'btn-page'}}"
@@ -13,7 +13,7 @@
             {{page.page}}
         </button>
         {{/each}}
-        <button {{action 'goto' model.pagination.next}} 
-        class="{{if model.pagination.next '' 'disabled'}} btn btn-page" type="button">Next</button>
+        <button {{action 'goto' model.paginator.next}}
+        class="{{if model.paginator.next '' 'disabled'}} btn btn-page" type="button">Next</button>
     </div>
 </div>

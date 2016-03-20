@@ -12,9 +12,12 @@ before_install:
   - "npm install -g npm@^2"
 
 install:
+  - npm install --global babel
   - npm install -g bower
   - npm install
   - bower install
+  - npm install -g phantomjs
+  - phantomjs -v
 
 script:
   - npm test

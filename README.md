@@ -1,5 +1,5 @@
 
-# CRUD Table [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable/v0.3.27.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable) [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)
+# CRUD Table [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable) [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg)](http://emberobserver.com/addons/ember-cli-crudtable)
 This addon allows you to easly create a CRUD Table, it will take you only 5s!.
 
 This component is compatible with bootstrap (Actually is a dependency, but it's downloaded automatically) and ember-data.
