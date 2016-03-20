@@ -2,6 +2,7 @@
     "jscodehints.detectedExclusions": [
         "bower_components",
         "node_modules",
+	".node_modules.ember-try",
         "tmp"
     ]
 }

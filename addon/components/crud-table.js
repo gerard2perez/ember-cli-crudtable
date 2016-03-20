@@ -382,12 +382,6 @@ export default Ember.Component.extend({
 									record.RoutedRecord.set(RoutedPropMap.DisplayField, use);
 								}
 								record.RoutedRecord.set(RoutedPropMap.Zoom.field, record.get('map').getZoom());
-								/*var value = add.split(",");
-								var count = value.length;
-								var country = value[count - 1];
-								var state = value[count - 2];
-								var city = value[count - 3];
-								alert("city name is: " + city);*/
 							} else {
 								alert("address not found");
 							}
@@ -521,10 +515,7 @@ export default Ember.Component.extend({
 				showmodal();
 			}
 	},
-	init(){
-
-	},
-	willInsertElement() {
+	init() {
 		component = this;
 		component.set('labels', []);
 		Object.keys(component.get('fields')).forEach(key => {
@@ -562,21 +553,19 @@ export default Ember.Component.extend({
 		});
 		proccesDef = [];
 		PreLoad = [];
-		component.get('paginator').getBody(1, lastquery);
+		component.set('editdelete', component.deleteRecord != null || component.updateRecord != null);
+		component.set('isLoading', true);
+		component.get('paginator').init();
 		PULLID = 0;
-		component._super();
-		component.willInsertElement = component._super();
+		PromiseHandler = Ember.RSVP.defer('crud-table#SetUp');
 		component.addObserver('pulling', () => {
 			PULL(component);
 		});
-		component.set('isLoading', true);
-		PromiseHandler = Ember.RSVP.defer('crud-table#SetUp');
-		component.set('Promise', PromiseHandler.promise);
-		component.get('paginator').init();
+		this._super(...arguments);
 	},
 	CurrentState: null,
 	didInsertElement() {
-		component.set('editdelete', component.deleteRecord != null || component.updateRecord != null);
+		component.get('paginator').getBody(1, lastquery);
 		var deferred = Ember.RSVP.defer('crud-table#createRecord');
 		component.sendAction('searchRecord', lastquery, deferred);
 		$(component).addClass(component.get('class'));

@@ -1,16 +1,11 @@
 /* globals ok*/
-import {
-	moduleForComponent,
-	test
-}
-from 'ember-qunit';
+import { moduleForComponent, test } from 'ember-qunit';
 import startApp from '../../helpers/start-app';
 import Ember from 'ember';
-import DS from "ember-data";
 import hbs from 'htmlbars-inline-precompile';
-var component;
-var App;
-var ArrField = {
+let component;
+let App;
+let ArrField = {
 	Field1: {
 		Label: 'Field1'
 	},
@@ -21,15 +16,15 @@ var ArrField = {
 		Label: 'Field3'
 	}
 };
-var tricky = 0;
-var FakeModel = Ember.Component.extend({
+let tricky = 0;
+const FakeModel = Ember.Component.extend({
 	id: null,
 	Field1: null,
 	Field2: null,
 	Field3: null
 });
 
-var searchResult = DS.RecordArray.create({
+let searchResult = Ember.Object.create({
 	type: {
 		typeKey: "Dummy"
 	},
@@ -45,7 +40,7 @@ var searchResult = DS.RecordArray.create({
 			Field2: 'Data7',
 			Field3: 'Data11'
 		}),
-                FakeModel.create({
+        FakeModel.create({
 			id: 12,
 			Field1: 'Data17',
 			Field2: 'Data19',
@@ -56,14 +51,13 @@ var searchResult = DS.RecordArray.create({
 
 const targetObject = {
 	FetchData: function (query, deferred) {
-		console.log("is called");
-		var meta = searchResult.get('meta');
+		let meta = searchResult.get('meta');
 		meta.total += tricky;
 		searchResult.set('meta', meta);
 		deferred.resolve(searchResult);
 	},
 	getRecord: function (deferred) {
-		var newobject = FakeModel.create({
+		let newobject = FakeModel.create({
 			id: '3',
 			Field1: 'Data77',
 			Field2: 'Data88',
@@ -81,7 +75,6 @@ const targetObject = {
 		deferred.resolve(record);
 	},
 	create: function (record, deferred) {
-		console.log('create');
 		searchResult.get('content').pushObject(record);
 		deferred.resolve(record);
 	}
@@ -89,26 +82,8 @@ const targetObject = {
 
 moduleForComponent('crud-table', 'CrudTable', {
 	integration: true,
-	//    needs: [
-	//        'component:crud-cell',
-	//        'component:crud-edit-cell',
-	//        'template:ember-cli-crudtable/default/base',
-	//        'template:ember-cli-crudtable/default/top',
-	//        'template:ember-cli-crudtable/default/body',
-	//        'template:ember-cli-crudtable/default/pagination',
-	//        'template:ember-cli-crudtable/table-cell-googlemap',
-	//        'template:ember-cli-crudtable/table-cell-text',
-	//        'template:ember-cli-crudtable/edit-cell-googlemap',
-	//        'template:ember-cli-crudtable/edit-cell-text',
-	//        'template:ember-cli-crudtable/modal-googlemap',
-	//        'template:ember-cli-crudtable/spinner',
-	//        'template:ember-cli-crudtable/table-modal',
-	//        'template:ember-cli-crudtable/table-row',
-	//        'template:ember-cli-crudtable/table-update'
-	//    ],
 	beforeEach: function () {
 		App = startApp();
-
 	},
 	afterEach: function () {
 		Ember.run(App, 'destroy');
@@ -117,13 +92,10 @@ moduleForComponent('crud-table', 'CrudTable', {
 
 test('No data initialization', function (assert) {
 	this.set('fields', ArrField);
-	this.set('log', console.log);
 	this.set('actions.FetchData', targetObject.FetchData);
 	this.render(hbs `{{crud-table search=true stripped=true hover=true deleteRecord='delete' updateRecord='update' createRecord='create' fields=fields}}`);
-	console.log("yes3");
 	assert.expect(1);
 	assert.equal(1, 1);
-	console.log("yes3");
 });
 //test('Can Set Initial Variables', function (assert) {
 //    assert.expect(3);
@@ -138,7 +110,7 @@ test('No data initialization', function (assert) {
 //    this.render();
 //    assert.expect(2);
 //    tricky = 1;
-//    //var rows = parseInt(this.$('[name=total_records]').text());
+//    //let rows = parseInt(this.$('[name=total_records]').text());
 //    click('[data-action=create]');
 //    andThen(function () {
 //        assert.equal($('.modal-title').text().trim(), 'Add a New Record');
@@ -151,7 +123,7 @@ test('No data initialization', function (assert) {
 //    });
 //});
 //test('User Edits a Record', function (assert) {
-//    var rows = parseInt(this.$('[name=total_records]').text());
+//    let rows = parseInt(this.$('[name=total_records]').text());
 //    this.render();
 //    assert.expect(1);
 //    click('[data-action=edit]:eq(0)');
@@ -166,7 +138,7 @@ test('No data initialization', function (assert) {
 //test('User attemps to delete a Record and cancels', function (assert) {
 //    this.render();
 //    assert.expect(2);
-//    var rows = this.$('table.table>tbody>tr').children().length;
+//    let rows = this.$('table.table>tbody>tr').children().length;
 //    assert.equal($('table.table>tbody>tr').children().length, rows);
 //    click('[data-action=edit]:eq(0)');
 //    andThen(function () {
@@ -184,7 +156,7 @@ test('No data initialization', function (assert) {
 //
 //test('User deletes a Record', function (assert) {
 //    this.render();
-//    //var rows = this.$('table.table>tbody>tr').length;
+//    //let rows = this.$('table.table>tbody>tr').length;
 //    click('[data-action=delete]:eq(0)');
 //    andThen(function () {
 //        //equal($('#CrudTableDeleteRecordModal').html().trim(), "You're about to delete a record");
