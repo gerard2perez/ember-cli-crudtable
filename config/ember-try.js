@@ -1,17 +1,17 @@
 /*jshint node:true*/
 module.exports = {
+	bowerOptions: ['--silent','--quiet'],
 	scenarios: [{
 			name: 'default',
     }, {
 			name: 'ember-1-13',
-			command: 'ember test --filter ember-1-10',
+			command: 'ember test --silent true',
 			bower: {
-				devDependencies: {
-					'ember-cli-shims': '~0.0.6'
-				},
 				dependencies: {
-					'ember': '~1.13.0',
-					'ember-cli-htmlbars': '0.7.9'
+					'ember': '~1.13.0'
+				},
+				resolutions:{
+					'ember': '~1.13.0'
 				}
 			}
     }, {
@@ -36,6 +36,7 @@ module.exports = {
 			}
     }, {
 			name: 'ember-canary',
+			allowedToFail: true,
 			bower: {
 				dependencies: {
 					'ember': 'components/ember#canary'
