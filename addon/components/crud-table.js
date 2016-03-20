@@ -1,6 +1,6 @@
 /*globals $, google*/
 import Ember from 'ember';
-import DF from '../utils/dateformat';
+import dateformat from '../utils/dateformat';
 import pagination from '../mixins/pagination';
 //import sorting from '../utils/sorting';
 let component;
@@ -69,7 +69,7 @@ const regenerateView = cmp => {
 				Field: field,
 				Value: data,
 				Choose: cmp.fields[field].OnChoose,
-				Display: DF.format(data, cmp.fields[field].Format),
+				Display: dateformat.format(data, cmp.fields[field].Format),
 				List: cmp.fields[field].List === false ? false : true,
 				Suffix: cmp.fields[field].Suffix,
 				Prefix: cmp.fields[field].Prefix,
