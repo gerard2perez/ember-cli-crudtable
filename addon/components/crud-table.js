@@ -27,23 +27,23 @@ var CustomField = Ember.Object.extend({
 	Suffix: null,
 	Prefix: null,
 	OnChoose: null,
-	listener: Ember.observer('Value', () => {}),
-	googlefield: Ember.observer('Display', () => {})
+	listener: Ember.observer('Value', function () {}),
+	googlefield: Ember.observer('Display', function () {})
 });
-const checkvals = (cmp, records, cfield, field) => {
+const checkvals = function (cmp, records, cfield, field) {
 	if (cmp.fields[field].Source === undefined) {
 		cfield.set('Display', records.get(cmp.fields[field].Display));
 	} else {
 		var datafinal = [];
 		var deps = cmp.get('dependants')[cmp.fields[field].Source];
-		deps.forEach(datadep => {
+		deps.forEach(function (datadep) {
 			var info = {
 				Display: datadep.get(cmp.fields[field].Display),
 				Routed: datadep,
 				Added: false
 			};
 			if (records.any !== undefined) {
-				records.any(record => {
+				records.any(function (record) {
 					info.Added = datadep.get('id') === record.get('id');
 					if (info.Added) {
 						return true;
@@ -70,13 +70,13 @@ let newCustomField = function (field, data) {
 		Edit: component.fields[field].Edit || component.fields[field].ReadOnly || false,
 		Create: component.fields[field].Create || false,
 		Type: component.fields[field].Type || 'text',
-		listener: Ember.observer('Value', () => {
+		listener: Ember.observer('Value', function () {
 			row.set(component.get('Field'), component.get('Value'));
 			if (component.fields[field].Display === null) {
 				row.set('Display', component.get('Value'));
 			}
 		}),
-		googlefield: Ember.observer('Display', () => {
+		googlefield: Ember.observer('Display', function () {
 			if (component.get('DisplayField')) {
 				row.set(component.get('DisplayField'), component.get('Display'));
 			}
@@ -84,7 +84,7 @@ let newCustomField = function (field, data) {
 		})
 	});
 }
-const TypeAdjustments=function(Type,field, data, cfield,row) {
+const TypeAdjustments = function (Type, field, data, cfield, row) {
 	switch (Type) {
 	case 'check':
 		if (this.fields[field].Value) {
@@ -97,7 +97,7 @@ const TypeAdjustments=function(Type,field, data, cfield,row) {
 			checkvals(this, data, cfield, field);
 		} else {
 			data.then(
-				() => {
+				function () {
 					checkvals(this, data, cfield, field);
 				}
 			);
@@ -116,12 +116,12 @@ const TypeAdjustments=function(Type,field, data, cfield,row) {
 	}
 	return cfield;
 }
-const regenerateView = cmp => {
+const regenerateView = function (cmp) {
 	const trytest = cmp.get('value').get('isLoaded') === true ? cmp.get('value') : cmp.get('value').get('content');
 	var ComplexModel = [];
-	trytest.forEach(row => {
+	trytest.forEach(function (row) {
 		let CustomProperties = [];
-		Object.keys(cmp.fields).forEach(field => {
+		Object.keys(cmp.fields).forEach(function (field) {
 			let data = row.get(field);
 			let cfield = newCustomField(field, data);
 			let Type = cfield.get('Type');
@@ -130,7 +130,7 @@ const regenerateView = cmp => {
 				Type = inherits[1];
 				cfield.set('Type', inherits[0]);
 			}
-			cfield = TypeAdjustments.apply(component, [Type,field, data, cfield,row]);
+			cfield = TypeAdjustments.apply(component, [Type, field, data, cfield, row]);
 			CustomProperties[field] = cfield;
 			try {
 				CustomProperties.pushObject(cfield);
@@ -147,16 +147,16 @@ const regenerateView = cmp => {
 	});
 	cmp.set('ComplexModel', ComplexModel);
 };
-const showmodal = () => {
+const showmodal = function () {
 	modalpromise = Ember.RSVP.defer('crud-table#showingmodal');
 	var modal = $("#CrudTableDeleteRecordModal");
 	modal.modal('show');
 };
-const metadata = (records) => {
+const metadata = function (records) {
 	component.get('paginator').update(component, records.get("meta"), records.get('length'));
 	component.get('paginator').generateLinks();
 };
-const hidemodal = () => {
+const hidemodal = function () {
 	try {
 		$("#CrudTableDeleteRecordModal").modal('hide');
 	} catch (e) {
@@ -164,21 +164,22 @@ const hidemodal = () => {
 	}
 
 };
-var PULLFN = (cmp, time) => {
-	return setTimeout(() => {
+var PULLFN = function (cmp, time) {
+	return setTimeout(function () {
 		var deferred = Ember.RSVP.defer('crud-table#pulling');
 		cmp.sendAction('searchRecord', lastquery, deferred);
-		deferred.promise.then(records => {
-			metadata(records, cmp);
-			cmp.set('value', records);
-			regenerateView(cmp);
-			PULLID = PULLFN(cmp, time);
-		}, data => {
-			console.log(data.message);
-		});
+		deferred.promise.then(function (records) {
+				metadata(records, cmp);
+				cmp.set('value', records);
+				regenerateView(cmp);
+				PULLID = PULLFN(cmp, time);
+			},
+			function (data) {
+				console.log(data.message);
+			});
 	}, time);
 };
-var PULL = cmp => {
+var PULL = function (cmp) {
 	clearTimeout(PULLID);
 	PULLID = 0;
 	if (cmp.get('pulling') > 0) {
@@ -189,19 +190,19 @@ var PULL = cmp => {
 const exportData = function (format, joinchar) {
 	let data = [];
 	let row = [];
-	component.labels.forEach(field => {
+	component.labels.forEach(function (field) {
 		row.push(field.Display);
 	});
 	data.push(row);
-	component.get('ComplexModel').forEach(model => {
+	component.get('ComplexModel').forEach(function (model) {
 		row = [];
-		model.forEach(field => {
+		model.forEach(function (field) {
 			row.push(field.Value);
 		});
 		data.push(row);
 	});
 	let content = "data:text/" + format + ";charset=utf-8,";
-	data.forEach((infoArray, index) => {
+	data.forEach(function (infoArray, index) {
 		let dataString = infoArray.join(joinchar);
 		content += index < data.length ? dataString + "\n" : dataString;
 	});
@@ -245,158 +246,160 @@ export default Ember.Component.extend({
 	labels: [],
 	exports: true,
 	actions: {
-		select(record) {
-				component.set('currentRecord', record);
-			},
-			generic_callback() {
-				component.set('Callback', arguments[0]);
-				delete arguments[0];
-				var args = ['Callback', component.get('currentRecord')].concat([].slice.call(arguments));
-				component.sendAction.apply(component, args);
-				component.set('Callback', null);
-			},
-			internal_choose(incomming) {
-				component.set('Callback', incomming);
-				component.sendAction('Callback', component.get('currentRecord'));
-				component.set('Callback', null);
-			},
-			toJSONObject() {
-				var data = [];
-				component.get('ComplexModel').forEach(model => {
-					var row = {};
-					model.forEach(field => {
-						row[field.Field] = field.Value;
-					});
-					data.push(row);
+		select: function (record) {
+			component.set('currentRecord', record);
+		},
+		generic_callback: function () {
+			component.set('Callback', arguments[0]);
+			delete arguments[0];
+			var args = ['Callback', component.get('currentRecord')].concat([].slice.call(arguments));
+			component.sendAction.apply(component, args);
+			component.set('Callback', null);
+		},
+		internal_choose: function (incomming) {
+			component.set('Callback', incomming);
+			component.sendAction('Callback', component.get('currentRecord'));
+			component.set('Callback', null);
+		},
+		toJSONObject: function () {
+			var data = [];
+			component.get('ComplexModel').forEach(function (model) {
+				var row = {};
+				model.forEach(function (field) {
+					row[field.Field] = field.Value;
 				});
-				var csvContent = "data:text/json;charset=utf-8," + JSON.stringify(data);
-				var encodedUri = encodeURI(csvContent);
-				var link = document.createElement("a");
-				link.setAttribute("href", encodedUri);
-				link.setAttribute("download", "table.json");
-				component.set('dlf', link);
-				if (link.click) {
-					link.click();
-				}
-			},
-			toTSV() {
-				exportData("tsv", "\t");
-			},
-			toCSV() {
-				exportData("csv", ",");
-			},
-			goto(page) {
-				var deferred = Ember.RSVP.defer('crud-table#goto');
-				component.get('paginator').getBody(page, lastquery);
-				component.set('isLoading', true);
-				component.sendAction('searchRecord', lastquery, deferred);
-				deferred.promise.then(records => {
+				data.push(row);
+			});
+			var csvContent = "data:text/json;charset=utf-8," + JSON.stringify(data);
+			var encodedUri = encodeURI(csvContent);
+			var link = document.createElement("a");
+			link.setAttribute("href", encodedUri);
+			link.setAttribute("download", "table.json");
+			component.set('dlf', link);
+			if (link.click) {
+				link.click();
+			}
+		},
+		toTSV:function() {
+			exportData("tsv", "\t");
+		},
+		toCSV:function() {
+			exportData("csv", ",");
+		},
+		goto:function(page) {
+			var deferred = Ember.RSVP.defer('crud-table#goto');
+			component.get('paginator').getBody(page, lastquery);
+			component.set('isLoading', true);
+			component.sendAction('searchRecord', lastquery, deferred);
+			deferred.promise.then(function (records) {
 					metadata(records);
 					component.set('value', records);
 					regenerateView(component);
 					component.set('isLoading', false);
-				}, () => {
+				},
+				function () {
 					component.set('isLoading', false);
 				});
-			},
-			internal_cancel() {
-				component.set('notEdition', true);
-				component.set('isEdition', false);
-			},
-			internal_search() {
-				let field = $("#SearchField").val();
-				Object.keys(component.fields).forEach(fieldname => {
-					if (component.fields[fieldname].Label === field) {
-						field = fieldname;
+		},
+		internal_cancel:function() {
+			component.set('notEdition', true);
+			component.set('isEdition', false);
+		},
+		internal_search:function() {
+			let field = $("#SearchField").val();
+			Object.keys(component.fields).forEach(function (fieldname) {
+				if (component.fields[fieldname].Label === field) {
+					field = fieldname;
+				}
+			});
+			let query = {};
+			component.get('paginator').getBody(0, query);
+			query[field] = component.get('SearchTerm');
+			if (query[field] === "") {
+				delete query[field];
+			}
+			lastquery = query;
+			var deferred = Ember.RSVP.defer('crud-table#createRecord');
+			component.set('isLoading', true);
+			component.sendAction('searchRecord', query, deferred);
+			deferred.promise.then(function (records) {
+					metadata(records);
+					component.set('value', records);
+					regenerateView(component);
+					component.set('isLoading', false);
+				},
+				function (data) {
+					component.set('isLoading', false);
+				});
+		},
+		confirm:function() {
+			var deferred;
+			component.set('isLoading', true);
+			if (component.get('newRecord')) {
+				deferred = Ember.RSVP.defer('crud-table#createRecord');
+				component.sendAction('createRecord', component.get('currentRecord').RoutedRecord, deferred);
+			} else if (component.get('showMap')) {
+				var record = component.get('currentRecord');
+				var map;
+				var RoutedPropMap;
+				record.forEach(function (prop) {
+					RoutedPropMap = prop;
+					switch (prop.Type) {
+					case 'googlemap':
+						map = record.get('map').getCenter();
+						prop.set('Value', map.toUrlValue());
+						break;
+					case 'many-multi':
+						break;
 					}
 				});
-				let query = {};
-				component.get('paginator').getBody(0, query);
-				query[field] = component.get('SearchTerm');
-				if (query[field] === "") {
-					delete query[field];
-				}
-				lastquery = query;
-				var deferred = Ember.RSVP.defer('crud-table#createRecord');
-				component.set('isLoading', true);
-				component.sendAction('searchRecord', query, deferred);
-				deferred.promise.then(records => {
-					metadata(records);
-					component.set('value', records);
-					regenerateView(component);
-					component.set('isLoading', false);
-				}, data => {
-					component.set('isLoading', false);
-				});
-			},
-			confirm() {
-				var deferred;
-				component.set('isLoading', true);
-				if (component.get('newRecord')) {
-					deferred = Ember.RSVP.defer('crud-table#createRecord');
-					component.sendAction('createRecord', component.get('currentRecord').RoutedRecord, deferred);
-				} else if (component.get('showMap')) {
-					var record = component.get('currentRecord');
-					var map;
-					var RoutedPropMap;
-					record.forEach(prop => {
-						RoutedPropMap = prop;
-						switch (prop.Type) {
-						case 'googlemap':
-							map = record.get('map').getCenter();
-							prop.set('Value', map.toUrlValue());
-							break;
-						case 'many-multi':
-							break;
-						}
-					});
-					deferred = Ember.RSVP.defer('crud-table#updateRecord');
-					var geocoder = new google.maps.Geocoder();
-					geocoder.geocode({
-						'latLng': map
-					}, results, status => {
-						if (status === google.maps.GeocoderStatus.OK) {
-							if (results[0]) {
-								var add = results[0].formatted_address;
-								var use = prompt('Suggested address is:\n' + add + '\n If you want to use it leave the field empty.');
-								if (use === null || use === "") {
-									record.RoutedRecord.set(RoutedPropMap.DisplayField, add);
-								} else {
-									record.RoutedRecord.set(RoutedPropMap.DisplayField, use);
-								}
-								record.RoutedRecord.set(RoutedPropMap.Zoom.field, record.get('map').getZoom());
+				deferred = Ember.RSVP.defer('crud-table#updateRecord');
+				var geocoder = new google.maps.Geocoder();
+				geocoder.geocodefunction({
+					'latLng': map
+				}, function (results, status) {
+					if (status === google.maps.GeocoderStatus.OK) {
+						if (results[0]) {
+							var add = results[0].formatted_address;
+							var use = prompt('Suggested address is:\n' + add + '\n If you want to use it leave the field empty.');
+							if (use === null || use === "") {
+								record.RoutedRecord.set(RoutedPropMap.DisplayField, add);
 							} else {
-								alert("address not found");
+								record.RoutedRecord.set(RoutedPropMap.DisplayField, use);
 							}
+							record.RoutedRecord.set(RoutedPropMap.Zoom.field, record.get('map').getZoom());
 						} else {
-							alert("Geocoder failed due to: " + status);
+							alert("address not found");
 						}
-						component.sendAction('updateRecord', record.RoutedRecord, deferred);
-					});
-				} else {
-					if (component.get('isDeleting')) {
-						deferred = Ember.RSVP.defer('crud-table#deleteRecord');
-						component.sendAction('deleteRecord', component.get('currentRecord').RoutedRecord, deferred);
 					} else {
-						deferred = Ember.RSVP.defer('crud-table#updateRecord');
-						component.sendAction('updateRecord', component.get('currentRecord').RoutedRecord, deferred);
+						alert("Geocoder failed due to: " + status);
 					}
-				}
-				var updateview = Ember.RSVP.defer('crud-table#pagination');
-				deferred.promise.then(() => {
-					if (component.get('paginator') !== undefined) {
-						component.get('paginator').getBody(component.get('paginator').get('page'), lastquery);
-					} else {
-						delete lastquery.page;
-					}
-					component.sendAction('searchRecord', lastquery, updateview);
-				}, () => {
-					component.set('isEdition', false);
-					component.set('notEdition', true);
-					component.set('isLoading', false);
+					component.sendAction('updateRecord', record.RoutedRecord, deferred);
 				});
+			} else {
+				if (component.get('isDeleting')) {
+					deferred = Ember.RSVP.defer('crud-table#deleteRecord');
+					component.sendAction('deleteRecord', component.get('currentRecord').RoutedRecord, deferred);
+				} else {
+					deferred = Ember.RSVP.defer('crud-table#updateRecord');
+					component.sendAction('updateRecord', component.get('currentRecord').RoutedRecord, deferred);
+				}
+			}
+			var updateview = Ember.RSVP.defer('crud-table#pagination');
+			deferred.promise.then(function () {
+				if (component.get('paginator') !== undefined) {
+					component.get('paginator').getBody(component.get('paginator').get('page'), lastquery);
+				} else {
+					delete lastquery.page;
+				}
+				component.sendAction('searchRecord', lastquery, updateview);
+			}, function () {
+				component.set('isEdition', false);
+				component.set('notEdition', true);
+				component.set('isLoading', false);
+			});
 
-				updateview.promise.then(records => {
+			updateview.promise.then(function (records) {
 					metadata(records);
 					component.set('value', records);
 					regenerateView(component);
@@ -404,71 +407,72 @@ export default Ember.Component.extend({
 					component.set('isEdition', false);
 					component.set('isLoading', false);
 					component.set('notEdition', true);
-				}, () => {
+				},
+				function () {
 					hidemodal();
 					component.set('isEdition', false);
 					component.set('isLoading', false);
 					component.set('notEdition', true);
 				});
-			},
-			internal_map(record, kind) {
-				if (google === undefined) {
+		},
+		internal_map:function(record, kind) {
+			if (google === undefined) {
 
+			}
+			component.set('showMap', true);
+			showmodal();
+
+			function mapit(id, latlng) {
+				if (document.getElementById(id) === null) {
+					return false;
 				}
-				component.set('showMap', true);
-				showmodal();
-
-				function mapit(id, latlng) {
-					if (document.getElementById(id) === null) {
-						return false;
-					}
-					var mapOptions = {
-						zoom: latlng.zoom,
-						center: new google.maps.LatLng(latlng.lat, latlng.lng),
-						mapTypeId: google.maps.MapTypeId.ROADMAP
-					};
-					var map = new google.maps.Map(document.getElementById(id), mapOptions);
-					record.set('map', map);
-					return true;
-				}
-
-				var cord = "";
-				record.forEach(prop => {
-					if (prop.Type === kind) {
-						cord = prop.Value.split(',');
-						cord = {
-							lat: cord[0],
-							lng: cord[1],
-							zoom: prop.Zoom.value
-						};
-					}
-				});
-				var waitforgoogle = fn => {
-					if (google === undefined) {
-						setTimeout(() => {
-							fn(fn);
-						}, 10);
-						return false;
-					}
-					if (mapit('google_map_canvas', cord)) {
-						setTimeout(() => {
-							component.set('currentRecord', record);
-						}, 1);
-					} else {
-						setTimeout(() => {
-							fn(fn);
-						}, 10);
-					}
+				var mapOptions = {
+					zoom: latlng.zoom,
+					center: new google.maps.LatLng(latlng.lat, latlng.lng),
+					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
-				waitforgoogle(waitforgoogle);
-			},
-			internal_create() {
-				let records = component.get('value').get('isLoaded') === true ? component.get('value') : component.get('value').get('content');
-				component.set('newRecord', true);
-				let deferred = Ember.RSVP.defer('crud-table#newRecord');
-				component.sendAction('getRecord', deferred);
-				deferred.promise.then(record => {
-					Object.keys(proccesDef).forEach(field => {
+				var map = new google.maps.Map(document.getElementById(id), mapOptions);
+				record.set('map', map);
+				return true;
+			}
+
+			var cord = "";
+			record.forEach(function (prop) {
+				if (prop.Type === kind) {
+					cord = prop.Value.split(',');
+					cord = {
+						lat: cord[0],
+						lng: cord[1],
+						zoom: prop.Zoom.value
+					};
+				}
+			});
+			var waitforgoogle = function (fn) {
+				if (google === undefined) {
+					setTimeout(function () {
+						fn(fn);
+					}, 10);
+					return false;
+				}
+				if (mapit('google_map_canvas', cord)) {
+					setTimeout(function () {
+						component.set('currentRecord', record);
+					}, 1);
+				} else {
+					setTimeout(function () {
+						fn(fn);
+					}, 10);
+				}
+			};
+			waitforgoogle(waitforgoogle);
+		},
+		internal_create:function() {
+			let records = component.get('value').get('isLoaded') === true ? component.get('value') : component.get('value').get('content');
+			component.set('newRecord', true);
+			let deferred = Ember.RSVP.defer('crud-table#newRecord');
+			component.sendAction('getRecord', deferred);
+			deferred.promise.then(function (record) {
+					Object.keys(proccesDef).forEach(function (field) {
 						record.set(field, proccesDef[field](component.get('targetObject').get('model')));
 					});
 					if (record._internalModel !== undefined) {
@@ -479,29 +483,30 @@ export default Ember.Component.extend({
 					regenerateView(component);
 					component.set('currentRecord', component.get('ComplexModel').get('lastObject'));
 					showmodal();
-				}, () => {
+				},
+				function () {
 					console.debug('Something went wrong');
 				});
-			},
-			internal_edit(record) {
-				component.set('notEdition', false);
-				component.set('isEdition', true);
-				component.set('isDeleting', false);
-				component.set('currentRecord', record);
-				//$("#CrudTableDeleteRecordModal .modal-title").html("Updating");
-				showmodal();
-			},
-			internal_delete(record) {
-				component.set('newRecord', false);
-				component.set('isDeleting', true);
-				component.set('currentRecord', record);
-				showmodal();
-			}
+		},
+		internal_edit:function(record) {
+			component.set('notEdition', false);
+			component.set('isEdition', true);
+			component.set('isDeleting', false);
+			component.set('currentRecord', record);
+			//$("#CrudTableDeleteRecordModal .modal-title").html("Updating");
+			showmodal();
+		},
+		internal_delete:function(record) {
+			component.set('newRecord', false);
+			component.set('isDeleting', true);
+			component.set('currentRecord', record);
+			showmodal();
+		}
 	},
-	init() {
+	init:function() {
 		component = this;
 		component.set('labels', []);
-		Object.keys(component.get('fields')).forEach(key => {
+		Object.keys(component.get('fields')).forEach(function (key) {
 			if (component.fields[key].Default !== undefined) {
 				proccesDef[key] = component.fields[key].Default;
 			}
@@ -517,20 +522,21 @@ export default Ember.Component.extend({
 				PreLoad.push(deferred.promise);
 				component.set('sideLoad', component.fields[key].Source);
 				component.sendAction('sideLoad', deferred);
-				deferred.promise.then(arr => {
-					var dep = component.get('dependants') || {};
-					dep[component.fields[key].Source] = arr;
-					component.set('dependants', dep);
-					component.set('sideLoad', null);
-				}, data => {
-					var dep = component.get('dependants') || {};
-					dep[component.fields[key].Source] = {
-						isLoaded: true
-					};
-					component.set('dependants', dep);
-					component.set('sideLoad', null);
-					console.log(data.message);
-				});
+				deferred.promise.then(function (arr) {
+						var dep = component.get('dependants') || {};
+						dep[component.fields[key].Source] = arr;
+						component.set('dependants', dep);
+						component.set('sideLoad', null);
+					},
+					function (data) {
+						var dep = component.get('dependants') || {};
+						dep[component.fields[key].Source] = {
+							isLoaded: true
+						};
+						component.set('dependants', dep);
+						component.set('sideLoad', null);
+						console.log(data.message);
+					});
 
 			}
 		});
@@ -541,67 +547,69 @@ export default Ember.Component.extend({
 		component.get('paginator').init();
 		PULLID = 0;
 		PromiseHandler = Ember.RSVP.defer('crud-table#SetUp');
-		component.addObserver('pulling', () => {
+		component.addObserver('pulling', function () {
 			PULL(component);
 		});
 		this._super(...arguments);
 	},
 	CurrentState: null,
-	didInsertElement() {
+	didInsertElement:function() {
 		component.get('paginator').getBody(1, lastquery);
 		var deferred = Ember.RSVP.defer('crud-table#createRecord');
 		component.sendAction('searchRecord', lastquery, deferred);
 		$(component).addClass(component.get('class'));
-		deferred.promise.then(records => {
-			metadata(records);
-			component.set('value', records);
-			component.set('isLoading', false);
-			PULL(component);
-		}, () => {
-			component.set('isLoading', false);
-		});
+		deferred.promise.then(function (records) {
+				metadata(records);
+				component.set('value', records);
+				component.set('isLoading', false);
+				PULL(component);
+			},
+			function () {
+				component.set('isLoading', false);
+			});
 		PreLoad.push(deferred.promise);
-		Ember.RSVP.all(PreLoad).then(() => {
+		Ember.RSVP.all(PreLoad).then(function () {
 			regenerateView(component);
 			PromiseHandler.resolve(true);
 		});
-		$('#CrudTableDeleteRecordModal').on('shown.bs.modal', () => {
+		$('#CrudTableDeleteRecordModal').on('shown.bs.modal', function () {
 			modalpromise.resolve();
 		});
 		if ($("#CrudTableDeleteRecordModal").modal !== undefined) {
 			$("#CrudTableDeleteRecordModal").modal('hide');
 		}
 
-		$('#CrudTableDeleteRecordModal').on('hidden.bs.modal', () => {
+		$('#CrudTableDeleteRecordModal').on('hidden.bs.modal', function () {
 			var deferred = Ember.RSVP.defer('crud-table#cancelRecord');
 			var template = Ember.RSVP.defer('crud-table#RenderTemplate');
 			component.sendAction('cancelRecord', component.get('currentRecord').RoutedRecord, deferred);
-			deferred.promise.then(args => {
-				component.get('currentRecord').forEach(prop => {
-					switch (prop.Type) {
-					case 'many-multi':
-						prop.Display.forEach(property => {
-							Ember.set(property, 'Added', false);
-						});
-						break;
+			deferred.promise.then(function (args) {
+					component.get('currentRecord').forEach(function (prop) {
+						switch (prop.Type) {
+						case 'many-multi':
+							prop.Display.forEach(function (property) {
+								Ember.set(property, 'Added', false);
+							});
+							break;
+						}
+					});
+					if (args.remove) {
+						component.get('value').removeObject(args.record);
 					}
+					regenerateView(component);
+					component.set('newRecord', false);
+					component.set('isDeleting', false);
+					component.set('currentRecord', null);
+					component.set('showMap', false);
+					template.resolve(true);
+				},
+				function (data) {
+					console.log(data);
 				});
-				if (args.remove) {
-					component.get('value').removeObject(args.record);
-				}
-				regenerateView(component);
-				component.set('newRecord', false);
-				component.set('isDeleting', false);
-				component.set('currentRecord', null);
-				component.set('showMap', false);
-				template.resolve(true);
-			}, data => {
-				console.log(data);
-			});
 		});
 		$('body').append($("#CrudTableDeleteRecordModal"));
 	},
-	willDestroyElement() {
+	willDestroyElement:function() {
 		$("#CrudTableDeleteRecordModal").remove();
 	},
 });
