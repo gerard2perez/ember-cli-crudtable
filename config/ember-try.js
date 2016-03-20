@@ -3,9 +3,15 @@ module.exports = {
 	bowerOptions: ['--silent', '--quiet'],
 	scenarios: [{
 			name: 'default',
+			bower: {
+				dependencies: {
+					'ember': '2.4.3'
+				}
+			}
     }, {
 			name: 'Ember 1.13',
 			command: 'ember test --silent true',
+			allowedToFail: true,
 			bower: {
 				dependencies: {
 					'ember': '~1.13.0'
@@ -16,6 +22,7 @@ module.exports = {
 			}
     }, {
 			name: 'Ember Release',
+			allowedToFail: true,
 			bower: {
 				dependencies: {
 					'ember': 'components/ember#release'
