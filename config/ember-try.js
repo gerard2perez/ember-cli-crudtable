@@ -1,21 +1,21 @@
 /*jshint node:true*/
 module.exports = {
-	bowerOptions: ['--silent','--quiet'],
+	bowerOptions: ['--silent', '--quiet'],
 	scenarios: [{
 			name: 'default',
     }, {
-			name: 'ember-1-13',
+			name: 'Ember 1.13',
 			command: 'ember test --silent true',
 			bower: {
 				dependencies: {
 					'ember': '~1.13.0'
 				},
-				resolutions:{
+				resolutions: {
 					'ember': '~1.13.0'
 				}
 			}
     }, {
-			name: 'ember-release',
+			name: 'Ember Release',
 			bower: {
 				dependencies: {
 					'ember': 'components/ember#release'
@@ -25,7 +25,8 @@ module.exports = {
 				}
 			}
     }, {
-			name: 'ember-beta',
+			name: 'Ember Beta',
+			allowedToFail: true,
 			bower: {
 				dependencies: {
 					'ember': 'components/ember#beta'
@@ -35,7 +36,7 @@ module.exports = {
 				}
 			}
     }, {
-			name: 'ember-canary',
+			name: 'Ember Canary',
 			allowedToFail: true,
 			bower: {
 				dependencies: {
