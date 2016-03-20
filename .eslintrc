@@ -50,7 +50,7 @@ rules:
   default-case: 0
   dot-location: 0
   dot-notation: 0
-  eqeqeq: 2
+  eqeqeq: 3
   guard-for-in: 2
   no-alert: 2
   no-caller: 2

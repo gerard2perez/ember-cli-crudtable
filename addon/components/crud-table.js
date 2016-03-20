@@ -104,7 +104,7 @@ const TypeAdjustments=function(Type,field, data, cfield,row) {
 		}
 		break;
 	case 'googlemap':
-		if (this.fields[field].Display != null) {
+		if (this.fields[field].Display !== null) {
 			cfield.set('Zoom', {
 				value: row.get(this.fields[field].Zoom),
 				field: this.fields[field].Zoom
@@ -419,7 +419,7 @@ export default Ember.Component.extend({
 				showmodal();
 
 				function mapit(id, latlng) {
-					if (document.getElementById(id) == null) {
+					if (document.getElementById(id) === null) {
 						return false;
 					}
 					var mapOptions = {
@@ -536,7 +536,7 @@ export default Ember.Component.extend({
 		});
 		proccesDef = [];
 		PreLoad = [];
-		component.set('editdelete', component.deleteRecord != null || component.updateRecord != null);
+		component.set('editdelete', component.deleteRecord !== null || component.updateRecord !== null);
 		component.set('isLoading', true);
 		component.get('paginator').init();
 		PULLID = 0;
