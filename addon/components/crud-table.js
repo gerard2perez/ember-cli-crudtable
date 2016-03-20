@@ -4,7 +4,6 @@ import dateformat from '../utils/dateformat';
 import pagination from '../mixins/pagination';
 //import sorting from '../utils/sorting';
 let component;
-
 var modalpromise;
 var proccesDef = [];
 var PreLoad = [];
@@ -58,6 +57,65 @@ const checkvals = (cmp, records, cfield, field) => {
 		cfield.set('Display', datafinal);
 	}
 };
+let newCustomField = function (field, data) {
+	return CustomField.create({
+		Field: field,
+		Value: data,
+		Choose: component.fields[field].OnChoose,
+		Display: dateformat.format(data, component.fields[field].Format),
+		List: component.fields[field].List === false ? false : true,
+		Suffix: component.fields[field].Suffix,
+		Prefix: component.fields[field].Prefix,
+		Label: component.fields[field].Label,
+		Edit: component.fields[field].Edit || component.fields[field].ReadOnly || false,
+		Create: component.fields[field].Create || false,
+		Type: component.fields[field].Type || 'text',
+		listener: Ember.observer('Value', () => {
+			row.set(component.get('Field'), component.get('Value'));
+			if (component.fields[field].Display === null) {
+				row.set('Display', component.get('Value'));
+			}
+		}),
+		googlefield: Ember.observer('Display', () => {
+			if (component.get('DisplayField')) {
+				row.set(component.get('DisplayField'), component.get('Display'));
+			}
+			component.set('Edit', component.fields[field].Edit || component.get('Type') === "googlemap");
+		})
+	});
+}
+const TypeAdjustments=function(Type,field, data, cfield,row) {
+	switch (Type) {
+	case 'check':
+		if (this.fields[field].Value) {
+			cfield.set('Display', 'checked="checked"');
+		}
+		break;
+	case 'many-multi':
+	case 'belongsto':
+		if (data.isLoaded) {
+			checkvals(this, data, cfield, field);
+		} else {
+			data.then(
+				() => {
+					checkvals(this, data, cfield, field);
+				}
+			);
+		}
+		break;
+	case 'googlemap':
+		if (this.fields[field].Display != null) {
+			cfield.set('Zoom', {
+				value: row.get(this.fields[field].Zoom),
+				field: this.fields[field].Zoom
+			});
+			cfield.set('Display', row.get(this.fields[field].Display));
+			cfield.set('DisplayField', this.fields[field].Display);
+		}
+		break;
+	}
+	return cfield;
+}
 const regenerateView = cmp => {
 	const trytest = cmp.get('value').get('isLoaded') === true ? cmp.get('value') : cmp.get('value').get('content');
 	var ComplexModel = [];
@@ -65,66 +123,14 @@ const regenerateView = cmp => {
 		let CustomProperties = [];
 		Object.keys(cmp.fields).forEach(field => {
 			let data = row.get(field);
-			let cfield = CustomField.create({
-				Field: field,
-				Value: data,
-				Choose: cmp.fields[field].OnChoose,
-				Display: dateformat.format(data, cmp.fields[field].Format),
-				List: cmp.fields[field].List === false ? false : true,
-				Suffix: cmp.fields[field].Suffix,
-				Prefix: cmp.fields[field].Prefix,
-				Label: cmp.fields[field].Label,
-				Edit: cmp.fields[field].Edit || cmp.fields[field].ReadOnly || false,
-				Create: cmp.fields[field].Create || false,
-				Type: cmp.fields[field].Type || 'text',
-				listener: Ember.observer('Value', () => {
-					row.set(component.get('Field'), component.get('Value'));
-					if (cmp.fields[field].Display === null) {
-						row.set('Display', component.get('Value'));
-					}
-				}),
-				googlefield: Ember.observer('Display', () => {
-					if (component.get('DisplayField')) {
-						row.set(component.get('DisplayField'), component.get('Display'));
-					}
-					component.set('Edit', cmp.fields[field].Edit || component.get('Type') === "googlemap");
-				})
-			});
+			let cfield = newCustomField(field, data);
 			let Type = cfield.get('Type');
 			let inherits = Type.split(':');
 			if (inherits.length === 2) {
 				Type = inherits[1];
 				cfield.set('Type', inherits[0]);
 			}
-			switch (Type) {
-			case 'check':
-				if (cmp.fields[field].Value) {
-					cfield.set('Display', 'checked="checked"');
-				}
-				break;
-			case 'many-multi':
-			case 'belongsto':
-				if (data.isLoaded) {
-					checkvals(cmp, data, cfield, field);
-				} else {
-					data.then(
-						() => {
-							checkvals(cmp, data, cfield, field);
-						}
-					);
-				}
-				break;
-			case 'googlemap':
-				if (cmp.fields[field].Display != null) {
-					cfield.set('Zoom', {
-						value: row.get(cmp.fields[field].Zoom),
-						field: cmp.fields[field].Zoom
-					});
-					cfield.set('Display', row.get(cmp.fields[field].Display));
-					cfield.set('DisplayField', cmp.fields[field].Display);
-				}
-				break;
-			}
+			cfield = TypeAdjustments.apply(component, [Type,field, data, cfield,row]);
 			CustomProperties[field] = cfield;
 			try {
 				CustomProperties.pushObject(cfield);
@@ -179,6 +185,35 @@ var PULL = cmp => {
 		PULLID = PULLFN(cmp, cmp.get('pulling'));
 	}
 };
+
+const exportData = function (format, joinchar) {
+	let data = [];
+	let row = [];
+	component.labels.forEach(field => {
+		row.push(field.Display);
+	});
+	data.push(row);
+	component.get('ComplexModel').forEach(model => {
+		row = [];
+		model.forEach(field => {
+			row.push(field.Value);
+		});
+		data.push(row);
+	});
+	let content = "data:text/" + format + ";charset=utf-8,";
+	data.forEach((infoArray, index) => {
+		let dataString = infoArray.join(joinchar);
+		content += index < data.length ? dataString + "\n" : dataString;
+	});
+	content = encodeURI(content);
+	let link = document.createElement("a");
+	link.setAttribute("href", content);
+	link.setAttribute("download", component.get('paginator').get('name') + "." + format);
+	component.set('dlf', link);
+	if (link.click) {
+		link.click();
+	}
+}
 
 export default Ember.Component.extend({
 	paginator: Ember.Object.extend(pagination).create(),
@@ -245,62 +280,10 @@ export default Ember.Component.extend({
 				}
 			},
 			toTSV() {
-				var data = [];
-				var row = [];
-				component.labels.forEach(field => {
-					row.push(field.Display);
-				});
-				data.push(row);
-
-				component.get('ComplexModel').forEach(model => {
-					row = [];
-					model.forEach(field => {
-						row.push(field.Value);
-					});
-					data.push(row);
-				});
-				var csvContent = "data:text/csv;charset=utf-8,";
-				data.forEach(infoArray, index => {
-					var dataString = infoArray.join("\t");
-					csvContent += index < data.length ? dataString + "\n" : dataString;
-				});
-				var encodedUri = encodeURI(csvContent);
-				var link = document.createElement("a");
-				link.setAttribute("href", encodedUri);
-				link.setAttribute("download", "table.tsv");
-				component.set('dlf', link);
-				if (link.click) {
-					link.click();
-				}
+				exportData("tsv", "\t");
 			},
 			toCSV() {
-				var data = [];
-				var row = [];
-				component.labels.forEach(field => {
-					row.push(field.Display);
-				});
-				data.push(row);
-
-				component.get('ComplexModel').forEach(model => {
-					row = [];
-					model.forEach(field => {
-						row.push(field.Value);
-					});
-					data.push(row);
-				});
-				var csvContent = "data:text/csv;charset=utf-8,";
-				data.forEach(infoArray, index => {
-					var dataString = infoArray.join(",");
-					csvContent += index < data.length ? dataString + "\n" : dataString;
-				});
-				var encodedUri = encodeURI(csvContent);
-				var link = document.createElement("a");
-				link.setAttribute("href", encodedUri);
-				link.setAttribute("download", "table.csv");
-				component.set('dlf', link);
-				if (link.click) {
-					link.click();
-				}
+				exportData("csv", ",");
 			},
 			goto(page) {
 				var deferred = Ember.RSVP.defer('crud-table#goto');
@@ -480,24 +463,24 @@ export default Ember.Component.extend({
 				waitforgoogle(waitforgoogle);
 			},
 			internal_create() {
-				var trytest = component.get('value').get('isLoaded') === true ? component.get('value') : component.get('value').get('content');
+				let records = component.get('value').get('isLoaded') === true ? component.get('value') : component.get('value').get('content');
 				component.set('newRecord', true);
-				var deferred = Ember.RSVP.defer('crud-table#newRecord');
+				let deferred = Ember.RSVP.defer('crud-table#newRecord');
 				component.sendAction('getRecord', deferred);
 				deferred.promise.then(record => {
 					Object.keys(proccesDef).forEach(field => {
 						record.set(field, proccesDef[field](component.get('targetObject').get('model')));
 					});
 					if (record._internalModel !== undefined) {
-						trytest.addObject(record._internalModel);
+						records.addObject(record._internalModel);
 					} else {
-						trytest.push(record);
+						records.push(record);
 					}
 					regenerateView(component);
 					component.set('currentRecord', component.get('ComplexModel').get('lastObject'));
 					showmodal();
 				}, () => {
-					alert('Something went wrong');
+					console.debug('Something went wrong');
 				});
 			},
 			internal_edit(record) {
