@@ -1,8 +1,15 @@
 
-# CRUD Table [![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable) [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable) [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg)](http://emberobserver.com/addons/ember-cli-crudtable)
+# CRUD Table [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)
+
+[![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable)[![Dependency Status](https://david-dm.org/gerard2p/ember-cli-crudtable.svg?style=flat-square)](https://david-dm.org/gerard2p/ember-cli-crudtable)[![devDependency Status](https://david-dm.org/gerard2p/ember-cli-crudtable/dev-status.svg?style=flat-square)](https://david-dm.org/gerard2p/ember-cli-crudtable#info=devDependencies)[![Code Climate](https://codeclimate.com/github/gerard2p/ember-cli-crudtable/badges/gpa.svg)](https://codeclimate.com/github/gerard2p/ember-cli-crudtable)
+
 This addon allows you to easly create a CRUD Table, it will take you only 5s!.
 
 This component is compatible with bootstrap (Actually is a dependency, but it's downloaded automatically) and ember-data.
+
+  [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)[![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg?style=flat-square)](http://emberobserver.com/addons/ember-cli-crudtable)
+
+
 
 ##Features
 1. Create
