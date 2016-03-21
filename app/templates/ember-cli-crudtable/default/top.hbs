@@ -1,45 +1,58 @@
 <div class="row">
-{{#if model.createRecord}}
-    <div class="col-sm-3 m-b-xs">
-    
-        <button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' model.value}}>
-            <i class="glyphicon glyphicon-send"></i>&nbsp;New Record</button>
-    
-    </div>
-    {{/if}}
-    {{#if model.exports}}
-    <div class="col-sm-4 m-b-xs">
-        <div data-toggle="buttons" class="btn-group">
-        
-            <label id="tocsv" class="btn btn-sm btn-default" {{action 'toCSV' this}}  >
-                <input type="radio"> To CSV </label>
-            <label id="totsv" class="btn btn-sm btn-default" {{action 'toTSV' this}}>
-                <input type="radio" id="option2" name="options"> To TSV </label>
-            <label id="tojson" class="btn btn-sm btn-default" {{action 'toJSONObject' this}}>
-                <input type="radio" id="option3" name="options"> To Json </label>
-        
-        </div>
-    </div>
-    {{/if}}
-    {{#if model.search}}
-    <div class="col-sm-2 m-b-xs no-padding">
-        <select id="SearchField" class="input-sm form-control input-s-sm inline">
-            {{#each model.labels key="@index" as |field index|}}
-            {{#if field.Search}}
-            <option value={{field.Display}}>{{field.Display}}</option>
-            {{/if}}
-            {{/each}}
-        </select>
-    </div>
-    <div class="col-sm-3">
-    
-        <div class="input-group">
-            {{input value=model.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
-            <span class="input-group-btn">
+	<div class="col-sm-3 btn-group">
+		{{#if model.exports}}
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="glyphicon glyphicon-export icon-share"></i>
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu">
+				<li><a {{action 'toCSV' this}}>To CSV</a></li>
+				<li><a {{action 'toTSV' this}}>To TSV</a></li>
+				<li><a {{action 'toJSONObject' this}}>To JSON</a></li>
+				<li><a {{action 'toSQL' this}}>To SQL</a></li>
+			</ul>
+		</div>
+		{{/if}}
+		<div class="keep-open btn-group" role="group">
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="glyphicon glyphicon-th icon-th"></i>
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu">
+				{{#each model.labels key="@index" as |field index|}}
+				<li>
+					<label>
+						{{input type="checkbox" checked=field.Visible}} {{field.Display}}
+					</label>
+				</li>
+				{{/each}}
+			</ul>
+		</div>
+		<button class="btn btn-default" type="button" name="refresh" title="Refresh"><i class="glyphicon glyphicon-refresh icon-refresh" {{action 'internal_reload'}}></i></button>
+		{{#if model.createRecord}}
+		<button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' model.value}}>
+			<i class="glyphicon glyphicon-send"></i>&nbsp;New Record</button>
+		{{/if}}
+	</div>
+	<div class="col-sm-4 m-b-xs"></div>
+	{{#if model.search}}
+	<div class="col-sm-2 m-b-xs no-padding">
+		<select id="SearchField" class="input-sm form-control input-s-sm inline">
+			{{#each model.labels key="@index" as |field index|}} {{#if field.Search}}
+			<option value={{field.Display}}>{{field.Display}}</option>
+			{{/if}} {{/each}}
+		</select>
+	</div>
+	<div class="col-sm-3">
+		<div class="input-group">
+			{{input value=model.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
+			<span class="input-group-btn">
                 <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
             </span>
-        </div>
-    
-    </div>
-    {{/if}}
+		</div>
+
+	</div>
+	{{/if}}
+
 </div>

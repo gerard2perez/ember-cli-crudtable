@@ -34,65 +34,7 @@ Please let me know about anything you find is not working, or maybe some feature
 ember install ember-cli-crudtable
 ```
 
-After this you must install boostrap with bower
-
-```
-bower install bootstrap
-```
-
 ---
-
-##Current Status ![Current NPM](https://img.shields.io/github/tag/gerard2p/ember-cli-crudtable.svg)
-
-I'm now using a Mayor/Minor/Revision notation.
-
-So we can now use the npm notation correctly.
-
----
-
-##Changelog
-
-### v1.0.0
-Since this versión I'll put the changelog on the release section.
-
-Maybe you want one of the older releases.
-### v0.4.2
-I made a lot of mistakes and v0.4.1 it's actually version v0.4.2 and I accidentally removed all the other versions from npm, but don't worry this version is still backwards compatible.
-
-### v0.4.1
-1. Handles manytomany relations (many-multi)
-2. Yout can now access the properties of the complex model by the name you defined in the model. (check custom templates seccion)
-3. Error messages won't show and alert window, intead, the response will be log to the console.
-4. Fixed a bug that made modal window be created twice in the DOM so ... you know a mess.
-5. Boostrap is a requiere dependency.
-
-### V0.4.0
-1. Support for Search key in controller configuration allowing to decide which fields are searchable.
-2. layoutName can be defined in order to select a fully custom design if you don't like tables.
-
-### v0.4.0-beta.3
-1. Fixed a bug that prevent pulling from stopping.
-2. Improved the map initialization.
-3. Support for ReadOnly Fields.
-4. Added the edit-cell-image template.
-5. Added email datatype.
-
-### v0.4.0-beta.2
-1. Added support for data pooling every n millisecods.
-2. Create button can now be hidden.
-3. The export commands can now be hidden.
-
-### v0.4.0-beta.1
-1. **fields** variable of the component now is and **object** an should be defined through the controller.
-1. Added support to export results to CSV, TSV, JSON.
-1. Custom labels.
-1. Render-Cell by Type
-	a. Text
-	a. Google Map
-	a. Image (Url)
-1. Custom field render based on handelbars templates.
-___
-
 
 ##How to use it
 You can use the helper **{{crud-table}}** there are some minimun variables you must specify and these are:
@@ -114,7 +56,7 @@ field_name:{
 ```
 ** *If not clear please check the example at the end* **.
 ###Action Configuration
-These variables are completely optional, if you're using the integrated mixin for the controller.
+These variables are completely optional, if you're using the integrated mixin for the controller and ember-data in your project.
 
 1. createRecord: [default: '*create*']
 1. updateRecord: [default: '*update*']
@@ -150,9 +92,9 @@ These are the current aviable templates to overwrite:
 
 ###Handlebars templates for data Read
 
-a. table-cell-googlemap
-a. table-cell-text
-a. table-cell-image
+* table-cell-googlemap
+* table-cell-text
+* table-cell-image
 
 You can access the data in handeblar using the next object
 
@@ -169,10 +111,10 @@ recod = {
 
 ###Handlebars templates for data creation/update
 
-a. edit-cell-googlemap
-a. edit-cell-text
-a. edit-cell-image
-a. edit-cell-many-multi
+* edit-cell-googlemap
+* edit-cell-text
+* edit-cell-image
+* edit-cell-many-multi
 
 You can access the data in handeblar using the next object
 
@@ -248,7 +190,7 @@ And will use the Display field has the property that will show the information f
 
 ember-cli-crudtable has the hability to indicate and interval of time for reloading all data from the server.
 
-You can do this by setting the pulling var in the template to the time you like to pull in milliseconds.
+You can do this by setting the **pulling** var in the template to the time you like to pull in milliseconds.
 The default value if false (no pulling).
 
 ##Controller Configuration
@@ -341,17 +283,49 @@ Thats All you can have now a fully CRUD table that communicates with your server
 ##Pagination
 The pagination data must be included in the meta response of your server so ember-data can use it and crudtable has access to it.
 
-This is a sample meta:
+ember-cli-crudtable has an integrated mixin which is use by default to parse the metadata and the metadata structure it expects is defined as:
 
-```
+
+```javascript
 {
 	"meta":{
-		"next":2,
-		"previous"":null,
-		"count":20
+		"total":626
 	}
 }
 ```
+
+The default paginator uses *skip* and *limit* to make a query request to your WEBAPI, so the next is a example of the requested url:
+
+```
+www.webapi.com/yourmodel/?limit=10&skip=10
+```
+
+This request is equivalent to show 10 records by page and therefore it will be showing page 2.
+
+The mixin calls and update function which set's all the internal values.
+
+###Changing the query parameters
+**getBody( *page*, *query_params* )** is a function which is called when the query parameters need to be updated. So the function can be overrided to match your Web API implementation.
+
+###I don't like the paginator look & feel
+Easy, if you don't like the links that are generated you can override the **generateLinks()** functions from the paginator mixin.
+
+Just remember this:
+1. You must set the **links** parameter with and array of links.
+1. The link object is like this:
+
+```javascript
+{
+	page: <<number>> ,
+	current: true | false 
+}
+```
+
+This all is great, but what about the look, well
+you can always override the template located in:
+
+**app/templates/ember-cli-crudtable/default/pagination.hbs**
+
 ## Creating your own datatype
 When You're defining the Type field in the controller yuo can especify a generic one.
 

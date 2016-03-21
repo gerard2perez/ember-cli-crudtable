@@ -1,42 +1,78 @@
-<div class="table-responsive">
-    {{#unless model.isLoading}}
-    <table 
-    class="table {{if model.stripped 'table-striped'}} {{if model.hover 'table-hover'}}"
-    >
-        <thead>
-            <tr>
-                {{#each model.labels key="@index" as |field index|}}
-                <th>{{field.Display}}</th>
-                {{/each}}
-                {{#if model.editdelete}}
-                <th width="100px">Actions</th>
-                {{/if}}
-            </tr>
-        </thead>
-        <tbody>
-            {{#each model.ComplexModel key="@index" as |row index|}}
-            <tr>
-                {{#if row}} {{render 'ember-cli-crudtable.table-row' row}} {{/if}} {{#if model.editdelete}}
-                <td>
-                    {{#if model.updateRecord}}
-                    <button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="glyphicon glyphicon-edit"></i>
-                    </button>
-                    {{/if}} {{#if model.deleteRecord}}
-                    <button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="glyphicon glyphicon-trash"></i>
-                    </button>
-                    {{/if}}
-                </td>
-                {{/if}}
-            </tr>
-            {{/each}}
+<div class="table-responsive fixed-table-container">
+	<table class="table {{if model.stripped 'table-striped'}} {{if model.hover 'table-hover'}}">
+		<thead>
+			<tr>
+				{{#each model.labels key="@index" as |field index|}}
+				{{#if field.Visible}}
+				<th>
+					<span>{{field.Display}}</span>
+					<button class="btn btn-xs glyphicon {{if field.Order '' 'glyphicon-sort'}} {{if field.Order_ASC 'glyphicon-sort-by-attributes' ''}} pull-left {{if field.Order_DESC 'glyphicon-sort-by-attributes-alt' ''}}" {{action 'internal_order' field }}></button>
+				</th>
+				{{/if}}
+				{{/each}}
+				{{#if model.editdelete}}
+				<th width="100px">Actions</th>
+				{{/if}}
+			</tr>
+		</thead>
+		<tbody>
+		{{#unless model.isLoading}}
+			{{#each model.ComplexModel key="@index" as |row index|}}
+			<tr>
+				{{#if row}}
+				{{render 'ember-cli-crudtable.table-row' row}} {{/if}} {{#if model.editdelete}}
+				<td>
+					{{#if model.updateRecord}}
+					<button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="glyphicon glyphicon-edit"></i>
+					</button>
+					{{/if}} {{#if model.deleteRecord}}
+					<button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="glyphicon glyphicon-trash"></i>
+					</button>
 
-        </tbody>
-        {{#if model.paginator.render}}
-        <tfoot>
-            Showing {{model.paginator.from}} to {{model.paginator.to}} of
-            <span name="total_records"> {{model.paginator.total}} </span> {{model.paginator.name}}
-        </tfoot>
-        {{/if}}
-    </table>
-    {{else}} -{{render 'ember-cli-crudtable.spinner' model.newRecord}}- {{/unless}}
+					{{/if}}
+				</td>
+				{{/if}}
+			</tr>
+			{{/each}}
+
+
+		{{else}}
+			<tr>
+				<th colspan="50">
+					{{render 'ember-cli-crudtable.spinner' model.newRecord}}
+				</th>
+			</tr>
+
+		{{/unless}}
+			</tbody>
+		{{#if model.paginator.render}}
+		<tfoot>
+			<div>
+				{{model.paginator.from}} to {{model.paginator.to}} of
+				<span name="total_records"> {{model.paginator.total}} </span> {{model.paginator.name}}
+			</div>
+			<div>
+				Showing
+				<span class="dropup">
+				<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{model.paginator.limit}}
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+					<li>
+						<a{{action 'intetnal_setlimit' 10}}>10</a>
+					</li>
+					<li><a {{action 'intetnal_setlimit' 25}}>25</a></li>
+					<li><a {{action 'intetnal_setlimit' 50}}>50</a></li>
+					<li><a {{action 'intetnal_setlimit' 100}}>100</a></li>
+					<li><a {{action 'intetnal_setlimit' 'all'}}>All</a></li>
+				</ul>
+				</span>
+				per page
+			</div>
+
+		</tfoot>
+		{{/if}}
+	</table>
+
 </div>
