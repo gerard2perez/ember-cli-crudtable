@@ -19,3 +19,8 @@ ratings:
 exclude_paths:
 - config/
 - tests/
+- app/templates/
+- addon/templates/
+- "README.md"
+- "LICENSE.md"
+- "changelog.md"
