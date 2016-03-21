@@ -240,7 +240,7 @@ const makeRequest = function (query, done, fail) {
 	let deferred = Ember.RSVP.defer('crud-table#createRecord');
 	component.set('isLoading', true);
 	component.sendAction('searchRecord', query, deferred);
-	_getRequest();
+	_getRequest(deferred);
 	return deferred;
 }
 export default Ember.Component.extend({
@@ -305,7 +305,7 @@ export default Ember.Component.extend({
 			let encodedUri = encodeURI(csvContent);
 			let link = document.createElement("a");
 			link.setAttribute("href", encodedUri);
-			link.setAttribute("download", "table.json");
+			link.setAttribute("download", component.get("_table")+".json");
 			component.set('dlf', link);
 			if (link.click) {
 				link.click();
