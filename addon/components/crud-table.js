@@ -367,10 +367,10 @@ export default Ember.Component.extend({
 							}
 							record.RoutedRecord.set(RoutedPropMap.Zoom.field, record.get('map').getZoom());
 						} else {
-							alert("address not found");
+							console.warn("address not found");
 						}
 					} else {
-						alert("Geocoder failed due to: " + status);
+						console.warn("Geocoder failed due to: " + status);
 					}
 					component.sendAction('updateRecord', record.RoutedRecord, deferred);
 				});
@@ -437,7 +437,7 @@ export default Ember.Component.extend({
 		},
 		internal_map: function (record, kind) {
 			if (google === undefined) {
-
+				return;
 			}
 			component.set('showMap', true);
 			showmodal();
@@ -543,7 +543,7 @@ export default Ember.Component.extend({
 					Search: component.fields[key].Search || false,
 					Order: 0,
 					Order_ASC: false,
-					Order_DESC: false,
+					Order_DESC: false
 				});
 			}
 			if (component.fields[key].Source !== undefined) {
@@ -630,5 +630,5 @@ export default Ember.Component.extend({
 	},
 	willDestroyElement: function () {
 		$("#CrudTableDeleteRecordModal").remove();
-	},
+	}
 });
