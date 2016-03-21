@@ -25,3 +25,6 @@ ratings:
 exclude_paths:
 - config/
 - tests/
+- *.md
+- *.hbs
+- *.json

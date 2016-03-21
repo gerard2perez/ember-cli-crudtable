@@ -27,6 +27,8 @@ var CustomField = Ember.Object.extend({
 	Suffix: null,
 	Prefix: null,
 	OnChoose: null,
+	_field_cfg: null,
+	Visible: Ember.computed.oneWay('_field_cfg.Visible'),
 	listener: Ember.observer('Value', function () {}),
 	googlefield: Ember.observer('Display', function () {})
 });
@@ -59,6 +61,7 @@ const checkvals = function (cmp, records, cfield, field) {
 };
 let newCustomField = function (field, data) {
 	return CustomField.create({
+		_field_cfg: component.get('labels')[field],
 		Field: field,
 		Value: data,
 		Choose: component.fields[field].OnChoose,
@@ -305,7 +308,7 @@ export default Ember.Component.extend({
 			exportData("csv", ",");
 		},
 		goto: function (page) {
-			if (page !== 0 && component.get('paginator').get('current')!==page) {
+			if (page !== 0 && component.get('paginator').get('current') !== page) {
 				component.get('paginator').getBody(page, lastquery);
 				makeRequest(lastquery);
 			}
@@ -527,6 +530,9 @@ export default Ember.Component.extend({
 			component.get('paginator').set('limit', limit);
 			component.get('paginator').getBody(1, lastquery);
 			makeRequest(lastquery);
+		},
+		internal_reload() {
+			makeRequest(lastquery);
 		}
 	},
 	init: function () {
@@ -537,7 +543,8 @@ export default Ember.Component.extend({
 				proccesDef[key] = component.fields[key].Default;
 			}
 			if (component.fields[key].List !== false) {
-				component.get('labels').push({
+				let label_cfg = Ember.Object.create({
+					Visible: true,
 					Key: key,
 					Display: component.fields[key].Label,
 					Search: component.fields[key].Search || false,
@@ -545,6 +552,8 @@ export default Ember.Component.extend({
 					Order_ASC: false,
 					Order_DESC: false
 				});
+				component.get('labels').push(label_cfg);
+				component.get('labels')[key] = label_cfg;
 			}
 			if (component.fields[key].Source !== undefined) {
 				Ember.assert('Action should be specified in Source field', component.fields[key].Source);
@@ -586,18 +595,12 @@ export default Ember.Component.extend({
 	didInsertElement: function () {
 		component.get('paginator').getBody(1, lastquery);
 		makeRequest(lastquery);
-		//		PreLoad.push(deferred.promise);
-		//		Ember.RSVP.all(PreLoad).then(function () {
-		//			regenerateView(component);
-		//			PromiseHandler.resolve(true);
-		//		});
 		$('#CrudTableDeleteRecordModal').on('shown.bs.modal', function () {
 			modalpromise.resolve();
 		});
 		if ($("#CrudTableDeleteRecordModal").modal !== undefined) {
 			$("#CrudTableDeleteRecordModal").modal('hide');
 		}
-
 		$('#CrudTableDeleteRecordModal').on('hidden.bs.modal', function () {
 			var deferred = Ember.RSVP.defer('crud-table#cancelRecord');
 			var template = Ember.RSVP.defer('crud-table#RenderTemplate');
