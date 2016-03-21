@@ -17,8 +17,6 @@ install:
   - npm install -g bower
   - npm install
   - bower install
-  - npm install -g phantomjs
-  - phantomjs -v
 
 script:
   - npm test

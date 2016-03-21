@@ -218,12 +218,12 @@ const exportData = function (format, joinchar) {
 		link.click();
 	}
 }
-
 const makeRequest = function (query) {
 	var deferred = Ember.RSVP.defer('crud-table#createRecord');
 	component.set('isLoading', true);
 	component.sendAction('searchRecord', query, deferred);
 	deferred.promise.then(function (records) {
+			component.set("_table", records.type.modelName);
 			metadata(records);
 			component.set('value', records);
 			regenerateView(component);
@@ -235,6 +235,7 @@ const makeRequest = function (query) {
 	return deferred;
 }
 export default Ember.Component.extend({
+	_table: "",
 	paginator: Ember.Object.extend(pagination).create(),
 	ComplexModel: {},
 	pulling: false,
@@ -306,6 +307,27 @@ export default Ember.Component.extend({
 		},
 		toCSV: function () {
 			exportData("csv", ",");
+		},
+		toSQL() {
+			var data = [];
+			component.get('ComplexModel').forEach(function (model) {
+				let columns = [];
+				let values = [];
+				model.forEach(function (field) {
+					columns.push(field.Field);
+					values.push(field.Value);
+				});
+				data.push("INSERT INTO " + component.get('_table') + "(" + columns.join(",") + ") VALUES('" + values.join("','") + "')");
+			});
+			var csvContent = "data:text/sql;charset=utf-8," + data.join("\n");
+			var encodedUri = encodeURI(csvContent);
+			var link = document.createElement("a");
+			link.setAttribute("href", encodedUri);
+			link.setAttribute("download", component.get('_table') + ".sql");
+			component.set('dlf', link);
+			if (link.click) {
+				link.click();
+			}
 		},
 		goto: function (page) {
 			if (page !== 0 && component.get('paginator').get('current') !== page) {
