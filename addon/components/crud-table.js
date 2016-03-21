@@ -415,7 +415,7 @@ export default Ember.Component.extend({
 		},
 		internal_order: function (label) {
 			component.get('labels').forEach(function (lbl) {
-				if (label != lbl) {
+				if (label !== lbl) {
 					Ember.set(lbl, 'Order_ASC', false);
 					Ember.set(lbl, 'Order_DESC', false);
 					Ember.set(lbl, 'Order', 0);
@@ -523,7 +523,7 @@ export default Ember.Component.extend({
 			showmodal();
 		},
 		intetnal_setlimit: function (limit) {
-			limit = limit == "all" ? component.get('paginator').get('total') : limit;
+			limit = limit === "all" ? component.get('paginator').get('total') : limit;
 			component.get('paginator').set('limit', limit);
 			component.get('paginator').getBody(1, lastquery);
 			makeRequest(lastquery);
