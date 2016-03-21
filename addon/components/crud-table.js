@@ -218,7 +218,7 @@ const exportData = function (format, joinchar) {
 		link.click();
 	}
 }
-const _getRequest = function (deferrend, done, fail) {
+const _getRequest = function (deferred, done, fail) {
 	deferred.promise.then(function (records) {
 			component.set("_table", records.type.modelName);
 			metadata(records);
