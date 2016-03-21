@@ -5,7 +5,7 @@
 
 This addon allows you to easly create a CRUD Table, it will take you only 5s!.
 
-This component is compatible with bootstrap (Actually is a dependency, but it's downloaded automatically) and ember-data.
+This component is compatible with bootstrap and ember-data.
 
   [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)[![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg?style=flat-square)](http://emberobserver.com/addons/ember-cli-crudtable)
 
@@ -19,6 +19,7 @@ This component is compatible with bootstrap (Actually is a dependency, but it's 
 5. Search by field
 6. Pagination
 7. Export to CSV, TSV, JSON
+
 ___
 
 
@@ -30,9 +31,11 @@ Please let me know about anything you find is not working, or maybe some feature
 
 
 ##Installation
-```
+```npm
 ember install ember-cli-crudtable
 ```
+
+> All the classes which the plug-in uses are from bootstrap framework.
 
 ---
 
@@ -44,7 +47,7 @@ You can use the helper **{{crud-table}}** there are some minimun variables you m
 
 The field definition is this:
 
-```
+```javascript
 field_name:{
 	Label:'label_to_show_on_table_header',
 	Display:'field_which_contain_data_to_show',
@@ -98,7 +101,7 @@ These are the current aviable templates to overwrite:
 
 You can access the data in handeblar using the next object
 
-```
+```javascript
 recod = {
 	Field:'field_name',
 	Value:'field_value',
@@ -118,7 +121,7 @@ recod = {
 
 You can access the data in handeblar using the next object
 
-```
+```javascript
 record = {
 	Field:'field_name',
 	Value:'field_value',
@@ -158,7 +161,7 @@ This template is render inside the modal window and calls every template labeled
 ##Hiding Edit,Delete,Create, Exports
 All these commands can be hidden if you need just by setting to null their corresponding action in the handlebars herlper.
 
-```
+```handlebars
 {{crud-table
 	createRecord=null
 	deleteRecord=null
@@ -174,7 +177,7 @@ All these commands can be hidden if you need just by setting to null their corre
 
 When defining a many-multi field you will have to specify the **Source** field, which is the name of the model from the second table.
 
-```
+```javascript
 Some_Field:{
 	Label:'Some_Label',
 	Type:'many-multi',
@@ -190,28 +193,28 @@ And will use the Display field has the property that will show the information f
 
 ember-cli-crudtable has the hability to indicate and interval of time for reloading all data from the server.
 
-You can do this by setting the **pulling** var in the template to the time you like to pull in milliseconds.
+You can do this by setting the **pulling** ley in the template to the time you like to pull in milliseconds.
 The default value if false (no pulling).
 
 ##Controller Configuration
 You can use this very same code when creating your controller and the only thing you have to worry about is to indicate the model.
 
-```
+```javascript
 import CTABLE from 'ember-cli-crudtable/mixins/crud-controller';
 import Ember from 'ember'
 
-var CrudTable = CTABLE('school');
+ley CrudTable = CTABLE('school');
 export default Ember.ObjectController.extend(CrudTable);
 ```
 
 
 ##Full Example
-```
+```javascript
 //app/router.js
 import Ember from 'ember';
 import config from './config/environment';
 
-var Router = Ember.Router.extend({
+ley Router = Ember.Router.extend({
     location: config.locationType,
     rootURL: config.baseURL
 });
@@ -224,11 +227,11 @@ export default Router;
 
 ```
 
-```
+```javascript
 //app/models/school.js
 import DS from 'ember-data';
 
-var attr = DS.attr;
+ley attr = DS.attr;
 
 export default DS.Model.extend({
     Name: attr('string'),
@@ -243,12 +246,12 @@ export default DS.Model.extend({
 
 ```
 
-```
+```javascript
 //app/controllers/schools/index.js
 import CTABLE from 'ember-cli-crudtable/mixins/crud-controller';
 import Ember from 'ember'
 
-var CrudTable = CTABLE('school');
+ley CrudTable = CTABLE('school');
 export default Ember.ObjectController.extend(CrudTable,{
 	fieldDefinition:{
 		Name:{Label:'School'},
@@ -268,7 +271,7 @@ export default Ember.ObjectController.extend(CrudTable,{
 ```
 
 
-```
+```handlebars
 //app/templates/schools/index.hbs
 {{crud-table 
 fields=fieldDefinition -- NOW It Should be an object defined in the controller
@@ -296,7 +299,7 @@ ember-cli-crudtable has an integrated mixin which is use by default to parse the
 
 The default paginator uses *skip* and *limit* to make a query request to your WEBAPI, so the next is a example of the requested url:
 
-```
+```url
 www.webapi.com/yourmodel/?limit=10&skip=10
 ```
 
@@ -304,6 +307,14 @@ This request is equivalent to show 10 records by page and therefore it will be s
 
 The mixin calls and update function which set's all the internal values.
 
+###Extending the paginator
+if you need to change the paginator behavor you should create a file in **app/paginator/crudtable.js**
+The next snippet is the default *paginator* implementation (which works with Sails.js and the Advanced Blueprints).
+
+```javascript
+import pagination from 'ember-cli-crudtable/mixins/pagination';
+export default Ember.Object.extend(pagination);
+```
 ###Changing the query parameters
 **getBody( *page*, *query_params* )** is a function which is called when the query parameters need to be updated. So the function can be overrided to match your Web API implementation.
 
@@ -333,9 +344,8 @@ Let's supose you want the field to have a link to some detail information, and w
 
 So our controller will contain a field definition like this:
 
-```
+```javascript
 fieldDefinition:{
-	Status:{
 	Label:'Current State',
 	Type:'link',
 	ReadOnly:true
@@ -346,7 +356,8 @@ In order to complete our goal we have to create a template file under **template
 
 The definition of the template can be like this:
 
-```
+```handlebars
+<!--app/templates/ember-cli-crudtable/table-cell-link.hbs-->
 {{#link-to 'school.profesors' parent.RoutedRecord}}
 	<span class="label label-primary pull-right" style="cursor:pointer">
 	<i class="glyphicon glyphicon-user" style="cursor:pointer"></i>

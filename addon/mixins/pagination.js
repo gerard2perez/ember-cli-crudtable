@@ -35,11 +35,12 @@ export default Ember.Mixin.create({
 		}
 	},
 	update(component, meta, nelements) {
+		if(meta.count!==undefined){
+			meta.total = meta.count;
+		}
 		this.set('total', meta.total);
-
 		let current = Math.ceil(this.get('skip') / this.get('limit')) + 1;
 		let pages = Math.ceil(this.get('total') / this.get('limit'));
-
 		this.set('pages', pages);
 		this.set('current', current);
 		this.set('from', this.get('skip') + 1);

@@ -22,7 +22,7 @@ ratings:
   paths:
   - "**.js"
 exclude_paths:
-- config/
+- confireadmeg/
 - tests/
 - app/templates/
 - addon/templates/

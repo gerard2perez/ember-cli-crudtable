@@ -1,9 +1,14 @@
-# v1.0.4
+# v1.1.0
 1. Remove the bootstrap dependency.
-1. Added custom css file.
 1. Added support for custom paginators.
-1. Added support for custom filter urs.
-1. More verbose ReadMe
+1. Fixed some bugs with the paginator.
+1. Added support to change page size from the GUI.
+1. Now your data can be exported to SQL.
+1. Added support to sort field.
+1. Added support  to show/hide fields.
+1. More verbose ReadMe.
+1. A lot of code improvements.
+1. The component is now tested in Ember 1.13.0, 2.4.0, Beta, Release, Canary.
 
 ###v1.0.3
 I've fixed the default value for the attribute List so it is true again (last release was false).
