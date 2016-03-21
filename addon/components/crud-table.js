@@ -1,6 +1,5 @@
 /*globals $, google*/
 import Ember from 'ember';
-import pagination from '../mixins/pagination';
 import ComplexModel from '../privateclasses/complexmodel';
 let component;
 let modalpromise;
@@ -102,9 +101,9 @@ const makeRequest = function (query, done, fail) {
 	_getRequest(deferred);
 	return deferred;
 }
-export default Ember.Component.extend({
+export default Ember.Mixin.create({
 	_table: "",
-	paginator: Ember.Object.extend(pagination).create(),
+	paginator:null,
 	ComplexModel: {},
 	pulling: false,
 	stripped: false,
@@ -420,6 +419,7 @@ export default Ember.Component.extend({
 	},
 	init: function () {
 		component = this;
+		component.get('paginator').init();
 		component.set('labels', []);
 		Object.keys(component.get('fields')).forEach(function (key) {
 			if (component.fields[key].Default !== undefined) {
@@ -466,7 +466,6 @@ export default Ember.Component.extend({
 		PreLoad = [];
 		component.set('editdelete', component.deleteRecord !== null || component.updateRecord !== null);
 		component.set('isLoading', true);
-		component.get('paginator').init();
 		PULLID = 0;
 		PromiseHandler = Ember.RSVP.defer('crud-table#SetUp');
 		component.addObserver('pulling', function () {

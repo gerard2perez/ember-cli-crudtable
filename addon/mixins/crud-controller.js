@@ -1,5 +1,4 @@
 import Ember from 'ember';
-
 export default function (model) {
     return Ember.Mixin.create({
         isEditing: false,
