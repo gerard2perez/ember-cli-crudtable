@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive fixed-table-container">
     {{#unless model.isLoading}}
     <table 
     class="table {{if model.stripped 'table-striped'}} {{if model.hover 'table-hover'}}"
@@ -6,7 +6,11 @@
         <thead>
             <tr>
                 {{#each model.labels key="@index" as |field index|}}
-                <th>{{field.Display}}</th>
+                <th>
+					<span>{{field.Display}}</span>
+					<button
+class="btn btn-xs glyphicon {{if field.Order '' 'glyphicon-sort'}} {{if field.Order_ASC 'glyphicon-sort-by-attributes' ''}} pull-left {{if field.Order_DESC 'glyphicon-sort-by-attributes-alt' ''}}" {{action 'internal_order' field }}></button>
+				</th>
                 {{/each}}
                 {{#if model.editdelete}}
                 <th width="100px">Actions</th>

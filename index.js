@@ -3,7 +3,7 @@
 
 module.exports = {
 	name: 'ember-cli-crudtable',
-	afterInstall:function () {
+	afterInstall: function () {
 		return this.addBowerPackageToProject('bootstrap'); // is a promise
 	}
 };
