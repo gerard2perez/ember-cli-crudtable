@@ -15,6 +15,32 @@ export default {
 	_RDN(base) {
 		return Math.ceil(base.length * Math.random() * Math.random());
 	},
+	_ensureSpecial(password,punctuation,specials) {
+		let specialchars = punctuation.slice(0);
+		let special;
+		let position
+		while (specials < this.minimunSpecialChars) {
+			special = specialchars.charAt(this._RDN(punctuation));
+			position = this._RDN(password);
+			if (specialchars.indexOf(password[position]) === -1) {
+				punctuation = specialchars.slice(0, position) + specialchars.slice(position + 1);
+				password = setCharAt(password, position, special);
+				specials++;
+			}
+		}
+	},
+	_ensureNumbers(password,numeric,punctuation,numbers) {
+		let number;
+		let position;
+		while (numbers < this.minimumNumbers) {
+			number = numeric.charAt(this._RDN(numeric));
+			position = this._RDN(password);
+			if (punctuation.indexOf(password[position]) === -1 && numeric.indexOf(password[position]) === -1) {
+				password = setCharAt(password, position, number);
+				numbers++;
+			}
+		}
+	},
 	gen() {
 		const string = "abcdefghijklmnopqrstuvwxyz"; //to upper
 		const numeric = '0123456789';
@@ -30,10 +56,10 @@ export default {
 		while (password.length < this.length) {
 			let cmp = Math.ceil(Math.exp(Math.random() * this.length));
 			let generator = string;
-			if (cmp % 3 == 0 && this.numbers) {
+			if (cmp % 3 === 0 && this.numbers) {
 				generator = numeric;
 				numbers++;
-			} else if (cmp % 5 == 0 && this.special_chars) {
+			} else if (cmp % 5 === 0 && this.special_chars) {
 				generator = punctuation;
 				specials++;
 			}
@@ -45,24 +71,8 @@ export default {
 			}
 			password += makemayus ? entity : entity.toUpperCase();
 		}
-		let specialchars = punctuation.slice(0);
-		while (specials < this.minimunSpecialChars) {
-			let special = specialchars.charAt(this._RDN(punctuation));
-			let position = this._RDN(password);
-			if (specialchars.indexOf(password[position]) === -1) {
-				punctuation = specialchars.slice(0, position) + specialchars.slice(position + 1);
-				password = setCharAt(password, position, special);
-				specials++;
-			}
-		}
-		while (numbers < this.minimumNumbers) {
-			let number = numeric.charAt(this._RDN(numeric));
-			let position = this._RDN(password);
-			if (punctuation.indexOf(password[position]) === -1 && numeric.indexOf(password[position]) === -1) {
-				password = setCharAt(password, position, number);
-				numbers++;
-			}
-		}
+		this._ensureSpecial(password,punctuation,specials);
+		this._ensureNumbers(password, numeric,punctuation,numbers);
 		return password;
 	}
 };

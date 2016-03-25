@@ -1,29 +1,5 @@
 import Ember from 'ember';
 import password from '../privateclasses/passgen';
-function generatePass(plength) {
-	var mkrdn = function () {
-		return 0.5 - Math.random();
-	};
-	var keylistalpha = "abcdefghijklmnopqrstuvwxyz";
-	var keylistint = "123456789";
-	var keylistspec = "!@#_";
-	var temp = '';
-	var len = plength / 2;
-	len = len - 1;
-	var lenspec = plength - len - len;
-	var i = 0;
-	for (i = 0; i < len; i++) {
-		temp += keylistalpha.charAt(Math.floor(Math.random() * keylistalpha.length));
-	}
-	for (i = 0; i < lenspec; i++) {
-		temp += keylistspec.charAt(Math.floor(Math.random() * keylistspec.length));
-	}
-	for (i = 0; i < len; i++) {
-		temp += keylistint.charAt(Math.floor(Math.random() * keylistint.length));
-		temp = temp.split('').sort(mkrdn).join('');
-	}
-	return temp;
-}
 export default Ember.Component.extend({
 	Display: function () {
 		return this.get('record.Display');
