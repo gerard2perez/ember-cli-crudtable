@@ -1,10 +1,11 @@
 import modal from './modal';
 import ComplexModel from '../privateclasses/complexmodel';
 
-export function metadata (component, records) {
+export let lastquery = {};
+export function metadata(component, records) {
 	component.get('paginator').update(component, records.get("meta"), records.get('length'));
 	component.get('paginator').generateLinks();
-};
+}
 const exportData = function (component, format, joinchar) {
 	let data = [];
 	let row = [];
@@ -33,14 +34,14 @@ const exportData = function (component, format, joinchar) {
 		link.click();
 	}
 }
-export function makeRequest (component, query, done, fail) {
+export function makeRequest(component, query, done, fail) {
 	let deferred = Ember.RSVP.defer('crud-table#createRecord');
 	component.set('isLoading', true);
 	component.sendAction('searchRecord', query, deferred);
-	_getRequest(component,deferred);
+	_getRequest(component, deferred);
 	return deferred;
 }
-export function _getRequest (component, deferred, done, fail) {
+export function _getRequest(component, deferred, done, fail) {
 	deferred.promise.then(function (records) {
 			component.set("_table", records.type.modelName);
 			metadata(component, records);
@@ -59,22 +60,22 @@ export function _getRequest (component, deferred, done, fail) {
 		});
 }
 export let actions = {
-	select: function (record) {
-		this.set('currentRecord', record);
-	},
-	generic_callback: function () {
+	select(record) {
+			this.set('currentRecord', record);
+		},
+	generic_callback() {
 		this.set('Callback', arguments[0]);
 		delete arguments[0];
 		let args = ['Callback', this.get('currentRecord')].concat([].slice.call(arguments));
 		this.sendAction.apply(this, args);
 		this.set('Callback', null);
 	},
-	internal_choose: function (incomming) {
+	internal_choose(incomming) {
 		this.set('Callback', incomming);
 		this.sendAction('Callback', this.get('currentRecord'));
 		this.set('Callback', null);
 	},
-	toJSONObject: function () {
+	toJSONObject() {
 		let data = [];
 		this.get('ComplexModel').forEach(function (model) {
 			let row = {};
@@ -93,11 +94,11 @@ export let actions = {
 			link.click();
 		}
 	},
-	toTSV: function () {
-		exportData(this,"tsv", "\t");
+	toTSV() {
+		exportData(this, "tsv", "\t");
 	},
-	toCSV: function () {
-		exportData(this,"csv", ",");
+	toCSV() {
+		exportData(this, "csv", ",");
 	},
 	toSQL() {
 		let component = this;
@@ -121,17 +122,17 @@ export let actions = {
 			link.click();
 		}
 	},
-	goto: function (page) {
+	goto(page) {
 		if (page !== 0 && this.get('paginator').get('current') !== page) {
 			this.get('paginator').getBody(page, lastquery);
-			makeRequest(this,lastquery);
+			makeRequest(this, lastquery);
 		}
 	},
-	internal_cancel: function () {
+	internal_cancel() {
 		this.set('notEdition', true);
 		this.set('isEdition', false);
 	},
-	internal_search: function () {
+	internal_search() {
 		let component = this;
 		let field = $("#SearchField").val();
 		Object.keys(component.fields).forEach(function (fieldname) {
@@ -146,9 +147,9 @@ export let actions = {
 			delete query[field];
 		}
 		lastquery = query;
-		makeRequest(component,lastquery);
+		makeRequest(component, lastquery);
 	},
-	confirm: function () {
+	confirm() {
 		let component = this;
 		let deferred;
 		this.set('isLoading', true);
@@ -225,7 +226,7 @@ export let actions = {
 			this.set('notEdition', true);
 		})
 	},
-	internal_order: function (label) {
+	internal_order(label) {
 		this.get('labels').forEach(function (lbl) {
 			if (label !== lbl) {
 				Ember.set(lbl, 'Order_ASC', false);
@@ -233,21 +234,14 @@ export let actions = {
 				Ember.set(lbl, 'Order', 0);
 			}
 		});
-		//label.set('Order_ASC',true);
-		if (!Ember.get(label, 'Order_DESC')) {
-			Ember.set(label, 'Order_ASC', false);
-			Ember.set(label, 'Order_DESC', true);
-			Ember.set(label, 'Order', 2);
-		} else {
-			Ember.set(label, 'Order_ASC', true);
-			Ember.set(label, 'Order_DESC', false);
-			Ember.set(label, 'Order', 1);
-		}
+		Ember.set(label, 'Order_ASC', Ember.get(label, 'Order_DESC'));
+		Ember.set(label, 'Order_DESC', !Ember.get(label, 'Order_DESC'));
+		Ember.set(label, 'Order', Ember.get(label, 'Order_DESC') ? 1:2);
 		this.get('paginator').sortData(label, lastquery);
-		makeRequest(this,lastquery);
+		makeRequest(this, lastquery);
 
 	},
-	internal_map: function (record, kind) {
+	internal_map(record, kind) {
 
 		if (google === undefined) {
 			return;
@@ -300,7 +294,7 @@ export let actions = {
 		};
 		waitforgoogle(waitforgoogle);
 	},
-	internal_create: function () {
+	internal_create() {
 		let component = this;
 		let records = component.get('value').get('isLoaded') === true ? component.get('value') : component.get('value').get('content');
 		this.set('newRecord', true);
@@ -323,28 +317,28 @@ export let actions = {
 				console.debug('Something went wrong');
 			});
 	},
-	internal_edit: function (record) {
+	internal_edit(record) {
 		this.set('notEdition', false);
 		this.set('isEdition', true);
 		this.set('isDeleting', false);
 		this.set('currentRecord', record);
 		modal.show();
 	},
-	internal_delete: function (record) {
+	internal_delete(record) {
 
 		this.set('newRecord', false);
 		this.set('isDeleting', true);
 		this.set('currentRecord', record);
 		modal.show();
 	},
-	intetnal_setlimit: function (limit) {
+	intetnal_setlimit(limit) {
 
 		limit = limit === "all" ? this.get('paginator').get('total') : limit;
 		this.get('paginator').set('limit', limit);
 		this.get('paginator').getBody(1, lastquery);
-		makeRequest(this,lastquery);
+		makeRequest(this, lastquery);
 	},
 	internal_reload() {
-		makeRequest(this,lastquery);
+		makeRequest(this, lastquery);
 	}
 };

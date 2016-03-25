@@ -24,10 +24,10 @@
 					{{#if this.editdelete}}
 					<td>
 						{{#if this.updateRecord}}
-							<button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="glyphicon glyphicon-edit"></i>
+							<button data-action="edit" class="btn btn-info btn-action btn-sm" {{action 'internal_edit' row}}><i class="glyphicon glyphicon-edit"></i>
 							</button>
 							{{/if}} {{#if this.deleteRecord}}
-							<button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="glyphicon glyphicon-trash"></i>
+							<button data-action="delete" class="btn btn-danger btn-action btn-sm" {{action 'internal_delete' row}}><i class="glyphicon glyphicon-trash"></i>
 							</button>
 						{{/if}}
 						</td>

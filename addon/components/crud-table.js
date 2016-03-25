@@ -1,13 +1,13 @@
 /*globals $, google*/
 import Ember from 'ember';
 import ComplexModel from '../privateclasses/complexmodel';
-import {actions,makeRequest,metadata} from '../privateclasses/actions';
+import {actions,makeRequest,metadata,lastquery} from '../privateclasses/actions';
 import modal from '../privateclasses/modal';
 
 let component;
 let proccesDef = [];
 let PreLoad = [];
-let lastquery = {};
+
 let PromiseHandler;
 let PULLID = 0;
 let PULLFN = function (cmp, time) {
