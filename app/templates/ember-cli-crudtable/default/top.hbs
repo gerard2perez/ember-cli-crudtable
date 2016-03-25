@@ -1,55 +1,56 @@
-	<div class="col-sm-5 btn-group">
-		{{#if this.exports}}
-		<div class="btn-group" role="group">
-			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="glyphicon glyphicon-export icon-share"></i>
-				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li><a {{action 'toCSV' this}}>To CSV</a></li>
-				<li><a {{action 'toTSV' this}}>To TSV</a></li>
-				<li><a {{action 'toJSONObject' this}}>To JSON</a></li>
-				<li><a {{action 'toSQL' this}}>To SQL</a></li>
-			</ul>
-		</div>
-		{{/if}}
-		<div class="keep-open btn-group" role="group">
-			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="glyphicon glyphicon-th icon-th"></i>
-				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				{{#each this.labels key="@index" as |field index|}}
-				<li>
-					<label>
-						{{input type="checkbox" checked=field.Visible}} {{field.Display}}
-					</label>
-				</li>
-				{{/each}}
-			</ul>
-		</div>
-		<button class="btn btn-default" type="button" name="refresh" title="Refresh"><i class="glyphicon glyphicon-refresh icon-refresh" {{action 'internal_reload'}}></i></button>
-		{{#if this.createRecord}}
-		<button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' this.value}}>
-			<i class="glyphicon glyphicon-send"></i>&nbsp;New Record</button>
-		{{/if}}
-	</div>
-	<div class="col-sm-2 m-b-xs"></div>
-	{{#if this.search}}
-	<div class="col-sm-2 m-b-xs no-padding">
-		<select id="SearchField" class="input-sm form-control input-s-sm inline">
-			{{#each this.labels key="@index" as |field index|}} {{#if field.Search}}
-			<option value={{field.Display}}>{{field.Display}}</option>
-			{{/if}} {{/each}}
-		</select>
-	</div>
-	<div class="col-sm-3">
-		<div class="input-group">
-			{{input value=this.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
-			<span class="input-group-btn">
-                <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
-            </span>
-		</div>
-
+<div class="col-sm-5 btn-group">
+	{{#if this.exports}}
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="glyphicon glyphicon-export icon-share"></i>
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a {{action 'toCSV' this}}>To CSV</a></li>
+			<li><a {{action 'toTSV' this}}>To TSV</a></li>
+			<li><a {{action 'toJSONObject' this}}>To JSON</a></li>
+			<li><a {{action 'toSQL' this}}>To SQL</a></li>
+		</ul>
 	</div>
 	{{/if}}
+	<div class="keep-open btn-group" role="group">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="glyphicon glyphicon-th icon-th"></i>
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			{{#each this.labels key="@index" as |field index|}}
+			<li>
+				<label>
+					{{input type="checkbox" checked=field.Visible}} {{field.Display}}
+				</label>
+			</li>
+			{{/each}}
+		</ul>
+	</div>
+	<button class="btn btn-default" type="button" name="refresh" title="Refresh"><i class="glyphicon glyphicon-refresh icon-refresh" {{action 'internal_reload'}}></i></button>
+	{{#if this.createRecord}}
+	<button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' this.value}}>
+		<i class="glyphicon glyphicon-send"></i>&nbsp;New Record</button>
+	{{/if}}
+</div>
+<div class="col-sm-2 m-b-xs"></div>
+{{#if this.search}}
+<div class="col-sm-2 m-b-xs no-padding">
+	<select id="SearchField" class="input-sm form-control input-s-sm inline">
+		{{#each this.labels key="@index" as |field index|}} {{#if field.Search}}
+		<option value={{field.Display}}>{{field.Display}}</option>
+		{{/if}} {{/each}}
+	</select>
+</div>
+<div class="col-sm-3">
+	<div class="input-group">
+		{{input action="internal_search"
+		value=this.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
+		<span class="input-group-btn">
+                <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
+            </span>
+	</div>
+
+</div>
+{{/if}}
