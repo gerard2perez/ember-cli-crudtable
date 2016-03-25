@@ -50,7 +50,7 @@ const CustomField = Ember.Object.extend({
 	listener: Ember.observer('Value', function () {}),
 	googlefield: Ember.observer('Display', function () {})
 });
-let newCustomField = function (component,field, data) {
+let newCustomField = function (component, field, data,row) {
 	return CustomField.create({
 		_field_cfg: component.get('labels')[field],
 		Field: field,
@@ -65,9 +65,9 @@ let newCustomField = function (component,field, data) {
 		Create: component.fields[field].Create || false,
 		Type: component.fields[field].Type || 'text',
 		listener: Ember.observer('Value', function () {
-			row.set(component.get('Field'), component.get('Value'));
+			row.set(this.get('Field'), this.get('Value'));
 			if (component.fields[field].Display === null) {
-				row.set('Display', component.get('Value'));
+				row.set('Display', this.get('Value'));
 			}
 		}),
 		googlefield: Ember.observer('Display', function () {
@@ -78,31 +78,32 @@ let newCustomField = function (component,field, data) {
 		})
 	});
 }
-const TypeAdjustments = function (Type, field, data, cfield, row) {
+const TypeAdjustments = function (component, Type, field, data, cfield, row) {
+	let fobj = component.get('fields')[field];
 	switch (Type) {
 	case 'check':
-		if (this.fields[field].Value) {
+		if (fobj.Value) {
 			cfield.set('Display', 'checked="checked"');
 		}
 		break;
 	case 'many-multi':
 	case 'belongsto':
 		if (data.isLoaded) {
-			checkvals(this, data, cfield, field);
+			checkvals(component, data, cfield, field);
 		} else {
 			data.then(function () {
-				checkvals(this, data, cfield, field);
+				checkvals(component, data, cfield, field);
 			});
 		}
 		break;
 	case 'googlemap':
-		if (this.fields[field].Display !== null) {
+		if (fobj.Display !== null) {
 			cfield.set('Zoom', {
-				value: row.get(this.fields[field].Zoom),
-				field: this.fields[field].Zoom
+				value: row.get(fobj.Zoom),
+				field: fobj.Zoom
 			});
-			cfield.set('Display', row.get(this.fields[field].Display));
-			cfield.set('DisplayField', this.fields[field].Display);
+			cfield.set('Display', row.get(fobj.Display));
+			cfield.set('DisplayField', fobj.Display);
 		}
 		break;
 	}
@@ -116,14 +117,14 @@ export default {
 			let CustomProperties = [];
 			Object.keys(component.fields).forEach(function (field) {
 				let data = row.get(field);
-				let cfield = newCustomField(component, field, data);
+				let cfield = newCustomField(component, field, data,row);
 				let Type = cfield.get('Type');
 				let inherits = Type.split(':');
 				if (inherits.length === 2) {
 					Type = inherits[1];
 					cfield.set('Type', inherits[0]);
 				}
-				cfield = TypeAdjustments.apply(component, [Type, field, data, cfield, row]);
+				cfield = TypeAdjustments(component, Type, field, data, cfield, row);
 				CustomProperties[field] = cfield;
 				try {
 					CustomProperties.pushObject(cfield);

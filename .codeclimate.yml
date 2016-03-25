@@ -3,14 +3,9 @@ engines:
   duplication:
     enabled: true
     exclude_fingerprints:
-    - 5306b03354574ee004977815480962b5
-    - f615adeb45c0166b4313fb24e27142b5
-    - c5b2eab551296a38dc0a0af22c7cdc34
-    - 94355f681e3b948b7b917c86309c2a4a
-    - 45775fca287bc8d683484107ae8f1587
-    - 6da1a5e2159ca7cd2356d518ab3d912d
+    - 6e77cde98fff9c92f5441e9c68a001a0
+    - 2a68cff27d8dd8b6b2c2c71b43f3d80a
     - 237cb24fd42103d623c26dc71384ef33
-    - e4d1c37ffc75e52dbfa9875a448350d5
     config:
       languages:
       - javascript

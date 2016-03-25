@@ -9,7 +9,7 @@ export default Ember.Mixin.create({
 	next: 0,
 	total: 0,
 	pages: 0,
-	limit: 2,
+	limit: 10,
 	skip: 0,
 	from: 0,
 	to: 0,
