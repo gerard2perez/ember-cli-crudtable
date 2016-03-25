@@ -1,11 +1,10 @@
 /*globals $, google*/
 import Ember from 'ember';
 import ComplexModel from '../privateclasses/complexmodel';
-import {actions,makeRequest,metadata,lastquery} from '../privateclasses/actions';
+import {actions,makeRequest,metadata,lastquery,fieldDefinition} from '../privateclasses/actions';
 import modal from '../privateclasses/modal';
 
 let component;
-let proccesDef = [];
 let PreLoad = [];
 
 let PromiseHandler;
@@ -34,6 +33,8 @@ let PULL = function (cmp) {
 };
 export default Ember.Mixin.create({
 	_table: "",
+	canFilter:true,
+	canRefresh:true,
 	paginator:null,
 	ComplexModel: {},
 	pulling: false,
@@ -73,7 +74,7 @@ export default Ember.Mixin.create({
 		component.set('labels', []);
 		Object.keys(component.get('fields')).forEach(function (key) {
 			if (component.fields[key].Default !== undefined) {
-				proccesDef[key] = component.fields[key].Default;
+				fieldDefinition[key] = component.fields[key].Default;
 			}
 			if (component.fields[key].List !== false) {
 				let label_cfg = Ember.Object.create({
@@ -112,7 +113,6 @@ export default Ember.Mixin.create({
 
 			}
 		});
-		proccesDef = [];
 		PreLoad = [];
 		component.set('editdelete', component.deleteRecord !== null || component.updateRecord !== null);
 		component.set('isLoading', true);

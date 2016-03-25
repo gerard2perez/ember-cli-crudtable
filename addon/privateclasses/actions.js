@@ -1,6 +1,7 @@
 import modal from './modal';
 import ComplexModel from '../privateclasses/complexmodel';
 
+export let fieldDefinition=[];
 export let lastquery = {};
 export function metadata(component, records) {
 	let meta = records.get("meta");
@@ -305,8 +306,8 @@ export let actions = {
 			let deferred = Ember.RSVP.defer('crud-table#newRecord');
 			component.sendAction('getRecord', deferred);
 			deferred.promise.then(function (record) {
-					Object.keys(proccesDef).forEach(function (field) {
-						record.set(field, proccesDef[field](component.get('targetObject').get('model')));
+					Object.keys(fieldDefinition).forEach(function (field) {
+						record.set(field, fieldDefinition[field](component.get('targetObject').get('model')));
 					});
 					if (record._internalModel !== undefined) {
 						records.addObject(record._internalModel);

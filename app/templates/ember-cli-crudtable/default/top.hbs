@@ -12,7 +12,7 @@
 			<li><a {{action 'toSQL' this}}>To SQL</a></li>
 		</ul>
 	</div>
-	{{/if}}
+	{{/if}} {{#if this.canFilter}}
 	<div class="keep-open btn-group" role="group">
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class="glyphicon glyphicon-th icon-th"></i>
@@ -28,8 +28,9 @@
 			{{/each}}
 		</ul>
 	</div>
+	{{/if}} {{#if this.canRefresh}}
 	<button class="btn btn-default" type="button" name="refresh" title="Refresh"><i class="glyphicon glyphicon-refresh icon-refresh" {{action 'internal_reload'}}></i></button>
-	{{#if this.createRecord}}
+	{{/if}} {{#if this.createRecord}}
 	<button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' this.value}}>
 		<i class="glyphicon glyphicon-send"></i>&nbsp;New Record</button>
 	{{/if}}
@@ -45,8 +46,7 @@
 </div>
 <div class="col-sm-3">
 	<div class="input-group">
-		{{input action="internal_search"
-		value=this.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
+		{{input action="internal_search" value=this.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
 		<span class="input-group-btn">
                 <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
             </span>
