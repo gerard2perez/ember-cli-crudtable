@@ -1,3 +1,10 @@
-{{#each this.model key="@index" as |property index|}} {{#if property.Visible}} {{#if property.List}}
-<td>{{crud-cell record=property parent=this.model}}</td>
-{{/if}} {{/if}} {{/each}}
+<!-- row is avialible here -->
+{{#each row key="@index" as |property index|}}
+{{#if property.Visible}}
+{{#if property.List}}
+<td>{{crud-cell record=property parent=row}}</td>
+{{/if}}
+{{/if}}
+{{/each}}
+{{yield}}
+{{content}}

@@ -1,7 +1,7 @@
 <form method="get" class="form-horizontal">
-    {{#each this.model key="@index" as |record index|}}
+    {{#each currentRecord key="@index" as |record index|}}
     	{{#unless record.Edit}}
-        	{{crud-edit-cell record=record parent=this.model}}
+        	{{crud-edit-cell record=record parent=currentRecord}}
         	<div class="hr-line-dashed"></div>
         {{/unless}}
     {{/each}}

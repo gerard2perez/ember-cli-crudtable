@@ -1,8 +1,7 @@
-<div class="table-responsive fixed-table-container">
-	<table class="table {{if model.stripped 'table-striped'}} {{if model.hover 'table-hover'}}">
+	<table class="table {{if this.stripped 'table-striped'}} {{if this.hover 'table-hover'}}">
 		<thead>
 			<tr>
-				{{#each model.labels key="@index" as |field index|}}
+				{{#each this.labels key="@index" as |field index|}}
 				{{#if field.Visible}}
 				<th>
 					<span>{{field.Display}}</span>
@@ -10,52 +9,52 @@
 				</th>
 				{{/if}}
 				{{/each}}
-				{{#if model.editdelete}}
+				{{#if this.editdelete}}
 				<th width="100px">Actions</th>
 				{{/if}}
 			</tr>
 		</thead>
 		<tbody>
-		{{#unless model.isLoading}}
-			{{#each model.ComplexModel key="@index" as |row index|}}
-			<tr>
+		{{#unless this.isLoading}}
+
+			{{#each this.ComplexModel key="@index" as |row index|}}
 				{{#if row}}
-				{{render 'ember-cli-crudtable.table-row' row}} {{/if}} {{#if model.editdelete}}
-				<td>
-					{{#if model.updateRecord}}
-					<button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="glyphicon glyphicon-edit"></i>
-					</button>
-					{{/if}} {{#if model.deleteRecord}}
-					<button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="glyphicon glyphicon-trash"></i>
-					</button>
-
+				<tr>
+					{{partial 'ember-cli-crudtable/table-row'}}
+					{{#if this.editdelete}}
+					<td>
+						{{#if this.updateRecord}}
+							<button data-action="edit" class="btn btn-info btn-action" {{action 'internal_edit' row}}><i class="glyphicon glyphicon-edit"></i>
+							</button>
+							{{/if}} {{#if this.deleteRecord}}
+							<button data-action="delete" class="btn btn-danger btn-action" {{action 'internal_delete' row}}><i class="glyphicon glyphicon-trash"></i>
+							</button>
+						{{/if}}
+						</td>
 					{{/if}}
-				</td>
+					</tr>
 				{{/if}}
-			</tr>
 			{{/each}}
-
-
 		{{else}}
 			<tr>
 				<th colspan="50">
-					{{render 'ember-cli-crudtable.spinner' model.newRecord}}
+					{{partial template='ember-cli-crudtable.spinner' model=this.newRecord}}
 				</th>
 			</tr>
 
 		{{/unless}}
 			</tbody>
-		{{#if model.paginator.render}}
+		{{#if this.paginator.render}}
 		<tfoot>
 			<div>
-				{{model.paginator.from}} to {{model.paginator.to}} of
-				<span name="total_records"> {{model.paginator.total}} </span> {{model.paginator.name}}
+				{{this.paginator.from}} to {{this.paginator.to}} of
+				<span name="total_records"> {{this.paginator.total}} </span> {{this.paginator.name}}
 			</div>
 			<div>
 				Showing
 				<span class="dropup">
 				<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					{{model.paginator.limit}}
+					{{this.paginator.limit}}
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -74,5 +73,3 @@
 		</tfoot>
 		{{/if}}
 	</table>
-
-</div>

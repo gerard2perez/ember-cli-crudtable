@@ -1,7 +1,9 @@
-{{render 'ember-cli-crudtable.default.top' this}}
-{{render 'ember-cli-crudtable.default.body' this}}
+<div class='row'>{{partial 'ember-cli-crudtable/default/top'}}</div>
+<div class='table-responsive fixed-table-container'>{{partial 'ember-cli-crudtable/default/body'}}</div>
 {{#if this.paginator.render}}
-{{render 'ember-cli-crudtable.default.pagination' this}}
+	<div class="row text-center">
+		{{partial 'ember-cli-crudtable/default/pagination'}}
+	</div>
 {{/if}}
-{{yield}} 
-{{render 'ember-cli-crudtable.table-modal' this}}
+{{yield}}
+{{partial 'ember-cli-crudtable/table-modal'}}
