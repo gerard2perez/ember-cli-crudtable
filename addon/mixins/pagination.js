@@ -93,55 +93,5 @@ export default Ember.Mixin.create({
 			}
 		}
 		this.set('links', arr);
-	},
-	generateLinks2() {
-		const slots = 1;
-		const siblings = 3;
-		let cur = this.get('current');
-		let pages = this.get('pages');
-		let arr = [];
-		let max = siblings * 2 + slots * 2 + 3;
-		let de1 = slots;
-		let de2 = cur - siblings;
-		let df2 = pages - slots + 1;
-		let df1 = cur + siblings;
-		let compress = pages > max;
-		let preadd = true;
-		let postadd = true;
-
-		for (let i = 1; i <= pages; i++) {
-			if (compress) {
-				let TP = max - ((pages - cur) + siblings + 1 + slots + 1);
-				let TP2 = max - (cur + siblings + 1 + slots);
-				if ((de1 < i && i < de2) && i < de2 - TP) {
-					if (preadd) {
-						preadd = false;
-						arr.push({
-							page: "..",
-							current: false
-						});
-					}
-				} else if ((df1 < i && i < df2) && i > df1 + TP2) {
-					if (postadd) {
-						postadd = false;
-						arr.push({
-							page: "..",
-							current: false
-						});
-					}
-				} else {
-					arr.push({
-						page: i,
-						current: cur === i
-					});
-				}
-			} else {
-				arr.push({
-					page: i,
-					current: cur === i
-				});
-			}
-		}
-		this.set('links', arr);
 	}
 });
