@@ -7,9 +7,7 @@ This addon allows you to easly create a CRUD Table, it will take you only 5s!.
 
 This component is compatible with bootstrap and ember-data.
 
-  [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)[![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg?style=flat-square)](http://emberobserver.com/addons/ember-cli-crudtable)
-
-
+  [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)[![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg?style=flat-square)](http://emberobserver.com/addons/ember-cli-crudtable)[![Issue Count](https://codeclimate.com/github/gerard2p/ember-cli-crudtable/badges/issue_count.svg)](https://codeclimate.com/github/gerard2p/ember-cli-crudtable)
 
 ##Features
 1. Create

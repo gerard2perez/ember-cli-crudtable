@@ -1,8 +1,8 @@
 import Ember from 'ember';
 export default Ember.Mixin.create({
 	name: "Custom Name",
-	sortingString: "field ORDER",
-	sortingKey: ["ASC", "DESC"],
+	sortingString: "ORDERfield",
+	sortingKey: ["", "-"],
 	render: false,
 	current: 0,
 	previous: 0,
@@ -23,16 +23,8 @@ export default Ember.Mixin.create({
 			.replace("field", Ember.get(field, 'Key'))
 			.replace("ORDER", this.get('sortingKey')[Ember.get(field, 'Order') - 1]);
 	},
-	getBody(page, query) {
-		query.skip = (page - 1) * this.get('limit');
-		this.set('skip', query.skip < 1 ? 0 : query.skip);
-		query.limit = this.get('limit');
-		if (query.skip < 1) {
-			delete query.skip;
-		}
-		if (!query.limit) {
-			delete query.limit;
-		}
+	getBody:function(page, query){
+		query.page=page;
 	},
 	update(component, meta, nelements) {
 		if (meta.count !== undefined) {
