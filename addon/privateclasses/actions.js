@@ -142,7 +142,7 @@ export let actions = {
 			}
 		},
 		goto(page) {
-			if (page !== 0 && this.get('paginator').get('current') !== page) {
+			if (page > 0 && this.get('paginator').get('current') !== page) {
 				this.get('paginator').getBody(page, lastquery);
 				makeRequest(this, lastquery);
 			}

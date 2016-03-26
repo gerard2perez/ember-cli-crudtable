@@ -9,7 +9,7 @@ export default Ember.Mixin.create({
 	next: 0,
 	total: 0,
 	pages: 0,
-	limit: 10,
+	limit: 1,
 	skip: 0,
 	from: 0,
 	to: 0,
@@ -35,7 +35,7 @@ export default Ember.Mixin.create({
 		}
 	},
 	update(component, meta, nelements) {
-		if(meta.count!==undefined){
+		if (meta.count !== undefined) {
 			meta.total = meta.count;
 		}
 		this.set('total', meta.total);
@@ -54,18 +54,65 @@ export default Ember.Mixin.create({
 		let cur = this.get('current');
 		let pages = this.get('pages');
 		let arr = [];
-		var max = siblings * 2 + slots * 2 + 3;
-		var de1 = slots;
-		var de2 = cur - siblings;
-		var df2 = pages - slots + 1;
-		var df1 = cur + siblings;
-		var compress = pages > max;
-		var preadd = true;
-		var postadd = true;
-		for (var i = 1; i <= pages; i++) {
+		let max = siblings * 2 + slots * 2 + 3;
+		let de1 = slots;
+		let de2 = cur - siblings;
+		let df2 = pages - slots + 1;
+		let df1 = cur + siblings;
+		let compress = pages > max;
+		let preadd = true;
+		let postadd = true;
+
+		function dummylinks(adder) {
+			if (adder) {
+				arr.push({
+					page: "..",
+					current: false
+				});
+			}
+		}
+		for (let i = 1; i <= pages; i++) {
 			if (compress) {
-				var TP = max - ((pages - cur) + siblings + 1 + slots + 1);
-				var TP2 = max - (cur + siblings + 1 + slots);
+				let TP = max - ((pages - cur) + siblings + 1 + slots + 1);
+				let TP2 = max - (cur + siblings + 1 + slots);
+				if ((de1 < i && i < de2) && i < de2 - TP) {
+					preadd = dummylinks(preadd);
+				} else if ((df1 < i && i < df2) && i > df1 + TP2) {
+					postadd = dummylinks(postadd);
+				} else {
+					arr.push({
+						page: i,
+						current: cur === i
+					});
+				}
+			} else {
+				arr.push({
+					page: i,
+					current: cur === i
+				});
+			}
+		}
+		this.set('links', arr);
+	},
+	generateLinks2() {
+		const slots = 1;
+		const siblings = 3;
+		let cur = this.get('current');
+		let pages = this.get('pages');
+		let arr = [];
+		let max = siblings * 2 + slots * 2 + 3;
+		let de1 = slots;
+		let de2 = cur - siblings;
+		let df2 = pages - slots + 1;
+		let df1 = cur + siblings;
+		let compress = pages > max;
+		let preadd = true;
+		let postadd = true;
+
+		for (let i = 1; i <= pages; i++) {
+			if (compress) {
+				let TP = max - ((pages - cur) + siblings + 1 + slots + 1);
+				let TP2 = max - (cur + siblings + 1 + slots);
 				if ((de1 < i && i < de2) && i < de2 - TP) {
 					if (preadd) {
 						preadd = false;
@@ -88,7 +135,6 @@ export default Ember.Mixin.create({
 						current: cur === i
 					});
 				}
-
 			} else {
 				arr.push({
 					page: i,
