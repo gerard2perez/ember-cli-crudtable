@@ -6,6 +6,9 @@ engines:
     - 6e77cde98fff9c92f5441e9c68a001a0
     - 2a68cff27d8dd8b6b2c2c71b43f3d80a
     - 237cb24fd42103d623c26dc71384ef33
+    - 45775fca287bc8d683484107ae8f1587
+    - e4d1c37ffc75e52dbfa9875a448350d5
+    - 94355f681e3b948b7b917c86309c2a4a
     config:
       languages:
       - javascript
@@ -24,3 +27,4 @@ exclude_paths:
 - "README.md"
 - "LICENSE.md"
 - "changelog.md"
+- config/

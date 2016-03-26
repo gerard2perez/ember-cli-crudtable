@@ -124,7 +124,7 @@ export let actions = {
 				let columns = [];
 				let values = [];
 				model.forEach(function (field) {
-					if (field.Type != 'many-multi') {
+					if (field.Type !== 'many-multi') {
 						columns.push(field.Field);
 						values.push(field.Value);
 					}
