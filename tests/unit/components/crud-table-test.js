@@ -1,5 +1,8 @@
 /* globals ok*/
-import { moduleForComponent, test } from 'ember-qunit';
+import {
+	moduleForComponent, test
+}
+from 'ember-qunit';
 import startApp from '../../helpers/start-app';
 import Ember from 'ember';
 import hbs from 'htmlbars-inline-precompile';
@@ -84,6 +87,13 @@ moduleForComponent('crud-table', 'CrudTable', {
 	integration: true,
 	beforeEach: function () {
 		App = startApp();
+		this.set('fields', ArrField);
+		this.set('actions.FetchData', targetObject.FetchData);
+		this.set('actions.getRecord', targetObject.getRecord);
+		this.set('actions.delete', targetObject.delete);
+		this.set('actions.update', targetObject.update);
+		this.set('actions.create', targetObject.create);
+		this.render(hbs `{{crud-table search=true stripped=true hover=true deleteRecord='delete' updateRecord='update' createRecord='create' fields=fields}}`);
 	},
 	afterEach: function () {
 		Ember.run(App, 'destroy');
@@ -91,131 +101,114 @@ moduleForComponent('crud-table', 'CrudTable', {
 });
 
 test('No data initialization', function (assert) {
-	this.set('fields', ArrField);
-	this.set('actions.FetchData', targetObject.FetchData);
-	this.render(hbs `{{crud-table search=true stripped=true hover=true deleteRecord='delete' updateRecord='update' createRecord='create' fields=fields}}`);
 	assert.expect(1);
 	assert.equal(1, 1);
 });
-//test('Can Set Initial Variables', function (assert) {
-//    assert.expect(3);
-//    this.render();
-//    andThen(function(){
-//        assert.equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data23');
-//        assert.equal(component.get('labels').length, 3);
-//        assert.equal(find('table.table>tbody>tr').children().length, (component.get('labels').length + 1) * find('table.table>tbody').children().length);
-//    });
-//});
-//test('User Creates a Record', function (assert) {
-//    this.render();
-//    assert.expect(2);
-//    tricky = 1;
-//    //let rows = parseInt(this.$('[name=total_records]').text());
-//    click('[data-action=create]');
-//    andThen(function () {
-//        assert.equal($('.modal-title').text().trim(), 'Add a New Record');
-//        click($('[data-action=confirm]'));
-//        andThen(function () {
-//            assert.equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data99');
-//            //assert.equal(find('[name=total_records]').text(), rows + 1);
-//            //For some reason the view is not yet updated.
-//        });
-//    });
-//});
-//test('User Edits a Record', function (assert) {
-//    let rows = parseInt(this.$('[name=total_records]').text());
-//    this.render();
-//    assert.expect(1);
-//    click('[data-action=edit]:eq(0)');
-//    andThen(function () {
-//        //assert.equal($('.modal-title').html().trim(), 'Updating');
-//        click( $('[data-action=confirm]'));
-//        andThen(function () {
-//            assert.equal(find('[name=total_records]').text(), rows);
-//        });
-//    });
-//});
-//test('User attemps to delete a Record and cancels', function (assert) {
-//    this.render();
-//    assert.expect(2);
-//    let rows = this.$('table.table>tbody>tr').children().length;
-//    assert.equal($('table.table>tbody>tr').children().length, rows);
-//    click('[data-action=edit]:eq(0)');
-//    andThen(function () {
-//        click( $('[data-dismiss=modal]'));
-//        andThen(function () {
-//            assert.equal(find('table.table>tbody>tr').children().length, rows);
-//        });
-//    });
-//});
-//
-//
-//
-//
-//
-//
-//test('User deletes a Record', function (assert) {
-//    this.render();
-//    //let rows = this.$('table.table>tbody>tr').length;
-//    click('[data-action=delete]:eq(0)');
-//    andThen(function () {
-//        //equal($('#CrudTableDeleteRecordModal').html().trim(), "You're about to delete a record");
-//        click( $('[data-action=confirm]'));
-//        andThen(function () {
-//            assert.ok('Templates take to long to render, causeing async fail');
-//        });
-//    });
-//});
-//
-//test('User pushes a search', function (assert) {
-//    this.render();
-//    Ember.run(function () {
-//        component.set('SearchTerm', 'Data2');
-//        component.set('SearchField', 'Field1');
-//        click('[data-action=search]');
-//    });
-//    andThen(function () {
-//        assert.equal(component.get('SearchTerm'), 'Data2');
-//        assert.equal(component.get('SearchField'), 'Field1');
-//        assert.equal(component.get('ComplexModel').get('lastObject').get('lastObject').get('Value'), 'Data99', 'Complex Model not Updated');
-//        assert.equal(component.get('value').get('content').get('lastObject').get('Field1'), 'Data77');
-//    });
-//});
-//
-//// test('User interacts with pagination', function (assert) {
-////     this.render();
-////     tricky = 6;
-////     click('[data-action=search]');
-////     andThen(function () {
-////         assert.equal(find('[data-page]').length, 3);
-////         click('[data-page=2]');
-////         andThen(function () {
-////             click('[data-page=3]');
-////             andThen(function () {
-////                 //equal(find('[name=total_records]').text(), 3);
-////                 assert.ok("doesn't wait for promises");
-////             });
-////         });
-////     });
-//// });
-//test('User exports file to CSV', function (assert) {
-//    this.render();
-//    click('#tocsv');
-//    andThen(function () {
-//        assert.ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
-//    });
-//});
-//test('User exports file to TSV', function (assert) {
-//    this.render();
-//    click('#totsv');
-//    andThen(function () {
-//        assert.ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
-//    });
-//});
-//test('User exports file to JSON', function (assert) {
-//    this.render();
-//    click('#tojson');
-//    andThen(function () {
-//        assert.ok(component.get('dlf').getAttribute('href'), "Download File Not Generated");
-//    });
-//});
+test('Can Set Initial Variables', function (assert) {
+	assert.expect(4);
+	andThen(function () {
+		assert.equal(this.$("tbody>tr>td:eq(0)").text().replace(/\n|\r/igm, ""), "Data5");
+		assert.equal(this.$("tbody>tr>td:eq(1)").text().replace(/\n|\r/igm, ""), "Data7");
+		assert.equal(this.$("tbody>tr:eq(1)>td:eq(2)").text().replace(/\n|\r/igm, ""), "Data23");
+		assert.equal(this.$("thead>tr>th").length, 4);
+	});
+});
+test('User Creates a Record', function (assert) {
+	assert.expect(2);
+	tricky = 1;
+	this.$('[data-action=create]').click();
+	andThen(function () {
+		assert.equal(this.$('.modal-title').text().trim(), 'Add a New Record');
+		this.$('[data-action=confirm]').click();
+		andThen(function () {
+			assert.equal(this.$("tbody>tr:eq(2)>td:eq(2)").text().replace(/\n|\r/igm, ""), 'Data99');
+		});
+	});
+});
+test('User Edits a Record', function (assert) {
+	let rows = parseInt(this.$('[name=total_records]').text());
+	assert.expect(1);
+	this.$('[data-action=edit]:eq(0)').click();
+	andThen(function () {
+		this.$('[data-action=confirm]').click();
+		andThen(function () {
+			assert.equal(this.$('[name=total_records]').text(), rows);
+		});
+	});
+});
+test('User attemps to delete a Record and cancels', function (assert) {
+	assert.expect(2);
+	let rows = this.$('table.table>tbody>tr').children().length;
+	assert.equal(this.$('table.table>tbody>tr').children().length, rows);
+	this.$('[data-action=edit]:eq(0)').click();
+	andThen(function () {
+		this.$('[data-dismiss=modal]').click();
+		andThen(function () {
+			assert.equal(this.$('table.table>tbody>tr').children().length, rows);
+		});
+	});
+});
+test('User deletes a Record', function (assert) {
+	this.$('[data-action=delete]:eq(0)').click();
+	andThen(function () {
+		this.$('[data-action=confirm]').click();
+		andThen(function () {
+			assert.equal(this.$('table.table>tbody>tr').length, 3);
+		});
+	});
+});
+test('User pushes a search', function (assert) {
+	let that = this;
+	this.set('SearchTerm', 'Data2');
+	this.$("#SearchField").val('Field1');
+	this.$('[data-action=search]').click();
+	andThen(function () {
+		assert.equal(that.get('SearchTerm'), 'Data2');
+		assert.equal(that.get('SearchField'), 'Field1');
+		console.log(this.$('tbody>tr').length);
+		//		console.log(that.get('ComplexModel'));
+		//		assert.equal(that.get('ComplexModel')[2].get('Value'), 'Data99', 'Complex Model not Updated');
+		//		assert.equal(that.get('value').get('content').get('lastObject').get('Field1'), 'Data77');
+	});
+});
+test('User interacts with pagination', function (assert) {
+	tricky = 30;
+	this.$('[data-action=search]').click();
+	andThen(function () {
+		assert.equal(this.$('[data-page]').length, 3);
+		this.$('[data-page=2]').click();
+		andThen(function () {
+			this.$('[data-page=3]').click();
+			andThen(function () {
+				//equal(find('[name=total_records]').text(), 3);
+				assert.ok("doesn't wait for promises");
+			});
+		});
+	});
+});
+test('User exports file to CSV', function (assert) {
+	assert.expect(1);
+	this.$('#tocsv').click();
+	andThen(function(){
+		assert.ok(this.$("#dlf").text().indexOf("csv")>0, "Download File Not Generated");
+	});
+});
+test('User exports file to TSV', function (assert) {
+	this.$('#totsv').click();
+	andThen(function(){
+		assert.ok(this.$("#dlf").text().indexOf("tsv")>0, "Download File Not Generated");
+	});
+});
+test('User exports file to JSON', function (assert) {
+	this.$('#tojson').click();
+	andThen(function(){
+		console.log(this.$("#dlf").text());
+		assert.ok(this.$("#dlf").text().indexOf("json")>0, "Download File Not Generated");
+	});
+});
+test('User exports file to SQL', function (assert) {
+	this.$('#tosql').click();
+	andThen(function(){
+		assert.ok(this.$("#dlf").text().indexOf("sql")>0, "Download File Not Generated");
+	});
+});

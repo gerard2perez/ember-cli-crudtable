@@ -5,6 +5,7 @@
 *.ember-try
 /dist
 /tmp
+/tmp/*
 
 # dependencies
 /node_modules
@@ -18,3 +19,4 @@
 npm-debug.log
 testem.log
 .DS_Store
+/tmp/

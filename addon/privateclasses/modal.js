@@ -44,11 +44,14 @@ export default {
 		$('body').append($("#CrudTableDeleteRecordModal"));
 	},
 	hide() {
-		$("#CrudTableDeleteRecordModal").modal('hide');
-
+		if(this.target.modal){
+			this.target.modal('hide');
+		}
 	},
 	show() {
 		this.promise = Ember.RSVP.defer('crud-table#showingmodal');
-		this.target.modal('show');
+		if(this.target.modal){
+			this.target.modal('show');
+		}
 	}
 }

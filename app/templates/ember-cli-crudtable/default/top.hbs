@@ -5,11 +5,11 @@
 			<i class="glyphicon glyphicon-export icon-share"></i>
 			<span class="caret"></span>
 		</button>
-		<ul class="dropdown-menu">
-			<li><a {{action 'toCSV' this}}>To CSV</a></li>
-			<li><a {{action 'toTSV' this}}>To TSV</a></li>
-			<li><a {{action 'toJSONObject' this}}>To JSON</a></li>
-			<li><a {{action 'toSQL' this}}>To SQL</a></li>
+		<ul class="dropdown-menu" >
+			<li><a id="tocsv" {{action 'toCSV' this}}>To CSV</a></li>
+			<li><a id="totsv" {{action 'toTSV' this}}>To TSV</a></li>
+			<li><a id="tojson" {{action 'toJSONObject' this}}>To JSON</a></li>
+			<li><a id="tosql" {{action 'toSQL' this}}>To SQL</a></li>
 		</ul>
 	</div>
 	{{/if}} {{#if this.canFilter}}

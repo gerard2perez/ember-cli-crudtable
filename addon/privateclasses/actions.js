@@ -1,7 +1,7 @@
 import modal from './modal';
 import ComplexModel from '../privateclasses/complexmodel';
 
-export let fieldDefinition=[];
+export let fieldDefinition = [];
 export let lastquery = {};
 export function metadata(component, records) {
 	let meta = records.get("meta");
@@ -33,7 +33,8 @@ const exportData = function (component, format, joinchar) {
 	let link = document.createElement("a");
 	link.setAttribute("href", content);
 	link.setAttribute("download", component.get('paginator').get('name') + "." + format);
-	component.set('dlf', link);
+	component.set('dlf', content);
+	let download = link.click !== null;
 	if (link.click) {
 		link.click();
 	}
@@ -84,7 +85,19 @@ export let actions = {
 			this.get('ComplexModel').forEach(function (model) {
 				let row = {};
 				model.forEach(function (field) {
-					row[field.Field] = field.Value;
+					switch (field.Type) {
+					case 'many-multi':
+						row[field.Field] = [];
+						field.Display.forEach(function (info) {
+							if (info.Added) {
+								row[field.Field].push(info.Routed.id * 1);
+							}
+						});
+						break;
+					default:
+						row[field.Field] = field.Value;
+						break;
+					}
 				});
 				data.push(row);
 			});
@@ -93,7 +106,7 @@ export let actions = {
 			let link = document.createElement("a");
 			link.setAttribute("href", encodedUri);
 			link.setAttribute("download", this.get("_table") + ".json");
-			this.set('dlf', link);
+			this.set('dlf', csvContent);
 			if (link.click) {
 				link.click();
 			}
@@ -111,17 +124,19 @@ export let actions = {
 				let columns = [];
 				let values = [];
 				model.forEach(function (field) {
-					columns.push(field.Field);
-					values.push(field.Value);
+					if (field.Type != 'many-multi') {
+						columns.push(field.Field);
+						values.push(field.Value);
+					}
 				});
 				data.push("INSERT INTO " + component.get('_table') + "(" + columns.join(",") + ") VALUES('" + values.join("','") + "')");
 			});
-			let csvContent = "data:text/sql;charset=utf-8," + data.join("\n");
-			let encodedUri = encodeURI(csvContent);
+			let sqlString = "data:text/sql;charset=utf-8," + data.join("\n");
+			let encodedUri = encodeURI(sqlString);
 			let link = document.createElement("a");
 			link.setAttribute("href", encodedUri);
 			link.setAttribute("download", this.get('_table') + ".sql");
-			this.set('dlf', link);
+			component.set('dlf', sqlString);
 			if (link.click) {
 				link.click();
 			}
@@ -315,7 +330,7 @@ export let actions = {
 						records.push(record);
 					}
 					ComplexModel.update(component);
-					component.set('currentRecord', component.get('ComplexModel').get('lastObject'));
+					component.set('currentRecord', component.get('ComplexModel')[component.get('ComplexModel').length - 1]);
 					modal.show();
 				},
 				function () {
