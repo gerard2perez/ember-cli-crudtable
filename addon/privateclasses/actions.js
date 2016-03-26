@@ -345,14 +345,12 @@ export let actions = {
 			modal.show();
 		},
 		internal_delete(record) {
-
 			this.set('newRecord', false);
 			this.set('isDeleting', true);
 			this.set('currentRecord', record);
 			modal.show();
 		},
 		intetnal_setlimit(limit) {
-
 			limit = limit === "all" ? this.get('paginator').get('total') : limit;
 			this.get('paginator').set('limit', limit);
 			this.get('paginator').getBody(1, lastquery);

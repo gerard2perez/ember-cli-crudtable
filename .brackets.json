@@ -1,4 +1,5 @@
 {
+	"sortDirectoriesFirst": true,
 	"jscodehints.detectedExclusions": [
 		"tmp",
         "bower_components",
