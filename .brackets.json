@@ -1,8 +1,9 @@
 {
-    "jscodehints.detectedExclusions": [
+	"sortDirectoriesFirst": true,
+	"jscodehints.detectedExclusions": [
+		"tmp",
         "bower_components",
         "node_modules",
-	".node_modules.ember-try",
-        "tmp"
+		".node_modules.ember-try"
     ]
 }

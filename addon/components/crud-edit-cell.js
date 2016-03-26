@@ -1,18 +1,19 @@
 import Ember from 'ember';
 import password from '../privateclasses/passgen';
 export default Ember.Component.extend({
-	Display: function () {
+	Display: Ember.computed('record', function () {
+		console.log(this.get('record'));
 		return this.get('record.Display');
-	}.property('record'),
-	Value: function () {
+	}),
+	Value: Ember.computed('record', function () {
 		return this.get('record.Value');
-	}.property('record'),
-	layoutName: function () {
+	}),
+	layoutName: Ember.computed('record', function () {
 		if (this.get('record.ReadOnly')) {
 			return null;
 		}
 		return 'ember-cli-crudtable/edit-cell-' + this.get('record.Type');
-	}.property('record'),
+	}),
 	parent: null,
 	belongsToCallback: 'internal_choose',
 	generic_callback: 'generic_callback',
