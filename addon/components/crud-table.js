@@ -80,7 +80,7 @@ export default Ember.Mixin.create({
 				let label_cfg = Ember.Object.create({
 					Visible: true,
 					Key: key,
-					Display: component.fields[key].Label,
+					Display: component.fields[key].Label || key,
 					Search: component.fields[key].Search || false,
 					Order: 0,
 					Order_ASC: false,

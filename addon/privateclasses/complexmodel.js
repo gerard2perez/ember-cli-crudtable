@@ -53,7 +53,7 @@ const CustomField = Ember.Object.extend({
 let newCustomField = function (component, field, data,row) {
 	return CustomField.create({
 		_field_cfg: component.get('labels')[field],
-		Field: field,
+		Field: row[field]===undefined ? field.toLowerCase() : field,
 		Value: data,
 		Choose: component.fields[field].OnChoose,
 		Display: dateformat.format(data, component.fields[field].Format),

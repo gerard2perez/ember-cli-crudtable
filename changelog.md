@@ -1,3 +1,8 @@
+# v1.1.1
+1. Fixed a bug with ember-data RESTAdpater (v2.5.0+).
+1. Default Label for fields.
+1. Remove htmlbars deprecation.
+
 # v1.1.0
 1. Remove the bootstrap dependency.
 1. Added support for custom paginators.
