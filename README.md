@@ -35,6 +35,34 @@ ember install ember-cli-crudtable
 
 > All the classes which the plug-in uses are from bootstrap framework.
 
+So you can install Bootsrap
+
+```bash
+bower install bootstrap --save
+```
+
+And don't forget to add these lines to ember-cli-build.js
+
+```javascript
+	app.import('bower_components/bootstrap/dist/js/bootstrap.js');
+    app.import('bower_components/bootstrap/dist/css/bootstrap.css');
+    app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', {
+        destDir: 'fonts'
+    });
+    app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', {
+        destDir: 'fonts'
+    });
+    app.import('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff2', {
+        destDir: 'fonts'
+    });
+```
+
+just before:
+
+```javascript
+return app.toTree();
+```
+
 ---
 
 ##How to use it
@@ -49,7 +77,7 @@ The field definition is this:
 field_name:{
 	Label:'label_to_show_on_table_header',
 	Display:'field_which_contain_data_to_show',
-	Type: 'any_of_the_supported_datatypes,
+	Type: 'any_of_the_supported_datatypes',
 	Zoom:'zoom_value_for_google_map_type'
 	ReadOnly: true || false,
 	Search: false || true
@@ -320,6 +348,7 @@ export default Ember.Object.extend(pagination);
 Easy, if you don't like the links that are generated you can override the **generateLinks()** functions from the paginator mixin.
 
 Just remember this:
+
 1. You must set the **links** parameter with and array of links.
 1. The link object is like this:
 

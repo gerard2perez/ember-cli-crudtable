@@ -45,14 +45,15 @@ const CustomField = Ember.Object.extend({
 	Suffix: null,
 	Prefix: null,
 	OnChoose: null,
-	_field_cfg: null,
-	Visible: Ember.computed.oneWay('_field_cfg.Visible'),
+	_lbl_field_cfg: null,
+	Visible: Ember.computed.oneWay('_lbl_field_cfg.Visible'),
 	listener: Ember.observer('Value', function () {}),
 	googlefield: Ember.observer('Display', function () {})
 });
 let newCustomField = function (component, field, data,row) {
 	return CustomField.create({
-		_field_cfg: component.get('labels')[field],
+		_lbl_field_cfg: component.get('labels')[field],
+		_field_cfg:component.fields[field],
 		Field: row[field]===undefined ? field.toLowerCase() : field,
 		Value: data,
 		Choose: component.fields[field].OnChoose,
