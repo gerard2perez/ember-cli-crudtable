@@ -1,3 +1,6 @@
+# v1.1.2
+1. Now the update modal shows the field name if no label is set.
+
 # v1.1.1
 1. Fixed a bug with ember-data RESTAdpater (v2.5.0+).
 1. Default Label for fields.
