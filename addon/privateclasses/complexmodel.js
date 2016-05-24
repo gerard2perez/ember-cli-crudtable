@@ -61,7 +61,7 @@ let newCustomField = function (component, field, data,row) {
 		List: component.fields[field].List === false ? false : true,
 		Suffix: component.fields[field].Suffix,
 		Prefix: component.fields[field].Prefix,
-		Label: component.fields[field].Label,
+		Label: component.fields[field].Label || field,
 		Edit: component.fields[field].Edit || component.fields[field].ReadOnly || false,
 		Create: component.fields[field].Create || false,
 		Type: component.fields[field].Type || 'text',
