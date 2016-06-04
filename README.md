@@ -277,7 +277,7 @@ export default DS.Model.extend({
 import CTABLE from 'ember-cli-crudtable/mixins/crud-controller';
 import Ember from 'ember'
 
-ley CrudTable = CTABLE('school');
+let CrudTable = CTABLE('school');
 export default Ember.ObjectController.extend(CrudTable,{
 	fieldDefinition:{
 		Name:{Label:'School'},
