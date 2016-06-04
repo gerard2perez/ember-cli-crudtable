@@ -288,7 +288,7 @@ export default Ember.ObjectController.extend(CrudTable,{
 		},
 		Location:{
 			Label:'Google Map',
-			Type:'googlemap'
+			Type:'googlemap',
 			Display:'City',
 			Zoom:'Zoom'
 		},
