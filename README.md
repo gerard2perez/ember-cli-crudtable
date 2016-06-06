@@ -105,10 +105,10 @@ These variables are completely optional, if you're using the integrated mixin fo
 
 Datatypes allow to make a custom predefined render of the data in the table, currently supported datatypes are:
 
-1. **text**: It just render the informatión without any decoration, in edition mode it renders a input text.
+1. **text**: It just render the information without any decoration, in edition mode it renders a input text.
 2. **image**: It assumes that information if an url so it renders the image. In edition mode it render a input text.
 3. **email**: Displays the email along with a button to mail the receiver, in edition mode it renders a input email.
-4. **googlemap**: Render a link that shows a modal windown with the location it is important to notice this Type of field is by default ReadOnly.
+4. **googlemap**: Render a link that shows a modal window with the location it is important to notice this Type of field is by default ReadOnly.
 
 
 
@@ -119,16 +119,16 @@ You must put your templates under */templates/**ember-cli-crudtable**/template_n
 
 These are the current aviable templates to overwrite:
 
-###Handlebars templates for data Read
+###htmlbars templates for data Read
 
 * table-cell-googlemap
 * table-cell-text
 * table-cell-image
 
-You can access the data in handeblar using the next object
+You can access the data in htmlbars using the next object
 
 ```javascript
-recod = {
+record = {
 	Field:'field_name',
 	Value:'field_value',
 	Display:'mask_field_value',
@@ -138,14 +138,14 @@ recod = {
 
 ---
 
-###Handlebars templates for data creation/update
+###htmlbars templates for data creation/update
 
 * edit-cell-googlemap
 * edit-cell-text
 * edit-cell-image
 * edit-cell-many-multi
 
-You can access the data in handeblar using the next object
+You can access the data in htmlbars using the next object
 
 ```javascript
 record = {
@@ -158,7 +158,7 @@ record = {
 
 ---
 
-###Other handlebars templates
+###Other htmlbars templates
 **modal-googlemap**
 
 Contains the definition for what will be shown in the modal window when, a googlemap field is defined.
@@ -177,7 +177,7 @@ This template contains the hole definition of the model window, by **the moment 
 **table-row**
 
 This template recives a full row which be iterated through the *model* property.
-The template uses de **crud-cell** helper to determine which templete is goin to be rendered.
+The template uses de **crud-cell** helper to determine which templete is going to be rendered.
 
 
 **table-update**
@@ -185,16 +185,16 @@ The template uses de **crud-cell** helper to determine which templete is goin to
 This template is render inside the modal window and calls every template labeled edit-cell-*datatype* this template also calls the **crud-edit-cell** helper in order to determine which template is going to be rendered.
 
 ##Hiding Edit,Delete,Create, Exports
-All these commands can be hidden if you need just by setting to null their corresponding action in the handlebars herlper.
+All these commands can be hidden if you need just by setting to null their corresponding action in the htmlbars helper.
 
-```handlebars
+```htmlbars
 {{crud-table
 	createRecord=null
 	deleteRecord=null
 	updateRecord=null
 	exports=false
-	
-	fields=fieldDefinition	
+
+	fields=fieldDefinition
 }}
 ```
 
@@ -217,9 +217,9 @@ And will use the Display field has the property that will show the information f
 
 ##Data Pulling
 
-ember-cli-crudtable has the hability to indicate and interval of time for reloading all data from the server.
+ember-cli-crudtable has the ability to indicate and interval of time for reloading all data from the server.
 
-You can do this by setting the **pulling** ley in the template to the time you like to pull in milliseconds.
+You can do this by setting the **pulling** let in the template to the time you like to pull in milliseconds.
 The default value if false (no pulling).
 
 ##Controller Configuration
@@ -229,7 +229,7 @@ You can use this very same code when creating your controller and the only thing
 import CTABLE from 'ember-cli-crudtable/mixins/crud-controller';
 import Ember from 'ember'
 
-ley CrudTable = CTABLE('school');
+let CrudTable = CTABLE('school');
 export default Ember.ObjectController.extend(CrudTable);
 ```
 
@@ -240,7 +240,7 @@ export default Ember.ObjectController.extend(CrudTable);
 import Ember from 'ember';
 import config from './config/environment';
 
-ley Router = Ember.Router.extend({
+let Router = Ember.Router.extend({
     location: config.locationType,
     rootURL: config.baseURL
 });
@@ -257,7 +257,7 @@ export default Router;
 //app/models/school.js
 import DS from 'ember-data';
 
-ley attr = DS.attr;
+let attr = DS.attr;
 
 export default DS.Model.extend({
     Name: attr('string'),
@@ -266,7 +266,7 @@ export default DS.Model.extend({
     Zoom:attr('number'),
     Address: attr('string'),
     CP: attr('string'),
-    Responsable:attr('string'),
+    Responsible:attr('string'),
     AmountStudents:attr('number')
 });
 
@@ -281,7 +281,7 @@ let CrudTable = CTABLE('school');
 export default Ember.ObjectController.extend(CrudTable,{
 	fieldDefinition:{
 		Name:{Label:'School'},
-		Responsable:{
+		Responsible:{
 			Label:'Manager',
 			Type:'text',
 			Search: true
@@ -297,12 +297,12 @@ export default Ember.ObjectController.extend(CrudTable,{
 ```
 
 
-```handlebars
+```htmlbars
 //app/templates/schools/index.hbs
-{{crud-table 
+{{crud-table
 fields=fieldDefinition -- NOW It Should be an object defined in the controller
 deleteRecord='delete'
-updateRecord='update' 
+updateRecord='update'
 createRecord='create'}}
 ```
 
@@ -334,7 +334,7 @@ This request is equivalent to show 10 records by page and therefore it will be s
 The mixin calls and update function which set's all the internal values.
 
 ###Extending the paginator
-if you need to change the paginator behavor you should create a file in **app/paginator/crudtable.js**
+if you need to change the paginator behavior you should create a file in **app/paginator/crudtable.js**
 The next snippet is the default *paginator* implementation (which works with Sails.js and the Advanced Blueprints).
 
 ```javascript
@@ -355,7 +355,7 @@ Just remember this:
 ```javascript
 {
 	page: <<number>> ,
-	current: true | false 
+	current: true | false
 }
 ```
 
@@ -365,9 +365,9 @@ you can always override the template located in:
 **app/templates/ember-cli-crudtable/default/pagination.hbs**
 
 ## Creating your own datatype
-When You're defining the Type field in the controller yuo can especify a generic one.
+When You're defining the Type field in the controller you can specify a generic one.
 
-Let's supose you want the field to have a link to some detail information, and we will define a Type **link**.
+Let's suppose you want the field to have a link to some detail information, and we will define a Type **link**.
 
 So our controller will contain a field definition like this:
 
@@ -383,21 +383,21 @@ In order to complete our goal we have to create a template file under **template
 
 The definition of the template can be like this:
 
-```handlebars
+```htmlbars
 <!--app/templates/ember-cli-crudtable/table-cell-link.hbs-->
-{{#link-to 'school.profesors' parent.RoutedRecord}}
+{{#link-to 'school.professors' parent.RoutedRecord}}
 	<span class="label label-primary pull-right" style="cursor:pointer">
 	<i class="glyphicon glyphicon-user" style="cursor:pointer"></i>
-	View All Profesors
+	View All Professors
 	</span>
 {{/link-to}}
 ```
 
-That's all. You'll have a new field rendered as a link which is pointing to 'school.profesors' route.
+That's all. You'll have a new field rendered as a link which is pointing to 'school.professors' route.
 
 
 ##Upcoming
 I'll create a website to show some examples if the downloads still increasing, thank you for using it.
 
-I'm in a little hurry but as soon as posible i'll be adding more features and also providing a more detailed doc about the functions.
+I'm in a little hurry but as soon as possible i'll be adding more features and also providing a more detailed doc about the functions.
 But try it, is quite simple to have your fully functional CRUD application.
