@@ -1,3 +1,8 @@
+# v1.2.0
+1. Added support to required, placeholder and pattern HTML attributes.
+2. Support browser validations.
+3. Paginator won't lose the current page reference.
+
 # v1.1.2
 1. Now the update modal shows the field name if no label is set.
 

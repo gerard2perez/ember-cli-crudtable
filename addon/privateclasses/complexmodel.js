@@ -29,6 +29,8 @@ const checkvals = function (cmp, records, cfield, field) {
 	}
 };
 const CustomField = Ember.Object.extend({
+	IsRequired:null,
+	Pattern:null,
 	Format: null,
 	Field: null,
 	Value: null,
@@ -45,6 +47,7 @@ const CustomField = Ember.Object.extend({
 	Suffix: null,
 	Prefix: null,
 	OnChoose: null,
+	PlaceHolder:null,
 	_lbl_field_cfg: null,
 	Visible: Ember.computed.oneWay('_lbl_field_cfg.Visible'),
 	listener: Ember.observer('Value', function () {}),
@@ -52,6 +55,9 @@ const CustomField = Ember.Object.extend({
 });
 let newCustomField = function (component, field, data,row) {
 	return CustomField.create({
+		PlaceHolder:component.fields[field].PlaceHolder || null,
+		IsRequired:component.fields[field].IsRequired || false,
+		Pattern:component.fields[field].Pattern || null,
 		_lbl_field_cfg: component.get('labels')[field],
 		_field_cfg:component.fields[field],
 		Field: row[field]===undefined ? field.toLowerCase() : field,

@@ -2,11 +2,16 @@ import Ember from 'ember';
 import password from '../privateclasses/passgen';
 export default Ember.Component.extend({
 	Display: Ember.computed('record', function () {
-		console.log(this.get('record'));
 		return this.get('record.Display');
 	}),
 	Value: Ember.computed('record', function () {
 		return this.get('record.Value');
+	}),
+	IsRequired:Ember.computed('record',function(){
+		return this.get('record.IsRequired');
+	}),
+	Pattern:Ember.computed('record',function(){
+		return this.get('record.Pattern');
 	}),
 	layoutName: Ember.computed('record', function () {
 		if (this.get('record.ReadOnly')) {

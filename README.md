@@ -17,6 +17,7 @@ This component is compatible with bootstrap and ember-data.
 5. Search by field
 6. Pagination
 7. Export to CSV, TSV, JSON
+8. Browser validations
 
 ___
 
@@ -80,7 +81,10 @@ field_name:{
 	Type: 'any_of_the_supported_datatypes',
 	Zoom:'zoom_value_for_google_map_type'
 	ReadOnly: true || false,
-	Search: false || true
+	Search: false || true,
+	IsRequired: true || false,
+	Pattern:'regex_expressopm_to_satisfy',
+	PlaceHolder:'HTML_placeholder_value'
 }
 ```
 ** *If not clear please check the example at the end* **.
@@ -132,7 +136,10 @@ record = {
 	Field:'field_name',
 	Value:'field_value',
 	Display:'mask_field_value',
-	ReadOnly: true || false
+	ReadOnly: true || false,
+	IsRequired: true || false,
+	Pattern:'regex_expressopm_to_satisfy',
+	PlaceHolder:'HTML_placeholder_value'
 }
 ```
 
@@ -152,7 +159,10 @@ record = {
 	Field:'field_name',
 	Value:'field_value',
 	Display:'mask_field_value'
-	ReadOnly: true || false
+	ReadOnly: true || false,
+	IsRequired: true || false,
+	Pattern:'regex_expressopm_to_satisfy',
+	PlaceHolder:'HTML_placeholder_value'
 }
 ```
 

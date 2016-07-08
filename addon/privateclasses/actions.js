@@ -160,7 +160,7 @@ export let actions = {
 				}
 			});
 			let query = {};
-			component.get('paginator').getBody(0, query);
+			component.get('paginator').getBody(1, query);
 			query[field] = component.get('SearchTerm');
 			if (query[field] === "") {
 				delete query[field];
@@ -173,8 +173,13 @@ export let actions = {
 			let deferred;
 			this.set('isLoading', true);
 			if (component.get('newRecord')) {
-				deferred = Ember.RSVP.defer('crud-table#createRecord');
-				component.sendAction('createRecord', component.get('currentRecord').RoutedRecord, deferred);
+				deferred = Ember.RSVP.defer('crud-table#createRecord');				
+				if($("#crudatable-update-data")[0].checkValidity()){
+					component.sendAction('createRecord', component.get('currentRecord').RoutedRecord, deferred);
+				}else{
+					$("#crudatable-update-data-submit").click();
+					deferred.reject(false);
+				}
 			} else if (component.get('showMap')) {
 				let record = component.get('currentRecord');
 				let map;

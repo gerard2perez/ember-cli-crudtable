@@ -1,8 +1,8 @@
-<form method="get" class="form-horizontal">
+<form method="post" class="form-horizontal" id="crudatable-update-data">
     {{#each currentRecord key="@index" as |record index|}}
     	{{#unless record.Edit}}
         	{{crud-edit-cell record=record parent=currentRecord}}
-        	<div class="hr-line-dashed"></div>
         {{/unless}}
     {{/each}}
+    <input type="submit" id="crudatable-update-data-submit" style="display:none;">
 </form>

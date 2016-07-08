@@ -6,6 +6,10 @@
             <span  class="input-group-addon" id="basic-addon2">{{record.Prefix}}</span>
             {{/if}}
         		{{input
+              placeholder=record.PlaceHolder
+              pattern=record.Pattern
+              required=record.IsRequired
+              type=record.Type
             style=" {{if record.Prefix 'color:#000;' 'border-top-left-radius: 4px;border-bottom-left-radius: 4px;'}}"
              value=record.Value type="text" class="form-control"}}
              {{#if record.Suffix}}
