@@ -40,8 +40,7 @@
     "ember-load-initializers": "^0.5.0",
     "ember-qunit": "^0.4.20",
     "ember-resolver": "^2.0.3",
-    "loader.js": "^4.0.0",
-    "npm-version": "^1.1.0"
+    "loader.js": "^4.0.0"
   },
   "keywords": [
     "ember-addon",
