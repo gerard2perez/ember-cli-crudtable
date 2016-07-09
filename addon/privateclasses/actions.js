@@ -219,13 +219,9 @@ export let actions = {
 					component.sendAction('updateRecord', record.RoutedRecord, deferred);
 				});
 			} else {
-				if (component.get('isDeleting')) {
-					deferred = Ember.RSVP.defer('crud-table#deleteRecord');
-					component.sendAction('deleteRecord', component.get('currentRecord').RoutedRecord, deferred);
-				} else {
-					deferred = Ember.RSVP.defer('crud-table#updateRecord');
-					component.sendAction('updateRecord', component.get('currentRecord').RoutedRecord, deferred);
-				}
+				let action = component.get('isDeleting') ? 'deleteRecord':'updateRecord';
+				deferred = Ember.RSVP.defer(`crud-table#${action}`);
+				component.sendAction(action, component.get('currentRecord').RoutedRecord, deferred);
 			}
 			let updateview = Ember.RSVP.defer('crud-table#pagination');
 			deferred.promise.then(function () {
