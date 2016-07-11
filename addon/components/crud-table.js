@@ -56,6 +56,7 @@ export default Ember.Mixin.create({
 	notEdition: true,
 	SearchTerm: "",
 	SearchField: "",
+	SelectFilterProperty:"filterproperty",
 	Callback: null,
 	value: [],
 	layoutName: 'ember-cli-crudtable/default/base',
@@ -67,17 +68,20 @@ export default Ember.Mixin.create({
 	labels: [],
 	exports: true,
 	CurrentState: null,
+	newFilter:null,
+	filterset:[],
 	actions:actions,
 	init: function () {
 		component = this;
 		component.get('paginator').init();
-		component.set('labels', []);
+		component.set('labels', Ember.ArrayProxy.create({ content: [] }));
 		Object.keys(component.get('fields')).forEach(function (key) {
 			if (component.fields[key].Default !== undefined) {
 				fieldDefinition[key] = component.fields[key].Default;
 			}
 			if (component.fields[key].List !== false) {
 				let label_cfg = Ember.Object.create({
+					Type:component.fields[key].Type || "text",
 					Visible: true,
 					Key: key,
 					Display: component.fields[key].Label || key,
@@ -86,7 +90,7 @@ export default Ember.Mixin.create({
 					Order_ASC: false,
 					Order_DESC: false
 				});
-				component.get('labels').push(label_cfg);
+				component.get('labels').addObject(label_cfg);
 				component.get('labels')[key] = label_cfg;
 			}
 			if (component.fields[key].Source !== undefined) {
@@ -96,13 +100,13 @@ export default Ember.Mixin.create({
 				component.set('sideLoad', component.fields[key].Source);
 				component.sendAction('sideLoad', deferred);
 				deferred.promise.then(function (arr) {
-						let dep = component.get('dependants') || {};
+						let dep = component.get('dependants') || Ember.Object.create({});
 						dep[component.fields[key].Source] = arr;
 						component.set('dependants', dep);
 						component.set('sideLoad', null);
 					},
 					function (data) {
-						let dep = component.get('dependants') || {};
+						let dep = component.get('dependants') || Ember.Object.create({});
 						dep[component.fields[key].Source] = {
 							isLoaded: true
 						};
@@ -121,6 +125,7 @@ export default Ember.Mixin.create({
 		component.addObserver('pulling', function () {
 			PULL(component);
 		});
+		component.get('filterset').init(component.filters||[]);
 		this._super(...arguments);
 	},
 	didInsertElement: function () {

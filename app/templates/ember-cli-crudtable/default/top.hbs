@@ -12,7 +12,8 @@
 			<li><a id="tosql" {{action 'toSQL' this}}>To SQL</a></li>
 		</ul>
 	</div>
-	{{/if}} {{#if this.canFilter}}
+	{{/if}}
+	{{#if this.canFilter}}
 	<div class="keep-open btn-group" role="group">
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class="glyphicon glyphicon-th icon-th"></i>
@@ -28,7 +29,8 @@
 			{{/each}}
 		</ul>
 	</div>
-	{{/if}} {{#if this.canRefresh}}
+	{{/if}} 
+	{{#if this.canRefresh}}
 	<button class="btn btn-default" type="button" name="refresh" title="Refresh"><i class="glyphicon glyphicon-refresh icon-refresh" {{action 'internal_reload'}}></i></button>
 	{{/if}} {{#if this.createRecord}}
 	<button class="btn btn-primary " type="button" data-action="create" {{action 'internal_create' this.value}}>

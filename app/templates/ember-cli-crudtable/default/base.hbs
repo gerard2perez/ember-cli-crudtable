@@ -1,4 +1,6 @@
 <div id="emberclicrudtableconfirm" style="display:none" {{action "confirm"}}></div>
+
+{{partial 'ember-cli-crudtable/default/filterset'}}
 <div class='row'>{{partial 'ember-cli-crudtable/default/top'}}</div>
 <div class='table-responsive fixed-table-container'>{{partial 'ember-cli-crudtable/default/body'}}</div>
 {{#if this.paginator.render}}

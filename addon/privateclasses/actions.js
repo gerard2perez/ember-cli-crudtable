@@ -65,9 +65,67 @@ export function _getRequest(component, deferred, done, fail) {
 		});
 }
 export let actions = {
+
+	internal_filterset(){
+		this.set('newFilter',Ember.ArrayProxy.create({ content: [] }));
+		this.newFilter.addObject(this.filterset.create());
+	},
+	RemoveFilter(filter){
+		this.filterset.list.removeObject(filter);
+	},
+	AddFilter(link){
+		/*if(!this.newFilter.Condition || !this.newFilter.Key || !this.newFilter.Value){
+			console.log("This needs Something elese");
+		}else{
+			this.filterset.Add(this.newFilter);
+			this.newFilter.set('Key',null);
+			this.newFilter.set('Type',null);
+			this.newFilter.set('Options',null);
+		}*/
+		this.filterset.Add(this.newFilter,link);
+	},
+	RemoveCondition(filter){
+		this.newFilter.removeObject(filter);
+	},
+	OrCondition(filter){
+		filter.set('Link','or');
+		this.newFilter.addObject(this.filterset.create());
+	},
+	AndCondition(filter){
+		filter.set('Link','and');
+		this.newFilter.addObject(this.filterset.create());
+	},
+	CancelFilter(){
+		this.set('newFilter',null);
+	},
+	SelectFilterProperty(filter,property){
+		let selectobject=false;
+		filter.set('Key',this.labels[property].Key);
+		filter.set('Type',this.labels[property].Type);
+		switch(filter.Type){
+			case 'number':
+			case 'text':
+				break;
+			case 'many-multi':
+				selectobject={};
+				this.dependants[this.fields[property].Source].forEach((element)=>{
+					selectobject[element.id]=element.get(this.fields[property].Display);
+				});
+				break;
+		}
+		filter.set('SelectObject',selectobject);
+		filter.set('Options',this.filterset[this.labels[property].Type]);
+		
+	},
+	SelectFilterValue(filter,value){
+		filter.set('Value',value);
+	},
+	SelectFilterConditon(filter,value){
+		filter.set('Condition',value);
+	},
 	select(record) {
-			this.set('currentRecord', record);
-		},
+		this.set('currentRecord', record);
+	},
 		generic_callback() {
 			this.set('Callback', arguments[0]);
 			delete arguments[0];
@@ -144,6 +202,7 @@ export let actions = {
 		goto(page) {
 			if (page > 0 && this.get('paginator').get('current') !== page) {
 				this.get('paginator').getBody(page, lastquery);
+				this.get('filterset').getBody(lastquery);
 				makeRequest(this, lastquery);
 			}
 		},
@@ -166,6 +225,7 @@ export let actions = {
 				delete query[field];
 			}
 			lastquery = query;
+			this.get('filterset').getBody(lastquery);
 			makeRequest(component, lastquery);
 		},
 		confirm() {
@@ -228,6 +288,7 @@ export let actions = {
 				if (component.get('paginator') !== undefined) {
 					let paginator = component.get('paginator');
 					paginator.getBody(paginator.get('pages'), lastquery);
+					this.get('filterset').getBody(lastquery);
 				} else {
 					delete lastquery.page;
 				}
@@ -355,6 +416,7 @@ export let actions = {
 			limit = limit === "all" ? this.get('paginator').get('total') : limit;
 			this.get('paginator').set('limit', limit);
 			this.get('paginator').getBody(1, lastquery);
+			this.get('filterset').getBody(lastquery);
 			makeRequest(this, lastquery);
 		},
 		internal_reload() {
