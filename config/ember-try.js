@@ -1,11 +1,12 @@
 /*jshint node:true*/
 module.exports = {
 	bowerOptions: ['--silent', '--quiet'],
-	scenarios: [{
+	scenarios: [
+	{
 			name: 'minimun',
 			bower: {
 				dependencies: {
-					'ember': '2.4.3'
+					'ember': '2.4.6'
 				}
 			}
     }, {

@@ -84,7 +84,7 @@ let newCustomField = function (component, field, data,row) {
 			component.set('Edit', component.fields[field].Edit || component.get('Type') === "googlemap");
 		})
 	});
-}
+};
 const TypeAdjustments = function (component, Type, field, data, cfield, row) {
 	let fobj = component.get('fields')[field];
 	switch (Type) {
@@ -115,7 +115,7 @@ const TypeAdjustments = function (component, Type, field, data, cfield, row) {
 		break;
 	}
 	return cfield;
-}
+};
 export default {
 	update(component) {
 		const trytest = component.get('value').get('isLoaded') === true ? component.get('value') : component.get('value').get('content');
@@ -131,12 +131,11 @@ export default {
 					Type = inherits[1];
 					cfield.set('Type', inherits[0]);
 				}
-				cfield = TypeAdjustments(component, Type, field, data, cfield, row);
-				CustomProperties[field] = cfield;
+				CustomProperties[field] = new TypeAdjustments(component, Type, field, data, cfield, row);
 				try {
-					CustomProperties.pushObject(cfield);
+					CustomProperties.pushObject(CustomProperties[field]);
 				} catch (e) {
-					CustomProperties.push(cfield);
+					CustomProperties.push(CustomProperties[field]);
 				}
 			});
 			CustomProperties.RoutedRecord = row;

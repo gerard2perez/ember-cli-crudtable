@@ -1,3 +1,4 @@
+/*globals $*/
 import Ember from 'ember';
 import ComplexModel from './complexmodel';
 
@@ -54,4 +55,4 @@ export default {
 			this.target.modal('show');
 		}
 	}
-}
+};

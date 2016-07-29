@@ -1,3 +1,7 @@
+parserOptions:
+  source-type:'module'
+  sourceType:'module'
+
 ecmaFeatures:
   modules: true
   jsx: true

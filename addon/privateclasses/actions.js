@@ -1,4 +1,6 @@
+/*globals $,google*/
 import modal from './modal';
+import Ember from 'ember';
 import ComplexModel from '../privateclasses/complexmodel';
 
 export let fieldDefinition = [];
@@ -34,16 +36,15 @@ const exportData = function (component, format, joinchar) {
 	link.setAttribute("href", content);
 	link.setAttribute("download", component.get('paginator').get('name') + "." + format);
 	component.set('dlf', content);
-	let download = link.click !== null;
 	if (link.click) {
 		link.click();
 	}
-}
+};
 export function makeRequest(component, query, done, fail) {
 	let deferred = Ember.RSVP.defer('crud-table#createRecord');
 	component.set('isLoading', true);
 	component.sendAction('searchRecord', query, deferred);
-	_getRequest(component, deferred);
+	_getRequest(component, deferred, done, fail);
 	return deferred;
 }
 export function _getRequest(component, deferred, done, fail) {
@@ -60,7 +61,7 @@ export function _getRequest(component, deferred, done, fail) {
 		function (data) {
 			component.set('isLoading', false);
 			if (fail) {
-				fail();
+				fail(data);
 			}
 		});
 }
@@ -115,7 +116,7 @@ export let actions = {
 		}
 		filter.set('SelectObject',selectobject);
 		filter.set('Options',this.filterset[this.labels[property].Type]);
-		
+
 	},
 	SelectFilterValue(filter,value){
 		filter.set('Value',value);
@@ -233,7 +234,7 @@ export let actions = {
 			let deferred;
 			this.set('isLoading', true);
 			if (component.get('newRecord')) {
-				deferred = Ember.RSVP.defer('crud-table#createRecord');				
+				deferred = Ember.RSVP.defer('crud-table#createRecord');
 				if($("#crudatable-update-data")[0].checkValidity()){
 					component.sendAction('createRecord', component.get('currentRecord').RoutedRecord, deferred);
 				}else{
@@ -288,7 +289,7 @@ export let actions = {
 				if (component.get('paginator') !== undefined) {
 					let paginator = component.get('paginator');
 					paginator.getBody(paginator.get('pages'), lastquery);
-					this.get('filterset').getBody(lastquery);
+					component.get('filterset').getBody(lastquery);
 				} else {
 					delete lastquery.page;
 				}
@@ -306,7 +307,7 @@ export let actions = {
 				modal.hide();
 				component.set('isEdition', false);
 				component.set('notEdition', true);
-			})
+			});
 		},
 		internal_order(label) {
 			this.get('labels').forEach(function (lbl) {

@@ -1,4 +1,4 @@
-/*globals $, google*/
+/*globals $*/
 import Ember from 'ember';
 import ComplexModel from '../privateclasses/complexmodel';
 import {actions,makeRequest,metadata,lastquery,fieldDefinition} from '../privateclasses/actions';
@@ -74,7 +74,7 @@ export default Ember.Mixin.create({
 	init: function () {
 		component = this;
 		component.get('paginator').init();
-		component.set('labels', Ember.ArrayProxy.create({ content: [] }));
+		component.set('labels', Ember.A([]));
 		Object.keys(component.get('fields')).forEach(function (key) {
 			if (component.fields[key].Default !== undefined) {
 				fieldDefinition[key] = component.fields[key].Default;

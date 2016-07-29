@@ -16,9 +16,7 @@ export default {
 		return Math.ceil(base.length * Math.random() * Math.random());
 	},
 	_ensureSpecial(password,punctuation,specials) {
-		let specialchars = punctuation.slice(0);
-		let special;
-		let position
+		let specialchars = punctuation.slice(0),special,position;
 		while (specials < this.minimunSpecialChars) {
 			special = specialchars.charAt(this._RDN(punctuation));
 			position = this._RDN(password);

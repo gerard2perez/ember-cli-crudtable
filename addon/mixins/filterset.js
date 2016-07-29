@@ -7,7 +7,7 @@ export default Ember.Mixin.create({
 		'!=':'Is not'
 	},
 	create(){
-		return Ember.Object.extend({ 
+		return Ember.Object.extend({
 			Key:null,
 			Condition:null,
 			Value:null,
@@ -45,7 +45,7 @@ export default Ember.Mixin.create({
 	},
 	Add(filters,link){
 		let that =this;
-		filters=filters.map((filter)=>{return that.makefilter(filter)});
+		filters=filters.map((filter)=>{return that.makefilter(filter);});
 		if(this.list.content.length>0){
 			this.list.objectAt(this.list.content.length-1).set('link',link);
 		}
@@ -58,6 +58,5 @@ export default Ember.Mixin.create({
 				link:filter.link
 			};
 		});
-		console.log(query);
 	}
 });
