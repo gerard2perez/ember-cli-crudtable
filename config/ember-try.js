@@ -10,7 +10,7 @@ module.exports = {
 				}
 			}
     }, {
-			name: 'Ember Release',
+			name: 'ember-release',
 			allowedToFail: false,
 			bower: {
 				dependencies: {
@@ -21,7 +21,7 @@ module.exports = {
 				}
 			}
     }, {
-			name: 'Ember Beta',
+			name: 'ember-beta',
 			allowedToFail: true,
 			bower: {
 				dependencies: {
@@ -32,7 +32,7 @@ module.exports = {
 				}
 			}
     }, {
-			name: 'Ember Canary',
+			name: 'ember-canary',
 			allowedToFail: true,
 			bower: {
 				dependencies: {
