@@ -1,11 +1,15 @@
 
 # CRUD Table [![NPM Version](http://img.shields.io/npm/v/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)
 
-[![Build Status](https://img.shields.io/travis/gerard2p/ember-cli-crudtable.svg?style=flat-square)](https://travis-ci.org/gerard2p/ember-cli-crudtable)[![Dependency Status](https://david-dm.org/gerard2p/ember-cli-crudtable.svg?style=flat-square)](https://david-dm.org/gerard2p/ember-cli-crudtable)[![devDependency Status](https://david-dm.org/gerard2p/ember-cli-crudtable/dev-status.svg?style=flat-square)](https://david-dm.org/gerard2p/ember-cli-crudtable#info=devDependencies)[![Code Climate](https://codeclimate.com/github/gerard2p/ember-cli-crudtable/badges/gpa.svg)](https://codeclimate.com/github/gerard2p/ember-cli-crudtable)
+[![Dependency Status](https://david-dm.org/gerard2p/ember-cli-crudtable.svg?style=flat-square)](https://david-dm.org/gerard2p/ember-cli-crudtable)[![devDependency Status](https://david-dm.org/gerard2p/ember-cli-crudtable/dev-status.svg?style=flat-square)](https://david-dm.org/gerard2p/ember-cli-crudtable#info=devDependencies)[![Code Climate](https://codeclimate.com/github/gerard2p/ember-cli-crudtable/badges/gpa.svg)](https://codeclimate.com/github/gerard2p/ember-cli-crudtable)
 
-This addon allows you to easly create a CRUD Table, it will take you only 5s!.
+This addon allows you to easily create a CRUD Table, it will take you only 5s!.
 
 This component is compatible with bootstrap and ember-data.
+
+Current Build Status for ember versions:
+
+[![Build Status](http://travisjobsbadges.bitsun.com.mx/gerard2p/ember-cli-crudtable/filters.svg)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
 
   [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)[![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg?style=flat-square)](http://emberobserver.com/addons/ember-cli-crudtable)[![Issue Count](https://codeclimate.com/github/gerard2p/ember-cli-crudtable/badges/issue_count.svg)](https://codeclimate.com/github/gerard2p/ember-cli-crudtable)
 
