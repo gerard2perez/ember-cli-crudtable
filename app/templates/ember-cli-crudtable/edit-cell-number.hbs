@@ -1,0 +1,22 @@
+<div class="form-group">
+  <label class="col-sm-2 control-label">{{record.Label}}</label>
+  <div class="col-sm-10">
+    <div class="input-group col-md-12">	
+    {{#if record.Prefix}}
+      <span  class="input-group-addon" id="basic-addon2">{{record.Prefix}}</span>
+    {{/if}}
+    {{input
+      placeholder=record.PlaceHolder
+      pattern=record.Pattern
+      required=record.IsRequired
+      type=record.Type
+      style=" {{if record.Prefix 'color:#000;' 'border-top-left-radius: 4px;border-bottom-left-radius: 4px;'}}"
+      value=record.Value 
+      class="form-control"
+    }}
+    {{#if record.Suffix}}
+      <span class="input-group-addon" id="basic-addon2">{{record.Suffix}}</span>
+    {{/if}}
+    </div>
+  </div>
+</div>

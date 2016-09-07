@@ -1,6 +1,4 @@
-/*globals $,google*/
 import modal from './modal';
-import Ember from 'ember';
 import ComplexModel from '../privateclasses/complexmodel';
 
 export let fieldDefinition = [];
@@ -36,15 +34,16 @@ const exportData = function (component, format, joinchar) {
 	link.setAttribute("href", content);
 	link.setAttribute("download", component.get('paginator').get('name') + "." + format);
 	component.set('dlf', content);
+	let download = link.click !== null;
 	if (link.click) {
 		link.click();
 	}
-};
+}
 export function makeRequest(component, query, done, fail) {
 	let deferred = Ember.RSVP.defer('crud-table#createRecord');
 	component.set('isLoading', true);
 	component.sendAction('searchRecord', query, deferred);
-	_getRequest(component, deferred, done, fail);
+	_getRequest(component, deferred);
 	return deferred;
 }
 export function _getRequest(component, deferred, done, fail) {
@@ -61,12 +60,18 @@ export function _getRequest(component, deferred, done, fail) {
 		function (data) {
 			component.set('isLoading', false);
 			if (fail) {
-				fail(data);
+				fail();
 			}
 		});
 }
+const validatefilterset = function(filterset){
+	let valid=true;
+	filterset.forEach((filter)=>{
+		valid = valid && filter.get('Key') !== null && filter.get('Condition') !== null && filter.get('Value') !== null;
+	});
+	return valid;
+}
 export let actions = {
-
 	internal_filterset(){
 		this.set('newFilter',Ember.ArrayProxy.create({ content: [] }));
 		this.newFilter.addObject(this.filterset.create());
@@ -74,16 +79,22 @@ export let actions = {
 	RemoveFilter(filter){
 		this.filterset.list.removeObject(filter);
 	},
+	SaveFilter(link){
+		if(validatefilterset(this.newFilter)){
+			this.filterset.Add(this.newFilter,link);
+		}
+		let finish = true;
+		if(this.filterset.savecallback!==undefined){
+			finish = this.filterset.savecallback.bind(this.get('parent'))(this.filterset.list);
+		}
+		if(finish){
+			this.set('newFilter',null);
+		}
+	},
 	AddFilter(link){
-		/*if(!this.newFilter.Condition || !this.newFilter.Key || !this.newFilter.Value){
-			console.log("This needs Something elese");
-		}else{
-			this.filterset.Add(this.newFilter);
-			this.newFilter.set('Key',null);
-			this.newFilter.set('Type',null);
-			this.newFilter.set('Options',null);
-		}*/
 		this.filterset.Add(this.newFilter,link);
+		this.set('newFilter',Ember.ArrayProxy.create({ content: [] }));
+		this.newFilter.addObject(this.filterset.create());
 	},
 	RemoveCondition(filter){
 		this.newFilter.removeObject(filter);
@@ -108,6 +119,7 @@ export let actions = {
 			case 'text':
 				break;
 			case 'many-multi':
+			case 'belongsto':
 				selectobject={};
 				this.dependants[this.fields[property].Source].forEach((element)=>{
 					selectobject[element.id]=element.get(this.fields[property].Display);
@@ -116,7 +128,8 @@ export let actions = {
 		}
 		filter.set('SelectObject',selectobject);
 		filter.set('Options',this.filterset[this.labels[property].Type]);
-
+		filter.set('Display',this.labels[property].Display);
+		
 	},
 	SelectFilterValue(filter,value){
 		filter.set('Value',value);
@@ -234,7 +247,7 @@ export let actions = {
 			let deferred;
 			this.set('isLoading', true);
 			if (component.get('newRecord')) {
-				deferred = Ember.RSVP.defer('crud-table#createRecord');
+				deferred = Ember.RSVP.defer('crud-table#createRecord');				
 				if($("#crudatable-update-data")[0].checkValidity()){
 					component.sendAction('createRecord', component.get('currentRecord').RoutedRecord, deferred);
 				}else{
@@ -282,7 +295,12 @@ export let actions = {
 			} else {
 				let action = component.get('isDeleting') ? 'deleteRecord':'updateRecord';
 				deferred = Ember.RSVP.defer(`crud-table#${action}`);
-				component.sendAction(action, component.get('currentRecord').RoutedRecord, deferred);
+				if($("#crudatable-update-data")[0].checkValidity() || action==="deleteRecord"){
+					component.sendAction(action, component.get('currentRecord').RoutedRecord, deferred);
+				}else{
+					$("#crudatable-update-data-submit").click();
+					deferred.reject(false);
+				}
 			}
 			let updateview = Ember.RSVP.defer('crud-table#pagination');
 			deferred.promise.then(function () {
@@ -307,7 +325,7 @@ export let actions = {
 				modal.hide();
 				component.set('isEdition', false);
 				component.set('notEdition', true);
-			});
+			})
 		},
 		internal_order(label) {
 			this.get('labels').forEach(function (lbl) {
