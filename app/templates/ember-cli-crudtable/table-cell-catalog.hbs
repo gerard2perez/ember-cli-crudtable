@@ -1,0 +1,5 @@
+{{#each record._field_cfg.Data key="@index" as |option index|}}
+	{{#if (eq option.value record.Value)}}
+		{{option.display}}
+	{{/if}}
+{{/each}}

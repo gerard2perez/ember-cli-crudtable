@@ -1,4 +1,4 @@
-/*globals $*/
+/*globals $, google*/
 import Ember from 'ember';
 import ComplexModel from '../privateclasses/complexmodel';
 import {actions,makeRequest,metadata,lastquery,fieldDefinition} from '../privateclasses/actions';
@@ -69,12 +69,35 @@ export default Ember.Mixin.create({
 	exports: true,
 	CurrentState: null,
 	newFilter:null,
-	filterset:[],
+	filterset:null,
+	filters:null,
+	parent:null,
+	_UpdateFilter_:Ember.observer('filters',function(){
+		this.get('filterset').init(this.get('filters')||[]);
+		//component.get('paginator').getBody(1, lastquery);
+		component.get('filterset').getBody(lastquery);
+		makeRequest(component,lastquery);
+	}),
 	actions:actions,
 	init: function () {
 		component = this;
+		if(component.get('parent')){
+			var ct = component.get('parent').get('crud-table');
+			switch(typeof ct){
+				case "Object":
+					component.get('parent').set('crud-table',[ct]);
+					break;
+				case "Array":
+					component.get('parent').get('crud-table').addObject(component);
+					break;
+				default:
+					component.get('parent').set('crud-table',component);
+					break;
+			}
+		}
+		console.log(1);
 		component.get('paginator').init();
-		component.set('labels', Ember.A([]));
+		component.set('labels', Ember.ArrayProxy.create({ content: [] }));
 		Object.keys(component.get('fields')).forEach(function (key) {
 			if (component.fields[key].Default !== undefined) {
 				fieldDefinition[key] = component.fields[key].Default;
@@ -117,6 +140,7 @@ export default Ember.Mixin.create({
 
 			}
 		});
+		console.log(2);
 		PreLoad = [];
 		component.set('editdelete', component.deleteRecord !== null || component.updateRecord !== null);
 		component.set('isLoading', true);
@@ -125,11 +149,20 @@ export default Ember.Mixin.create({
 		component.addObserver('pulling', function () {
 			PULL(component);
 		});
-		component.get('filterset').init(component.filters||[]);
+		console.log(3);
+		if( (typeof component.get('filters') )=== "function" ){
+			this.get('filters')().then((filters)=>{
+				console.log(filters);
+				component.get('filterset').init(filters||[]);
+			});
+		}else{
+			component.get('filterset').init(component.filters||[]);
+		}
 		this._super(...arguments);
 	},
 	didInsertElement: function () {
 		component.get('paginator').getBody(1, lastquery);
+		component.get('filterset').getBody(lastquery);
 		makeRequest(component,lastquery);
 		modal.init(component);
 	},
