@@ -26,6 +26,9 @@ export default Ember.Component.extend({
 	getCenter: 'set',
 	newpass: 'newpass',
 	actions: {
+		simplechoose(record,e){
+			record.set('Value',e.target.value);
+		},
 		newpass: function (record) {
 			record.set('Value', password.gen());
 		},

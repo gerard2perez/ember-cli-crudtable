@@ -25,6 +25,7 @@ export default Ember.Mixin.create({
 	},
 	getBody:function(page, query){
 		query.page=page;
+		this.set('skip',this.get('limit')*(page-1));
 	},
 	update(component, meta, nelements) {
 		if (meta.count !== undefined) {

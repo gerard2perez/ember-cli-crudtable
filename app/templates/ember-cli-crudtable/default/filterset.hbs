@@ -6,12 +6,12 @@
 		<select class='form-control' onchange={{action (action "SelectFilterProperty" filter) value="target.value"}}>
 			<option value="">Select a Field</option>
 		{{#each this.labels key="@index" as |field index|}} 
-			<option value={{field.Key}}>{{field.Display}}</option>
+			<option value={{field.key}}>{{field.Display}}</option>
 		{{/each}}
 		</select>
 	{{else}}
 		<div class="col-sm-2">
-			<label>{{filter.Display}}</label>
+			<label>{{filter.Key}}</label>
 		</div>
 	{{/unless}}
 	{{#if filter.Options}}
