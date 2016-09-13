@@ -36,6 +36,10 @@ export default Ember.Component.extend({
 			var args = ['generic_callback'].concat([].slice.call(arguments));
 			this.sendAction.apply(this, args);
 		},
+		catalog_take(complexrecord,record,c,d){
+			let value = record.get(complexrecord._field_cfg.Display);
+			complexrecord.set('Value',value);
+		},
 		choose: function (recordparent) {
 			var select = this.element.getElementsByTagName('select')[0];
 			recordparent.set('Value', {});

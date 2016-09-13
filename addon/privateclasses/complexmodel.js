@@ -93,6 +93,21 @@ const TypeAdjustments = function (component, Type, field, data, cfield, row) {
 			cfield.set('Display', 'checked="checked"');
 		}
 		break;
+	case 'catalog':
+		function map(dt){
+			return dt.map((r)=>{
+				return r.get(cfield._field_cfg.Display);
+			});
+		}
+		let deps = component.get('dependants')[component.fields[field].Source];
+		if (deps.isLoaded) {
+			cfield.set('related',map(deps));
+		} else {
+			deps.then(function () {
+				cfield.set('related',map(deps));
+			});
+		}
+		break;
 	case 'many-multi':
 	case 'belongsto':
 		if (data.isLoaded) {
@@ -130,6 +145,9 @@ export default {
 				if (inherits.length === 2) {
 					Type = inherits[1];
 					cfield.set('Type', inherits[0]);
+				}
+				if(component.fields[field].Source!==undefined){
+					cfield.set('related',component.get('dependants')[field]);
 				}
 				cfield = TypeAdjustments(component, Type, field, data, cfield, row);
 				CustomProperties[field] = cfield;

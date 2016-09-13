@@ -100,7 +100,7 @@ test('No data initialization', function (assert) {
 	assert.expect(1);
 	assert.equal(1, 1);
 });
-/*test('Can Set Initial Variables', function (assert) {
+test('Can Set Initial Variables', function (assert) {
 	assert.expect(4);
 	andThen(function () {
 		assert.equal(this.$("tbody>tr>td:eq(0)").text().replace(/\n|\r/igm, ""), "Data5");
@@ -205,4 +205,3 @@ test('User exports file to SQL', function (assert) {
 		assert.ok(this.$("#dlf").text().indexOf("sql") > 0, "Download File Not Generated");
 	});
 });
-*/

@@ -1,10 +1,13 @@
 {{#if this.newFilter}}
 <div class='row'>
-	{{#each this.newFilter key="@index" as |filter index|}}
-		<div class="form-group">
-		{{#unless filter.Key}}
+{{#each this.newFilter key="@index" as |filter index|}}
+	<div class="form-group">
+	<div class="col-sm-2">
+			<label>{{filter.Ready}}</label>
+		</div>
+	{{#unless filter.Key}}
 		<select class='form-control' onchange={{action (action "SelectFilterProperty" filter) value="target.value"}}>
-			<option value="">Select a Field</option>
+		<option value="">Select a Field</option>
 		{{#each this.labels key="@index" as |field index|}} 
 			<option value={{field.key}}>{{field.Display}}</option>
 		{{/each}}
@@ -24,21 +27,21 @@
 			</select>
 		</div>
 		<div class="col-sm-3">
-			{{#unless filter.SelectObject}}
-				{{input
-					value=filter.Value
-					class="form-control"
-					type=filter.Type
-					required="required"
-				}}
-			{{else}}
-				<select class='form-control' onchange={{action (action "SelectFilterValue" filter) value="target.value"}}>
-					<option value="">Select an option</option>
-				{{#each-in filter.SelectObject as |key value|}} 
-					<option value={{key}}>{{value}}</option>
-				{{/each-in}}
-				</select>
-			{{/unless}}
+		{{#unless filter.SelectObject}}
+			{{input
+				value=filter.Value
+				class="form-control"
+				type=filter.Type
+				required="required"
+			}}
+		{{else}}
+			<select class='form-control' onchange={{action (action "SelectFilterValue" filter) value="target.value"}}>
+				<option value="">Select an option</option>
+			{{#each-in filter.SelectObject as |key value|}} 
+				<option value={{key}}>{{value}}</option>
+			{{/each-in}}
+			</select>
+		{{/unless}}
 		</div>
 		{{#if filter.Link}}
 		<div class="col-sm-4">
@@ -56,40 +59,40 @@
 		{{/if}}
 	{{/if}}
 	</div>
-	{{/each}}
+{{/each}}
 </div>
 
 <div class="row">
 <div class="btn-group col-sm-8"></div>
-	<div class="btn-group col-sm-4 text-right">
-		<button class="btn btn-warning" type="submit" {{action "CancelFilter"}}>Cancel</button>
-		<button class="btn btn-primary" type="submit" {{action "AddFilter" "or"}}>Or Filter</button>
-		<button class="btn btn-primary" type="submit" {{action "AddFilter" "and"}}>And Filter</button>
-	</div>
+<div class="btn-group col-sm-4 text-right">
+<button class="btn btn-warning" type="submit" {{action "CancelFilter"}}>Cancel</button>
+<button class="btn btn-primary" type="submit" {{action "AddFilter" "or"}}>Or Filter</button>
+<button class="btn btn-primary" type="submit" {{action "AddFilter" "and"}}>And Filter</button>
 </div>
-	
+</div>
+
 {{else}}
-	<button class="btn btn-primary " type="button" data-action="filterset" {{action 'internal_filterset'}}>
-		<i class="glyphicon glyphicon-send"></i>&nbsp;New FilterSet</button>
+<button class="btn btn-primary " type="button" data-action="filterset" {{action 'internal_filterset'}}>
+<i class="glyphicon glyphicon-send"></i>&nbsp;New FilterSet</button>
 {{/if}}
 <div class="row">
 {{#each this.filterset.list key="@index" as |filterset index|}}
-	<span class="label label-default">
-	{{#each filterset.filters as |filter index|}}
-		<span class="label label-primary">{{filter.key}} {{filter.condition}} {{filter.value}}</span>
-		{{#if filter.link}}
-		<span class="label label-default">
-			{{filter.link}}
-		</span>
-		{{/if}}
-	{{/each}}
-		<button class="btn btn-danger btn-xs glyphicon glyphicon-remove-sign" type="submit" {{action "RemoveFilter" filterset}}></button>
-	</span>
-	{{#if filterset.link}}
-	<span class="label label-default">
-		{{filterset.link}}
-	</span>
-	{{/if}}
+<span class="label label-default">
+{{#each filterset.filters as |filter index|}}
+<span class="label label-primary">{{filter.key}} {{filter.condition}} {{filter.value}}</span>
+{{#if filter.link}}
+<span class="label label-default">
+{{filter.link}}
+</span>
+{{/if}}
+{{/each}}
+<button class="btn btn-danger btn-xs glyphicon glyphicon-remove-sign" type="submit" {{action "RemoveFilter" filterset}}></button>
+</span>
+{{#if filterset.link}}
+<span class="label label-default">
+{{filterset.link}}
+</span>
+{{/if}}
 {{/each}}
 <br style="clear:both"/>
 <br style="clear:both"/>
