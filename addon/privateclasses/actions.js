@@ -129,9 +129,13 @@ export default {
 			filter.set('Key', this.labels[property].Key);
 			filter.set('Type', this.labels[property].Type);
 			let type = this.fields[property].Type.split(":")[0];
+
+			filter.set('Options', this.filterset[this.labels[property].Type]);
+			filter.set('Display', this.labels[property].Display);
 			switch (type) {
               case "ref.search":
-                //filter.set('Key',this.fields[property].SearchValue);
+                	filter.set('Key',this.fields[property].SearchValue);
+                	filter.set('Options', this.filterset.text);
                 break
 				case 'number':
 				case 'text':
@@ -147,9 +151,6 @@ export default {
 					break;
 			}
 			filter.set('SelectObject', selectobject);
-			filter.set('Options', this.filterset[this.labels[property].Type]);
-			filter.set('Display', this.labels[property].Display);
-
 		},
 		SelectFilterValue(filter, target) {
 			filter.set('Value', target.value);
@@ -442,9 +443,9 @@ export default {
 			let deferred = Ember.RSVP.defer('crud-table#newRecord');
 			component.sendAction('getRecord', deferred);
 			deferred.promise.then(function(record) {
-					Object.keys(component.fieldDefinition).forEach(function(field) {
-						record.set(field, component.fieldDefinition[field](component.get('targetObject').get('model')));
-					});
+					// Object.keys(component.fieldDefinition).forEach(function(field) {
+					// 	record.set(field, component.fieldDefinition[field](component.get('targetObject').get('model')));
+					// });
 					if (record._internalModel !== undefined) {
 						records.addObject(record._internalModel);
 					} else {
