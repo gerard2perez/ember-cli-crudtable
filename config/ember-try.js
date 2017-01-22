@@ -6,7 +6,7 @@ module.exports = {
 			name: 'minimun',
 			bower: {
 				dependencies: {
-					'ember': '2.4.6'
+					'ember': '2.10.0'
 				}
 			}
     }, {

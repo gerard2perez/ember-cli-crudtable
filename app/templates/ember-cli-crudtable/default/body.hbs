@@ -16,7 +16,6 @@
 		</thead>
 		<tbody>
 		{{#unless this.isLoading}}
-
 			{{#each this.ComplexModel key="@index" as |row index|}}
 				{{#if row}}
 				<tr>
@@ -38,7 +37,7 @@
 		{{else}}
 			<tr>
 				<th colspan="50">
-					{{partial template='ember-cli-crudtable.spinner' model=this.newRecord}}
+					{{partial 'ember-cli-crudtable/spinner'}}
 				</th>
 			</tr>
 

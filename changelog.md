@@ -1,3 +1,7 @@
+# v2.0.0
+1. Support Ember 2.10.x
+1. No backwards compatibility.
+
 # v1.3.0
 1. Added support for filters
 2. Fixed paginator problem when server not returning metadata information.

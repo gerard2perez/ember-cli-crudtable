@@ -6,9 +6,6 @@
 This addon allows you to easily create a CRUD Table, it will take you only 5s!.
 
 This component is compatible with bootstrap and ember-data.
-
-Current Build Status for ember versions:
-
 [![Build Status](http://travisjobsbadges.bitsun.com.mx/gerard2p/ember-cli-crudtable/filters.svg)](https://travis-ci.org/gerard2p/ember-cli-crudtable)
 
   [![NPM Downlaads](http://img.shields.io/npm/dm/ember-cli-crudtable.svg?style=flat-square)](https://www.npmjs.org/package/ember-cli-crudtable)[![Ember Observer Score](http://emberobserver.com/badges/ember-cli-crudtable.svg?style=flat-square)](http://emberobserver.com/addons/ember-cli-crudtable)[![Issue Count](https://codeclimate.com/github/gerard2p/ember-cli-crudtable/badges/issue_count.svg)](https://codeclimate.com/github/gerard2p/ember-cli-crudtable)
@@ -411,7 +408,6 @@ That's all. You'll have a new field rendered as a link which is pointing to 'sch
 
 
 ##Upcoming
-I'll create a website to show some examples if the downloads still increasing, thank you for using it.
+I'll rewrite this component, I might change the name and deprecate this repo, this idea it's to make it 100% compatible with my new project [Koaton](https://github.com/gerard2p/koaton).
 
-I'm in a little hurry but as soon as possible i'll be adding more features and also providing a more detailed doc about the functions.
-But try it, is quite simple to have your fully functional CRUD application.
+See you soon.

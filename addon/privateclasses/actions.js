@@ -312,7 +312,7 @@ export default {
 				});
 				deferred = Ember.RSVP.defer('crud-table#updateRecord');
 				let geocoder = new google.maps.Geocoder();
-				geocoder.geocodefunction({
+				geocoder.geocode({
 					'latLng': map
 				}, function(results, status) {
 					if (status === google.maps.GeocoderStatus.OK) {
@@ -388,7 +388,9 @@ export default {
 			if (google === undefined) {
 				return;
 			}
-			this.set('showMap', true);
+			let component = this;
+			component.set('showMap', true);
+			component.set('isLoading', true);
 			modal.show();
 
 			function mapit(id, latlng) {
@@ -397,26 +399,27 @@ export default {
 				}
 				let mapOptions = {
 					zoom: latlng.zoom,
-					center: new google.maps.LatLng(latlng.lat, latlng.lng),
+					center: latlng,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 				let map = new google.maps.Map(document.getElementById(id), mapOptions);
 				record.set('map', map);
+				component.set('isLoading', false);
 				return true;
 			}
 
 			let cord = "";
 			record.forEach(function(prop) {
 				if (prop.Type === kind) {
-					cord = prop.Value.split(',');
+					cord = (prop.Value || '20.677632,-101.341632').split(',');
 					cord = {
-						lat: cord[0],
-						lng: cord[1],
-						zoom: prop.Zoom.value
+						lat: parseFloat(cord[0], 10),
+						lng: parseFloat(cord[1], 10),
+						zoom: prop.Zoom.value || 11
 					};
 				}
 			});
-			let component = this;
+
 			let waitforgoogle = function(fn) {
 				if (google === undefined) {
 					setTimeout(function() {
@@ -434,7 +437,10 @@ export default {
 					}, 10);
 				}
 			};
-			waitforgoogle(waitforgoogle);
+			setTimeout(function(){
+				waitforgoogle(waitforgoogle);
+			},1000);
+
 		},
 		internal_create() {
 			let component = this;
@@ -443,9 +449,6 @@ export default {
 			let deferred = Ember.RSVP.defer('crud-table#newRecord');
 			component.sendAction('getRecord', deferred);
 			deferred.promise.then(function(record) {
-					// Object.keys(component.fieldDefinition).forEach(function(field) {
-					// 	record.set(field, component.fieldDefinition[field](component.get('targetObject').get('model')));
-					// });
 					if (record._internalModel !== undefined) {
 						records.addObject(record._internalModel);
 					} else {

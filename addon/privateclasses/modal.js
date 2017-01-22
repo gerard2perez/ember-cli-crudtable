@@ -41,7 +41,7 @@ export default {
 					console.log(data);
 				});
 		});
-		$('body').append($("#CrudTableDeleteRecordModal"));
+		$('[data-role=crud-table]').parent().append($("#CrudTableDeleteRecordModal"));
 	},
 	hide() {
 		if(this.target.modal){

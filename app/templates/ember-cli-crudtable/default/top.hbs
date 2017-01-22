@@ -29,7 +29,7 @@
 			{{/each}}
 		</ul>
 	</div>
-	{{/if}} 
+	{{/if}}
 	{{#if this.canRefresh}}
 	<button class="btn btn-default" type="button" name="refresh" title="Refresh"><i class="glyphicon glyphicon-refresh icon-refresh" {{action 'internal_reload'}}></i></button>
 	{{/if}} {{#if this.createRecord}}
@@ -48,7 +48,7 @@
 </div>
 <div class="col-sm-3">
 	<div class="input-group">
-		{{input enter="internal_search" value=this.SearchTerm placeholder="Search" class="input-sm form-control" name="SearchTerm" }}
+		{{input enter="internal_search" value=this.SearchTerm placeholder="Search" class="input-sm form-control" id="SearchTerm" }}
 		<span class="input-group-btn">
                 <button type="button" class="btn btn-sm btn-primary" {{action 'internal_search' this}} data-action=search> Go!</button>
             </span>
